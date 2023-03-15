@@ -1,0 +1,15 @@
+###
+get http://localhost:3000/posts
+
+### 
+post http://localhost:3000/posts
+Content-Type: application/json
+
+{
+    "name" : "walid",
+    "age" : "24",
+    "password" : "123"
+}
+
+###
+delete http://localhost:3000/posts/walid
