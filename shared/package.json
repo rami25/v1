@@ -1,0 +1,17 @@
+{
+  "name": "@roomv1/shared",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm i && tsc"
+  },
+  "author": "rami25",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "mongoose": "^7.0.1"
+  }
+}
