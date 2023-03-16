@@ -4,8 +4,8 @@ export interface Post {
     id?: string;
     title: string;
     description: string;
-    urls: [string];
-    files: [string];
+    urls: string[];
+    files: string[];
     userId?: string;
     postedAt: Date;
     privacy: string;

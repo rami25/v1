@@ -1,4 +1,5 @@
 import { Group } from '../../../shared/src/types/Group';
+import { Post } from '../../../shared/src/types/Post';
 import { User } from './../../../shared/src/types/User';
 
 export interface UserDao {
@@ -11,4 +12,5 @@ export interface UserDao {
   sendRequestToUser(userName : string) : void;
   addGroup(group : Group) : void;
   addFriend(user : User) : void;
+  addUserPost(post : Post) : void;
 }

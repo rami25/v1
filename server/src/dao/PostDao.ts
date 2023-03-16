@@ -1,4 +1,4 @@
-import { Post } from './../../../shared/src/types/Posts';
+import { Post } from '../../../shared/src/types/Post';
 export interface PostDao {
   listPosts(userId?: string): Post[];
   createPost(post: Post): void;

@@ -6,10 +6,15 @@ post http://localhost:3000/posts
 Content-Type: application/json
 
 {
-    "name" : "walid",
-    "age" : "24",
-    "password" : "123"
+    "id" : "1",
+    "title" : "first post"
 }
 
 ###
-delete http://localhost:3000/posts/walid
+delete http://localhost:3000/posts
+Content-Type: application/json
+
+{
+    "id" : "1",
+    "title" : "first post"
+}

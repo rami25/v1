@@ -6,9 +6,9 @@ export interface User {
     email: string;
     password: string;
     createdAt: Date;
-    posts: [string];
-    friends: [string];
-    groups: [string];
+    posts: string[];
+    friends: string[];
+    groups: string[];
 }
 
 const userSchema = new Schema<User>({

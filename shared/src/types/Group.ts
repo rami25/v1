@@ -4,7 +4,7 @@ export interface Group {
     id?: string;
     groupName : string;
     description : string;
-    usersId? : [string];
+    usersId? : string[];
     userAdmin? : string;
     createdAt : Date;
 }

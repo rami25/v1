@@ -1,3 +1,4 @@
+import { InMemoryDataStore } from "../dataStore/memoryDb";
 import { CommentDao } from "./CommentDao";
 import { GroupDao } from "./GroupDao";
 import { PostDao } from "./PostDao";
@@ -12,3 +13,5 @@ export interface DataStore extends
     PostLikeDao, 
     CommentDao 
 {}
+
+export const db = new InMemoryDataStore()

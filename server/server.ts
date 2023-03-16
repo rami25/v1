@@ -1,22 +1,11 @@
-import express, { ErrorRequestHandler, RequestHandler } from 'express'
-import { createPostHandler, deletePostHandler, listPostsHandler } from './handlers/postHandler'
-import asyncHandler from 'express-async-handler'
+import express, { ErrorRequestHandler } from 'express'
 const app = express()
-
 app.use(express.json())
-
-
-const requestMiddleWare : RequestHandler = (req, res, next) => {
+app.use((req, res, next) => {
     console.log("req meth : ", req.method , " -request path : " , req.path , " -body : " , req.body)
-    res.status(200)
     next()
-}
-
-app.use(requestMiddleWare)
-
-app.get('/posts' , asyncHandler(listPostsHandler))
-app.post('/posts' , asyncHandler( createPostHandler))
-app.delete('/posts' , asyncHandler( deletePostHandler))
+})
+app.use('/posts', require('./src/routes/postRoute'))
 
 const errHandler : ErrorRequestHandler = (err, req, res, next) => {
     console.error('Uncaught exception', err)
