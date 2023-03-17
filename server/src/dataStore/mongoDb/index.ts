@@ -1,40 +1,51 @@
 import { Comment } from "../../../../shared/src/types/Comment";
 import { Group } from "../../../../shared/src/types/Group";
 import { Post } from "../../../../shared/src/types/Post";
-import { postLike } from "../../../../shared/src/types/postLike";
-import { User } from "../../../../shared/src/types/User";
+import { Like } from "../../../../shared/src/types/Like";
+import UserM, { User } from "../../../../shared/src/types/User";
 import { DataStore } from "../../dao";
 
 
 export class MongoDB implements DataStore {
-    createUser(user: User): void {
+    //User
+    async createUser(user: User): Promise<void> {
+       const u = new UserM(user)
+       await u.save();
+    }
+    deleteUser(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    updateCurrentUser(user: Partial<User>): void {
+    updateCurrentUser(user: Partial<User>): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    getUserById(id: string): User | undefined {
+    getUserById(id: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
     }
-    getUserByEmail(email: string): User | undefined {
+    getUserByEmail(email: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
     }
-    getUserByUsername(userName: string): User | undefined {
+    getUserByUsername(userName: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
     }
-    searchUser(userName: string): User | undefined {
+    searchUser(userName: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
     }
-    sendRequestToUser(userName: string): void {
+    sendRequestToUser(userName: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    addGroup(group: Group): void {
+    sendRequestToGroup(group: Group): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    addFriend(user: User): void {
+    joinGroup(group: Group): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    addUserPost(post: Post): void {
+    addGroup(group: Group): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    addFriend(user: User): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    addUserPost(post: Post): Promise<void> {
         throw new Error("Method not implemented.");
     }
     listPosts(userId?: string | undefined): Post[] {
@@ -50,18 +61,6 @@ export class MongoDB implements DataStore {
         throw new Error("Method not implemented.");
     }
     deletePost(id: string): void {
-        throw new Error("Method not implemented.");
-    }
-    createComment(comment: Comment): void {
-        throw new Error("Method not implemented.");
-    }
-    countComments(postId: string): number {
-        throw new Error("Method not implemented.");
-    }
-    listComments(postId: string): Comment[] {
-        throw new Error("Method not implemented.");
-    }
-    deleteComment(id: string): void {
         throw new Error("Method not implemented.");
     }
     listGroups(userId?: string | undefined): Group[] {
@@ -82,17 +81,30 @@ export class MongoDB implements DataStore {
     deleteGroup(id: string): void {
         throw new Error("Method not implemented.");
     }
-    createLike(like: postLike): void {
+    createLike(like: Like): void {
         throw new Error("Method not implemented.");
     }
-    deleteLike(like: postLike): void {
+    deleteLike(like: Like): void {
         throw new Error("Method not implemented.");
     }
     getLikes(postId: string): number {
         throw new Error("Method not implemented.");
     }
-    exists(like: postLike): boolean {
+    exists(like: Like): boolean {
         throw new Error("Method not implemented.");
     }
+    createComment(comment: Comment): void {
+        throw new Error("Method not implemented.");
+    }
+    countComments(postId: string): number {
+        throw new Error("Method not implemented.");
+    }
+    listComments(postId: string): Comment[] {
+        throw new Error("Method not implemented.");
+    }
+    deleteComment(id: string): void {
+        throw new Error("Method not implemented.");
+    }
+    
 }
 

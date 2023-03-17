@@ -1,3 +1,32 @@
+
+### uses case diagram :
+    actors : visitor , user , admin
+
+### fonctionnalites :
+    -visitor : 
+        ->list publics posts(by user or group) 
+        ->list Groups(with theirs descriptions)
+        ->list users profiles(with their publics posts , groups and their friends)
+        ->createAcount
+    -user :
+        ->Auth
+        ->list publics posts
+        ->list his profile (posts 'public and private' , groups , friends)
+        ->list users profiles(with their publics posts , groups and their friends)
+        ->create post(public or within a group)
+        ->create Group(set as an admin)
+        ->list Groups(with theirs descriptions)
+        ->send user request to the group
+        ->send group request
+        ->join group(by accepting request) 
+        ->update profile 
+
+    -admin (extends from user):
+        -> add user
+        ->delete user
+        -> generate settings
+
+
 ### Entity : User , Post , comment , feedback(like , dislike) , groupe.
 ### global (visitor) access to publics posts or users
 
@@ -59,3 +88,4 @@
     commentId : string,
     ...
 }
+

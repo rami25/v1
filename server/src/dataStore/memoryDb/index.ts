@@ -1,29 +1,11 @@
 import { Comment } from "../../../../shared/src/types/Comment";
 import { Group } from "../../../../shared/src/types/Group";
-import { postLike } from "../../../../shared/src/types/postLike";
+import { Like } from "../../../../shared/src/types/Like";
 import { Post } from "../../../../shared/src/types/Post";
 import { User } from "../../../../shared/src/types/User";
 import { DataStore } from "../../dao";
 
 export class InMemoryDataStore implements DataStore {
-    private posts : Post[] = []
-
-
-    addUserPost(post: Post): void {
-        throw new Error("Method not implemented.");
-    }
-    searchUser(userName: string): User | undefined {
-        throw new Error("Method not implemented.");
-    }
-    sendRequestToUser(userName: string): void {
-        throw new Error("Method not implemented.");
-    }
-    addGroup(group: Group): void {
-        throw new Error("Method not implemented.");
-    }
-    addFriend(user: User): void {
-        throw new Error("Method not implemented.");
-    }
     createUser(user: User): void {
         throw new Error("Method not implemented.");
     }
@@ -39,11 +21,26 @@ export class InMemoryDataStore implements DataStore {
     getUserByUsername(userName: string): User | undefined {
         throw new Error("Method not implemented.");
     }
+    searchUser(userName: string): User | undefined {
+        throw new Error("Method not implemented.");
+    }
+    sendRequestToUser(userName: string): void {
+        throw new Error("Method not implemented.");
+    }
+    addGroup(group: Group): void {
+        throw new Error("Method not implemented.");
+    }
+    addFriend(user: User): void {
+        throw new Error("Method not implemented.");
+    }
+    addUserPost(post: Post): void {
+        throw new Error("Method not implemented.");
+    }
     listPosts(userId?: string | undefined): Post[] {
-        return this.posts;
+        throw new Error("Method not implemented.");
     }
     createPost(post: Post): void {
-        this.posts.push(post)
+        throw new Error("Method not implemented.");
     }
     getPost(id: string, userId?: string | undefined): Post | undefined {
         throw new Error("Method not implemented.");
@@ -52,20 +49,6 @@ export class InMemoryDataStore implements DataStore {
         throw new Error("Method not implemented.");
     }
     deletePost(id: string): void {
-        const index = this.posts.findIndex(p => p.id === id)
-        if(index > -1)
-            this.posts.splice(index, 1)
-    }
-    createComment(comment: Comment): void {
-        throw new Error("Method not implemented.");
-    }
-    countComments(postId: string): number {
-        throw new Error("Method not implemented.");
-    }
-    listComments(postId: string): Comment[] {
-        throw new Error("Method not implemented.");
-    }
-    deleteComment(id: string): void {
         throw new Error("Method not implemented.");
     }
     listGroups(userId?: string | undefined): Group[] {
@@ -86,17 +69,30 @@ export class InMemoryDataStore implements DataStore {
     deleteGroup(id: string): void {
         throw new Error("Method not implemented.");
     }
-    createLike(like: postLike): void {
+    createLike(like: Like): void {
         throw new Error("Method not implemented.");
     }
-    deleteLike(like: postLike): void {
+    deleteLike(like: Like): void {
         throw new Error("Method not implemented.");
     }
     getLikes(postId: string): number {
         throw new Error("Method not implemented.");
     }
-    exists(like: postLike): boolean {
+    exists(like: Like): boolean {
         throw new Error("Method not implemented.");
     }
+    createComment(comment: Comment): void {
+        throw new Error("Method not implemented.");
+    }
+    countComments(postId: string): number {
+        throw new Error("Method not implemented.");
+    }
+    listComments(postId: string): Comment[] {
+        throw new Error("Method not implemented.");
+    }
+    deleteComment(id: string): void {
+        throw new Error("Method not implemented.");
+    }
+    
 
 }

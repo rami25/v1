@@ -1,4 +1,6 @@
 import { Schema, model, Types} from 'mongoose';
+import { Like } from './Like';
+import { Comment } from './Comment';
 
 export interface Post {
     id?: string;
@@ -7,6 +9,8 @@ export interface Post {
     urls: string[];
     files: string[];
     userId?: string;
+    comments : Comment[];
+    likes : Like[];
     postedAt: Date;
     privacy: string;
 }
@@ -28,6 +32,12 @@ const postSchema = new Schema<Post>({
     userId : {
         type : Types.ObjectId,
         required : true
+    },
+    comments : {
+        type : [Types.ObjectId]
+    },
+    likes : {
+        type : [Types.ObjectId]
     },
     postedAt : {
         type : Date,

@@ -6,6 +6,7 @@ export interface Group {
     description : string;
     usersId? : string[];
     userAdmin? : string;
+    postsId? : string[]; 
     createdAt : Date;
 }
 
@@ -23,6 +24,9 @@ const groupeSchema = new Schema<Group>({
     userAdmin : {
         type : Types.ObjectId,
         required : true
+    },
+    postsId : {
+        type : [Types.ObjectId]
     },
     createdAt : {
         type : Date,

@@ -1,8 +1,9 @@
 import { RequestHandler } from "express";
 import { db } from "../dao";
+import { ExpressHandler } from "../types";
 
 
-export const listPostsHandler : RequestHandler = (req, res) => {
+export const listPostsHandler : ExpressHandler<{},{}> = (req, res) => {
     res.send({ posts : db.listPosts() })
 }
 

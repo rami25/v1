@@ -2,16 +2,19 @@ import { InMemoryDataStore } from "../dataStore/memoryDb";
 import { CommentDao } from "./CommentDao";
 import { GroupDao } from "./GroupDao";
 import { PostDao } from "./PostDao";
-import { PostLikeDao } from "./PostLikeDao";
+import { LikeDao } from "./LikeDao";
 import { UserDao } from "./UserDao";
 
 export interface DataStore extends 
     UserDao, 
     PostDao, 
-    CommentDao, 
-    GroupDao, 
-    PostLikeDao, 
+    GroupDao,
+    LikeDao, 
     CommentDao 
 {}
 
-export const db = new InMemoryDataStore()
+export let db: DataStore; 
+
+export async  function initDb() {
+    db = new InMemoryDataStore()
+}
