@@ -2,7 +2,7 @@ import express, { ErrorRequestHandler } from 'express'
 import { initDb } from './src/dao';
 
 (async() => {
-    await initDb()
+    await initDb().then(() => console.log('init seccesfully')).catch((e) => console.log("init error"))
 const app = express()
 app.use(express.json())
 app.use((req, res, next) => {

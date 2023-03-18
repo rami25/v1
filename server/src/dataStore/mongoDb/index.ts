@@ -7,7 +7,7 @@ import { DataStore } from "../../dao";
 
 
 export class MongoDB implements DataStore {
-    //User
+
     async createUser(user: User): Promise<void> {
        const newUser = new UserM(user)
        await newUser.save();
@@ -15,6 +15,7 @@ export class MongoDB implements DataStore {
     async deleteUser(user: User, userName?: string): Promise<void> {
         const USER = UserM.find().where('userName').equals(userName)
         await USER.deleteOne()
+ 
     }
     updateCurrentUser(user: Partial<User>): Promise<void> {
         throw new Error("Method not implemented.");
@@ -46,13 +47,10 @@ export class MongoDB implements DataStore {
     addFriend(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    addUserPost(post: Post): Promise<void> {
+    listPosts(userId?: any, groupId?: any, profileId?: any, privacy?: string | undefined): Promise<Post[]> {
         throw new Error("Method not implemented.");
     }
-    listPosts(userId?: string | undefined): Post[] {
-        throw new Error("Method not implemented.");
-    }
-    createPost(post: Post): void {
+    createPost(post: Post, groupeId?: string | undefined, userId?: string | undefined): Promise<void> {
         throw new Error("Method not implemented.");
     }
     getPost(id: string, userId?: string | undefined): Post | undefined {
@@ -61,10 +59,13 @@ export class MongoDB implements DataStore {
     getPostByUrl(url: string): Post | undefined {
         throw new Error("Method not implemented.");
     }
-    deletePost(id: string): void {
+    deletePost(postId: any, userId: any): Promise<void> {
         throw new Error("Method not implemented.");
     }
     listGroups(userId?: string | undefined): Group[] {
+        throw new Error("Method not implemented.");
+    }
+    listGroupPosts(id: string, groupName?: string | undefined, privacy?: string | undefined): Promise<Post[]> {
         throw new Error("Method not implemented.");
     }
     listUsers(userId?: string | undefined): User[] {
@@ -79,7 +80,13 @@ export class MongoDB implements DataStore {
     getGroup(id: string, userId?: string | undefined): Group | undefined {
         throw new Error("Method not implemented.");
     }
+    getGroupByGroupName(groupName: string): Promise<Group | undefined> {
+        throw new Error("Method not implemented.");
+    }
     deleteGroup(id: string): void {
+        throw new Error("Method not implemented.");
+    }
+    existUserById(id: any): Promise<boolean | undefined> {
         throw new Error("Method not implemented.");
     }
     createLike(like: Like): void {
@@ -106,6 +113,5 @@ export class MongoDB implements DataStore {
     deleteComment(id: string): void {
         throw new Error("Method not implemented.");
     }
-    
 }
 

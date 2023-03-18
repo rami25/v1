@@ -1,29 +1,29 @@
 import { Post } from "../types/Post";
 ////////////////////////////posts
+export interface ListPostsRequest {
+    userId? : any;
+    groupId? : any;
+    profileId? : any;
+}
+export interface ListPostsResponse {
+    posts : Post[];
+}
+//
 export type CreatePostRequest = {
  title: string;
  description: string;
  urls?: any;
  files?: any;      
- userId?: string;
- groupName?: string;
- privacy?: string;
+ userId: any;
+ groupId?: any;
+ privacy: string;
 }
-
 export interface CreatePostResponse {}
-
-export interface ListPostsRequest {
-    userId : string;
-    groupName : string;
-    userName : string;
-}
-export interface ListPostsResponse {
-    posts : Post[];
-}
+//
 export interface DeletePostRequest {
-    userId: string;
-    postId: string;
-    groupName?: string;
+    userId?: any;
+    postId: any;
+    groupId?: any;
 }
 export interface DeletePostResponse {}
 ///////////////////////////////////////////////////

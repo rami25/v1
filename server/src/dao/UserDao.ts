@@ -1,5 +1,4 @@
 import { Group } from '../../../shared/src/types/Group';
-import { Post } from '../../../shared/src/types/Post';
 import { User } from './../../../shared/src/types/User';
 
 export interface UserDao {

@@ -4,22 +4,21 @@
 
 ### fonctionnalites :
     -visitor : 
-        ->list publics posts(by user or group) 
-        ->list Groups(with theirs descriptions)
-        ->list users profiles(with their publics posts , groups) 
+        ->list publics posts(by user or group user)main publics posts or profile publics posts  or group publics posts
+        ->list Groups(with theirs descriptions) and publics posts
+        ->list users profiles(with their descriptions , publics posts and groups) 
         ->createAcount
-    -user :
+    -user (as visitor also):
         ->Web Auth
-        ->list publics posts
         ->get his profile (posts 'public and private' , description ,(groups and theirs friends) )
-        ->list users profiles(with their publics posts , groups)
-        ->create post(public or private within a group)
+        ->create post(public or private within a group(and his profile) or her profile only)
+        ->delete his own post ( in group(and his profile) or his profile only)
         ->create Group(set as an admin)
-        ->list Groups(with theirs descriptions and friends)
+        ->list his groups (with theirs descriptions and posts(publics and privates))
         ->send user request to the group
         ->send group request
         ->join group(by accepting request) 
-        ->update profile 
+        ->update his own profile (description , UserName , email ...)
 
     -admin (extends from user):
         -> add user

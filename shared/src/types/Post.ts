@@ -3,13 +3,13 @@ import { Like } from './Like';
 import { Comment } from './Comment';
 
 export interface Post {
-    id?: string;
+    id?: Types.ObjectId;
     title: string;
     description: string;
     urls: string[];
     files: string[];
-    userId?: string;
-    groupName?: string;//
+    userId?: Types.ObjectId;
+    groupId?: Types.ObjectId;
     comments? : Comment[];
     likes? : Like[];
     postedAt?: number;
@@ -34,8 +34,8 @@ const postSchema = new Schema<Post>({
         type : Types.ObjectId,
         required : true
     },
-    groupName : {
-        type : String
+    groupId : {
+        type : Types.ObjectId
     },
     comments : {
         type : [Types.ObjectId]
