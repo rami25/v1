@@ -14,6 +14,7 @@ app.use((req, res, next) => {
 
 
 app.use('/posts', require('./src/routes/postRoute'))
+app.use('/users', require('./src/routes/userRoute'))
 
 
 

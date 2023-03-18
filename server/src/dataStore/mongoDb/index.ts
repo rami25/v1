@@ -9,11 +9,12 @@ import { DataStore } from "../../dao";
 export class MongoDB implements DataStore {
     //User
     async createUser(user: User): Promise<void> {
-       const u = new UserM(user)
-       await u.save();
+       const newUser = new UserM(user)
+       await newUser.save();
     }
-    deleteUser(user: User): Promise<void> {
-        throw new Error("Method not implemented.");
+    async deleteUser(user: User, userName?: string): Promise<void> {
+        const USER = UserM.find().where('userName').equals(userName)
+        await USER.deleteOne()
     }
     updateCurrentUser(user: Partial<User>): Promise<void> {
         throw new Error("Method not implemented.");

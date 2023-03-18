@@ -9,9 +9,10 @@ export interface Post {
     urls: string[];
     files: string[];
     userId?: string;
-    comments : Comment[];
-    likes : Like[];
-    postedAt: Date;
+    groupName?: string;//
+    comments? : Comment[];
+    likes? : Like[];
+    postedAt?: number;
     privacy: string;
 }
 
@@ -32,6 +33,9 @@ const postSchema = new Schema<Post>({
     userId : {
         type : Types.ObjectId,
         required : true
+    },
+    groupName : {
+        type : String
     },
     comments : {
         type : [Types.ObjectId]

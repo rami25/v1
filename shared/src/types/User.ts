@@ -6,8 +6,8 @@ export interface User {
     email: string;
     password: string;
     createdAt: Date;
+    description: string;
     posts: string[];
-    friends: string[];
     groups: string[];
 }
 
@@ -28,10 +28,10 @@ const userSchema = new Schema<User>({
         type : Date,
         default : Date.now()
     },
-    posts : {
-        type : [Types.ObjectId]
+    description : {
+        type : String
     },
-    friends : {
+    posts : {
         type : [Types.ObjectId]
     },
     groups : {

@@ -6,34 +6,43 @@ import { User } from "../../../../shared/src/types/User";
 import { DataStore } from "../../dao";
 
 export class InMemoryDataStore implements DataStore {
-    createUser(user: User): void {
+    createUser(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    updateCurrentUser(user: Partial<User>): void {
+    deleteUser(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    getUserById(id: string): User | undefined {
+    updateCurrentUser(user: Partial<User>): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    getUserByEmail(email: string): User | undefined {
+    getUserById(id: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
     }
-    getUserByUsername(userName: string): User | undefined {
+    getUserByEmail(email: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
     }
-    searchUser(userName: string): User | undefined {
+    getUserByUsername(userName: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
     }
-    sendRequestToUser(userName: string): void {
+    searchUser(userName: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
     }
-    addGroup(group: Group): void {
+    sendRequestToUser(userName: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    addFriend(user: User): void {
+    sendRequestToGroup(group: Group): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    addUserPost(post: Post): void {
+    joinGroup(group: Group): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    addGroup(group: Group): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    addFriend(user: User): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    addUserPost(post: Post): Promise<void> {
         throw new Error("Method not implemented.");
     }
     listPosts(userId?: string | undefined): Post[] {
@@ -93,6 +102,6 @@ export class InMemoryDataStore implements DataStore {
     deleteComment(id: string): void {
         throw new Error("Method not implemented.");
     }
-    
+   
 
 }

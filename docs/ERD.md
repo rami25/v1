@@ -6,16 +6,16 @@
     -visitor : 
         ->list publics posts(by user or group) 
         ->list Groups(with theirs descriptions)
-        ->list users profiles(with their publics posts , groups and their friends)
+        ->list users profiles(with their publics posts , groups) 
         ->createAcount
     -user :
-        ->Auth
+        ->Web Auth
         ->list publics posts
-        ->list his profile (posts 'public and private' , groups , friends)
-        ->list users profiles(with their publics posts , groups and their friends)
-        ->create post(public or within a group)
+        ->get his profile (posts 'public and private' , description ,(groups and theirs friends) )
+        ->list users profiles(with their publics posts , groups)
+        ->create post(public or private within a group)
         ->create Group(set as an admin)
-        ->list Groups(with theirs descriptions)
+        ->list Groups(with theirs descriptions and friends)
         ->send user request to the group
         ->send group request
         ->join group(by accepting request) 
@@ -23,7 +23,7 @@
 
     -admin (extends from user):
         -> add user
-        ->delete user
+        -> delete user
         -> generate settings
 
 

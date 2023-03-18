@@ -15,5 +15,5 @@ export interface UserDao {
   joinGroup(group : Group) : Promise<void>;
   addGroup(group : Group) : Promise<void>;
   addFriend(user : User) : Promise<void>;
-  addUserPost(post : Post) : Promise<void>;
+  //addUserPost(post : Post, userId?:string) : Promise<void>;
 }
