@@ -1,5 +1,6 @@
-require('dotenv').config()
+import dotenv from 'dotenv'
 import mongoose, { ConnectOptions } from 'mongoose'
+dotenv.config()
 const config = {
     useNewUrlParser: true
     // useUnifiedTopology:true

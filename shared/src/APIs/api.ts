@@ -27,25 +27,18 @@ export interface DeletePostRequest {
     groupId?: any;
 }
 export interface DeletePostResponse {}
+export interface UpdatePostRequest {}
+export interface UpdatePostResponse {}
 ///////////////////////////////////////////////////
 /////////////////////////////////////////users
 export interface SignInRequest {
     login : string;
     password: string;
 }
-export type SignInResponse = User | {
-    userName: string;
-    email: string;
-    description?: string;
-} | {}
-    // _id: string;
-    // username : string;
-    // email : string;
-    // password? : string;
-    // createdat: Date;
-    // description?: string;
-    // posts?: string[];
-    // groups?: string[];
+export interface SignInResponse { 
+    user : Pick<User, 'id'|'userName'|'email'|'description'|'createdAt'>;
+    jwt: string;
+}
 
 export interface SignUpRequest {
     userName : string;
@@ -53,4 +46,6 @@ export interface SignUpRequest {
     password : string;
     description?: string;
 }
-export interface SignUpResponse {}
+export interface SignUpResponse {
+    jwt: string;
+}

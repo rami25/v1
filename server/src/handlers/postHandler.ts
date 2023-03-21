@@ -3,7 +3,9 @@ import { CreatePostRequest,
          DeletePostRequest, 
          DeletePostResponse, 
          ListPostsRequest, 
-         ListPostsResponse 
+         ListPostsResponse, 
+         UpdatePostRequest,
+         UpdatePostResponse
 } from './../../../shared/src/APIs/api';
 import { db } from "../dao";
 import { ExpressHandler } from "../types";
@@ -90,4 +92,11 @@ DeletePostResponse
         await db.deletePost(req.body.postId, req.body.groupId)
         return res.sendStatus(200)
     }
+}
+
+export const updatePostHandler : ExpressHandler<
+UpdatePostRequest,
+UpdatePostResponse
+> = async (req, res) => {
+
 }

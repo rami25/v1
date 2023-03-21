@@ -9,13 +9,7 @@ import { DataStore } from "../../dao";
 export class MongoDB implements DataStore {
 
     async createUser(user: User): Promise<void> {
-    //    const newUser = UserM.create({
-    //     userName: user.userName,
-    //     email: user.email,
-    //     password: user.password,
-    //     createdAt: Date.now()
-    //    })
-        const newUser = UserM.create(user)
+        const newUser = await UserM.create(user)
         await (await newUser).save()
     }
     async deleteUser(user: User, userName?: string): Promise<void> {
@@ -26,20 +20,17 @@ export class MongoDB implements DataStore {
     updateCurrentUser(user: Partial<User>): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    getUserById(id: string): Promise<User | undefined> {
-        throw new Error("Method not implemented.");
+    async getUserById(id: string): Promise<User | undefined> {
+        const user = await UserM.findOne({}).where("id").equals(id) || undefined
+        return user
     }
     async getUserByEmail(email: string): Promise<User | undefined> {
-        const user = await UserM.findOne({email : { $eq : email}})
-        if(user)
-            return user
-        return undefined
+        const user = await UserM.findOne({email : { $eq : email}}) || undefined
+        return user
     }
     async getUserByUsername(userName: string): Promise<User | undefined> {
-        const user = await UserM.findOne({}).where("userName").equals(userName)
-        if(user)
-            return user
-        return undefined
+        const user = await UserM.findOne({}).where("userName").equals(userName) || undefined
+        return user
     }
     searchUser(userName: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");

@@ -3,10 +3,13 @@ import {
         SignInResponse, 
         SignUpRequest,
         SignUpResponse
-} from './../../../shared/src/APIs/api';
+} from './../../../shared/src/APIs/api'
+import { ERRORS } from './../../../shared/src/errors'
 import { ExpressHandler } from "../types"
-import { User } from '../../../shared/src/types/User';
+import { User } from '../../../shared/src/types/User'
 import { db } from '../dao';
+import { signJwt } from '../auth'
+import crypto from 'crypto'
 
 export const signInHandler : ExpressHandler<
 SignInRequest,
@@ -14,16 +17,22 @@ SignInResponse
 > = async (req, res) => {
     const { login , password } = req.body
     if(!login || !password){
-        return res.status(400).send('all fields are required')
+        return res.status(400).send({error:'all fields are required'})
     }
     const existing = (await db.getUserByUsername(login)) || (await db.getUserByEmail(login))
-    if(!existing || existing.password !== password){
-        return res.status(403).send('not authorized')
+    if(!existing || existing.password !== hashPassword(password)){
+        return res.status(403).send({error: 'unauthorized'})
     }
+    const jwt = signJwt({userId : existing.id!})
     return res.status(200).send({
-        userName: existing.userName,
-        email: existing.email,
-        description : existing.description
+        user: {
+            id: existing.id,
+            userName: existing.userName,
+            email: existing.email,
+            description : existing.description,
+            createdAt: existing.createdAt,
+        },
+        jwt,
     })    
 }
 
@@ -31,18 +40,37 @@ export const signUpHandler : ExpressHandler<
 SignUpRequest,
 SignUpResponse
 > = async (req, res) => {
-    if(!req.body.userName || !req.body.email || !req.body.password)
+    const { userName , email, password ,description} = req.body
+    if(!userName || !email || !password)
         return res.sendStatus(400)
+    if (await db.getUserByEmail(email)) {
+      return res.status(403).send({ error: ERRORS.DUPLICATE_EMAIL });
+    }
+    if (await db.getUserByUsername(userName)) {
+      return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
+    }
+    //TODO verified req.body and duplicated fields
     const newUser: User = {
-        userName: req.body.userName,
-        email: req.body.email,
-        password: req.body.password,
-        createdAt: Date.now()
+        userName,
+        email,
+        password: hashPassword(password),
+        createdAt: Date.now(),
+        description
     }    
     await db.createUser(newUser)
-    res.sendStatus(200)
+    const jwt = signJwt({userId : newUser.id!})
+    res.status(200).send({
+        jwt,
+    })
 }
 
 export const deleteUserHandler : ExpressHandler<{},{}> = async (req, res) => {
+}
+export const updateUserHandler : ExpressHandler<{},{}> = async (req, res) => {
+}
 
+function hashPassword(password: string): string {
+    return crypto
+      .pbkdf2Sync(password, process.env.PASSWORD_SALT!, 42, 64, 'sha512')
+      .toString('hex');
 }
