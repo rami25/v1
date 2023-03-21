@@ -1,13 +1,23 @@
 ###
 get http://localhost:3000/posts
+Content-Type: application/json
 
+{
+    "userId" : "123",
+    "profileId" : "123"
+}
 ### 
 post http://localhost:3000/posts
 Content-Type: application/json
 
 {
-    "id" : "1",
-    "title" : "first post"
+  "title": "new post",
+  "description": "new description",
+  "urls" : "dfsd",
+  "files" : "fafa",
+  "userId": "123",
+  "groupId": "32432",
+  "privacy": "public"
 }
 
 ###
@@ -17,4 +27,14 @@ Content-Type: application/json
 {
     "id" : "1",
     "title" : "first post"
+}
+
+###
+post http://localhost:3000/users/signup
+Content-Type: application/json
+
+{
+  "userName": "Rami",
+  "email": "ramibenmrad@gmail.com",
+  "password": "rami123"
 }

@@ -1,4 +1,5 @@
 import { Post } from "../types/Post";
+import { User } from "../types/User";
 ////////////////////////////posts
 export interface ListPostsRequest {
     userId? : any;
@@ -27,3 +28,29 @@ export interface DeletePostRequest {
 }
 export interface DeletePostResponse {}
 ///////////////////////////////////////////////////
+/////////////////////////////////////////users
+export interface SignInRequest {
+    login : string;
+    password: string;
+}
+export type SignInResponse = User | {
+    userName: string;
+    email: string;
+    description?: string;
+} | {}
+    // _id: string;
+    // username : string;
+    // email : string;
+    // password? : string;
+    // createdat: Date;
+    // description?: string;
+    // posts?: string[];
+    // groups?: string[];
+
+export interface SignUpRequest {
+    userName : string;
+    email : string;
+    password : string;
+    description?: string;
+}
+export interface SignUpResponse {}

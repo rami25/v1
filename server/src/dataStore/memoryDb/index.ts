@@ -1,7 +1,7 @@
 import { Comment } from "../../../../shared/src/types/Comment";
 import { Group } from "../../../../shared/src/types/Group";
 import { Like } from "../../../../shared/src/types/Like";
-import { Post } from "../../../../shared/src/types/Post";
+import PostM, { Post } from "../../../../shared/src/types/Post";
 import { User } from "../../../../shared/src/types/User";
 import { DataStore } from "../../dao";
 
@@ -42,11 +42,11 @@ export class InMemoryDataStore implements DataStore {
     addFriend(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    listPosts(userId?: any, groupId?: any, profileId?: any, privacy?: string | undefined): Promise<Post[]> {
-        throw new Error("Method not implemented.");
+    async listPosts(userId?: any, groupId?: any, profileId?: any, privacy?: string | undefined): Promise<Post[]> {
+        return await PostM.find()
     }
-    createPost(post: Post, groupeId?: string | undefined, userId?: string | undefined): Promise<void> {
-        throw new Error("Method not implemented.");
+    async createPost(post: Post, groupeId?: string | undefined, userId?: string | undefined): Promise<void> {
+        console.log('post created successfully')
     }
     getPost(id: string, userId?: string | undefined): Post | undefined {
         throw new Error("Method not implemented.");

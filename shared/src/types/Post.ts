@@ -54,5 +54,5 @@ const postSchema = new Schema<Post>({
 
 })
 
-const Post = model<Post>('Post', postSchema)
-export default Post
+const PostM = model<Post>('PostM', postSchema)
+export default PostM

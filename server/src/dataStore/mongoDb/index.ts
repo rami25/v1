@@ -1,6 +1,6 @@
 import { Comment } from "../../../../shared/src/types/Comment";
 import { Group } from "../../../../shared/src/types/Group";
-import { Post } from "../../../../shared/src/types/Post";
+import PostM, { Post } from "../../../../shared/src/types/Post";
 import { Like } from "../../../../shared/src/types/Like";
 import UserM, { User } from "../../../../shared/src/types/User";
 import { DataStore } from "../../dao";
@@ -9,8 +9,14 @@ import { DataStore } from "../../dao";
 export class MongoDB implements DataStore {
 
     async createUser(user: User): Promise<void> {
-       const newUser = new UserM(user)
-       await newUser.save();
+    //    const newUser = UserM.create({
+    //     userName: user.userName,
+    //     email: user.email,
+    //     password: user.password,
+    //     createdAt: Date.now()
+    //    })
+        const newUser = UserM.create(user)
+        await (await newUser).save()
     }
     async deleteUser(user: User, userName?: string): Promise<void> {
         const USER = UserM.find().where('userName').equals(userName)
@@ -23,11 +29,17 @@ export class MongoDB implements DataStore {
     getUserById(id: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
     }
-    getUserByEmail(email: string): Promise<User | undefined> {
-        throw new Error("Method not implemented.");
+    async getUserByEmail(email: string): Promise<User | undefined> {
+        const user = await UserM.findOne({email : { $eq : email}})
+        if(user)
+            return user
+        return undefined
     }
-    getUserByUsername(userName: string): Promise<User | undefined> {
-        throw new Error("Method not implemented.");
+    async getUserByUsername(userName: string): Promise<User | undefined> {
+        const user = await UserM.findOne({}).where("userName").equals(userName)
+        if(user)
+            return user
+        return undefined
     }
     searchUser(userName: string): Promise<User | undefined> {
         throw new Error("Method not implemented.");
@@ -47,11 +59,11 @@ export class MongoDB implements DataStore {
     addFriend(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    listPosts(userId?: any, groupId?: any, profileId?: any, privacy?: string | undefined): Promise<Post[]> {
-        throw new Error("Method not implemented.");
+    async listPosts(userId?: any, groupId?: any, profileId?: any, privacy?: string | undefined): Promise<Post[]> {
+        return await PostM.find().where(userId).equals("123")
     }
-    createPost(post: Post, groupeId?: string | undefined, userId?: string | undefined): Promise<void> {
-        throw new Error("Method not implemented.");
+    async createPost(post: Post, groupeId?: string | undefined, userId?: string | undefined): Promise<void> {
+        console.log("post was create successfully")
     }
     getPost(id: string, userId?: string | undefined): Post | undefined {
         throw new Error("Method not implemented.");

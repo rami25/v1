@@ -5,10 +5,10 @@ export interface User {
     userName: string;
     email: string;
     password: string;
-    createdAt: Date;
-    description: string;
-    posts: string[];
-    groups: string[];
+    createdAt: number;
+    description?: string;
+    posts?: string[];
+    groups?: string[];
 }
 
 const userSchema = new Schema<User>({
@@ -25,7 +25,7 @@ const userSchema = new Schema<User>({
         required : true
     },
     createdAt : {
-        type : Date,
+        type : Number,
         default : Date.now()
     },
     description : {

@@ -68,7 +68,7 @@ CreatePostResponse
             privacy: req.body.privacy
             } 
         if(req.body.groupId){
-            await db.createPost(post,req.body.groupId,req.body.userId)
+            await db.createPost(post)//,req.body.groupId,req.body.userId)
             return res.sendStatus(200)
         } 
         else{
