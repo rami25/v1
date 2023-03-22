@@ -15,7 +15,7 @@
         ->delete his own post ( in group(and his profile) or his profile only)
         ->create Group(set as an admin)
         ->list his groups (with theirs descriptions and posts(publics and privates))
-        ->send user request to the group
+        ->send user request to the group(invite user)
         ->send group request
         ->join group(by accepting request) 
         ->update his own profile (description , UserName , email ...)

@@ -50,8 +50,10 @@ export class MongoDB implements DataStore {
     addFriend(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    async listPosts(userId?: any, groupId?: any, profileId?: any, privacy?: string | undefined): Promise<Post[]> {
-        return await PostM.find().where(userId).equals("123")
+    async listPosts(userId?: string, groupId?: string, profileId?: string, privacy?: string | undefined): Promise<Post[]> {
+        // publics main posts
+
+        return await PostM.find().where("userId").equals("123")
     }
     async createPost(post: Post, groupeId?: string | undefined, userId?: string | undefined): Promise<void> {
         console.log("post was create successfully")

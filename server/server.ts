@@ -12,6 +12,7 @@ import dotenv from 'dotenv'
 
 
 
+    app.use('/visitor', require('./src/routes/visitorRoute'))
     app.use('/users', require('./src/routes/userRoute'))
     app.use('/posts', require('./src/routes/postRoute'))
 

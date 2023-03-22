@@ -9,7 +9,7 @@ import { ExpressHandler } from "../types"
 import { User } from '../../../shared/src/types/User'
 import { db } from '../dao';
 import { signJwt } from '../auth'
-import crypto from 'crypto'
+import { hashPassword } from '../env';
 
 export const signInHandler : ExpressHandler<
 SignInRequest,
@@ -43,13 +43,14 @@ SignUpResponse
     const { userName , email, password ,description} = req.body
     if(!userName || !email || !password)
         return res.sendStatus(400)
+
+    //TODO verified req.body and duplicated fields
     if (await db.getUserByEmail(email)) {
       return res.status(403).send({ error: ERRORS.DUPLICATE_EMAIL });
     }
     if (await db.getUserByUsername(userName)) {
       return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
     }
-    //TODO verified req.body and duplicated fields
     const newUser: User = {
         userName,
         email,
@@ -64,13 +65,12 @@ SignUpResponse
     })
 }
 
+export const signOutUserHandler : ExpressHandler<{},{}> = async (req, res) => {
+
+}
+
 export const deleteUserHandler : ExpressHandler<{},{}> = async (req, res) => {
 }
 export const updateUserHandler : ExpressHandler<{},{}> = async (req, res) => {
 }
 
-function hashPassword(password: string): string {
-    return crypto
-      .pbkdf2Sync(password, process.env.PASSWORD_SALT!, 42, 64, 'sha512')
-      .toString('hex');
-}

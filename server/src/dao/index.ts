@@ -18,6 +18,6 @@ export let db: DataStore;
 
 export async  function initDb(): Promise<void> {
     connectDb()
-    .then(() => db = new MongoDB())
+    .then(() => { db = new MongoDB(); console.log('Connected to Database')})
     .catch((e) => console.log(e))
 }

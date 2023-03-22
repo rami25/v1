@@ -24,16 +24,16 @@ ListPostsResponse
         await db.listPosts(req.body.profileId, 'public')
         return res.sendStatus(200)
     }
+    if(!req.body.userId && req.body.groupId){//as visitor search group
+        await db.listPosts(req.body.groupId, 'public')
+        return res.sendStatus(200)
+    }
     if(req.body.userId && !req.body.groupId && req.body.profileId){
         if(req.body.userId === req.body.profileId){//owns posts(public and private)
             await db.listPosts(req.body.userId)
             return res.sendStatus(200)
         }
         await db.listPosts(req.body.profileId, 'public')
-        return res.sendStatus(200)
-    }
-    if(!req.body.userId && req.body.groupId){//as visitor search group
-        await db.listPosts(req.body.groupId, 'public')
         return res.sendStatus(200)
     }
     if(req.body.userId && req.body.groupId){//as user search group
