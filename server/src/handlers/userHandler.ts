@@ -23,10 +23,10 @@ SignInResponse
     if(!existing || existing.password !== hashPassword(password)){
         return res.status(403).send({error: 'unauthorized'})
     }
-    const jwt = signJwt({userId : existing.id!})
+    const jwt = signJwt({userId : existing._id!})
     return res.status(200).send({
         user: {
-            id: existing.id,
+            _id: existing._id,
             userName: existing.userName,
             email: existing.email,
             description : existing.description,
@@ -55,11 +55,11 @@ SignUpResponse
         userName,
         email,
         password: hashPassword(password),
-        createdAt: Date.now(),
+        createdAt: new Date(),
         description
     }    
     await db.createUser(newUser)
-    const jwt = signJwt({userId : newUser.id!})
+    const jwt = signJwt({userId : newUser._id!})
     res.status(200).send({
         jwt,
     })

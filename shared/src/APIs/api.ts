@@ -2,9 +2,9 @@ import { Post } from "../types/Post";
 import { User } from "../types/User";
 ////////////////////////////posts
 export interface ListPostsRequest {
-    userId? : any;
-    groupId? : any;
-    profileId? : any;
+    userId? : string;
+    groupId? : string;
+    profileId? : string;
 }
 export interface ListPostsResponse {
     posts : Post[];
@@ -15,7 +15,7 @@ export type CreatePostRequest = {
  description: string;
  urls?: any;
  files?: any;      
- userId: any;
+ userId?: string;
  groupId?: any;
  privacy: string;
 }
@@ -36,7 +36,7 @@ export interface SignInRequest {
     password: string;
 }
 export interface SignInResponse { 
-    user : Pick<User, 'id'|'userName'|'email'|'description'|'createdAt'>;
+    user : Pick<User, '_id'|'userName'|'email'|'description'|'createdAt'>;
     jwt: string;
 }
 

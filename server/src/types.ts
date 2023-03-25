@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+import { Types } from 'mongoose';
 
 // Create generic type and append error prop to the Type T
 type WithError<T> = T & { error: string };
@@ -18,5 +19,5 @@ export type ExpressHandlerWithParams<Params, Req, Res> = RequestHandler<
 >
 
 export interface JwtObject {
-    userId : string;
+    userId : Types.ObjectId;
 }

@@ -17,8 +17,8 @@ ListPostsRequest,
 ListPostsResponse
 > = async (req, res) => {
     if(!req.body.groupId && !req.body.profileId){//as (visitor or user) to main posts
-        await db.listPosts('public')
-        return res.sendStatus(200)
+        const posts = await db.listPosts('public')
+        return res.status(200).send({posts})
     }
     if(!req.body.userId && !req.body.groupId && req.body.profileId){//as visitor to specific profile
         await db.listPosts(req.body.profileId, 'public')
@@ -53,31 +53,31 @@ export const createPostHandler : ExpressHandler<
 CreatePostRequest,
 CreatePostResponse
 > = async (req, res) => {
-    if(req.body.title && 
-       req.body.description && 
-       req.body.privacy &&
-       (req.body.urls || 
-       req.body.files)){
+    const { title , description , privacy , urls , files} = req.body
+    if(title && description && privacy && (urls || files)){
             //TODO Validations Fields
             const post: Post = {
-            title: req.body.title,
-            description: req.body.description,
-            urls: req.body.urls,
-            files: req.body.files, 
-            userId: req.body.userId,
+            title,
+            description,
+            urls,
+            files,
+            userId: res.locals.userId,
             groupId: req.body.groupId,
             postedAt: Date.now(),
-            privacy: req.body.privacy
+            privacy
             } 
         if(req.body.groupId){
             await db.createPost(post)//,req.body.groupId,req.body.userId)
             return res.sendStatus(200)
         } 
         else{
-            await db.createPost(post,req.body.userId)
+            console.log(res.locals.userId)
+            console.log('post created')
+            await db.createPost(post,res.locals.userId)
             return res.sendStatus(200)
         }
     }
+    res.status(200).json({})
 }
 
 export const deletePostHandler : ExpressHandler<

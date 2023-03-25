@@ -4,6 +4,7 @@ import PostM, { Post } from "../../../../shared/src/types/Post";
 import { Like } from "../../../../shared/src/types/Like";
 import UserM, { User } from "../../../../shared/src/types/User";
 import { DataStore } from "../../dao";
+import { Types } from "mongoose";
 
 
 export class MongoDB implements DataStore {
@@ -20,16 +21,25 @@ export class MongoDB implements DataStore {
     updateCurrentUser(user: Partial<User>): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    async getUserById(id: string): Promise<User | undefined> {
-        const user = await UserM.findOne({}).where("id").equals(id) || undefined
-        return user
+    async getUserById(id: Types.ObjectId): Promise<User | undefined> {
+        const userDoc = await UserM.findById(id).exec()
+        // .then(doc => { user = doc })
+        // .catch((err) => { console.error(err)})
+        // const user = await UserM.findById(id) || undefined//.where("_id").equals(id) || undefined
+        // const user = await UserM.findOne().where("_id").equals(id) || undefined
+        if(!userDoc) return undefined
+        return userDoc
     }
     async getUserByEmail(email: string): Promise<User | undefined> {
-        const user = await UserM.findOne({email : { $eq : email}}) || undefined
+        const user = await UserM.findOne().where("email").equals(email) || undefined
+        // const user = await UserM.findOne({email : { $eq : email}},function(err:any, user:any){
+        //     if(err) return console.error(err)
+        //     console.log(user)
+        // }) || undefined
         return user
     }
     async getUserByUsername(userName: string): Promise<User | undefined> {
-        const user = await UserM.findOne({}).where("userName").equals(userName) || undefined
+        const user = await UserM.findOne().where("userName").equals(userName) || undefined
         return user
     }
     searchUser(userName: string): Promise<User | undefined> {
@@ -50,11 +60,54 @@ export class MongoDB implements DataStore {
     addFriend(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    async listPosts(userId?: string, groupId?: string, profileId?: string, privacy?: string | undefined): Promise<Post[]> {
-        // publics main posts
 
-        return await PostM.find().where("userId").equals("123")
+    async listPosts(userId?: string, groupId?: string, profileId?: string, privacy?: string | undefined): Promise<Post[] | undefined> {
+        /////////////////////Handle tests
+        // publics main posts as (visitor or user)
+        if(!userId && !groupId && !profileId && (privacy === 'public'))
+            return await PostM.find().where("privacy").equals("public")
+
+        //visit profile as (visitor or user)
+        // else if(!userId && !groupId && profileId && (privacy === 'public')){
+        //     // const pId = {profileId : new ObjectId(profileId)}
+        //     return await PostM.find({
+        //          $and: [{userId : {$eq : new ObjectId(profileId)}},{privacy : {$eq : 'public'}}]
+        //     },function(err:any, doc:any){
+        //         if(err) return console.error(err)
+        //         console.log(doc)
+        //     })
+        // }
+        // //visit group as (visitor or user)    
+        // else if(!userId && groupId && !profileId && (privacy === 'public'))
+        //     return await PostM.find({
+        //         $and : [{groupId : {$eq : new ObjectId(groupId)}}, {privacy : {$eq : 'public'}}]
+        //     },function(err:any, doc:any){
+        //         if(err) return console.error(err)
+        //         console.log(doc)
+        //     })
+        // //visit your own profile as (user)
+        // else if(userId && !groupId && !profileId && !privacy){
+        //     return await PostM.find({
+        //         $and : [{userId : {$eq : new ObjectId(userId)}},
+        //         {$or : [{privacy : {$eq : 'public'}}, {privacy: {$eq : 'private'}}]}]
+        //     },function(err:any, doc:any){
+        //         if(err) return console.error(err)
+        //         console.log(doc)
+        //     })
+        // }
+        // //vist your own group
+        // else if(!userId && groupId && !profileId && !privacy){
+        //     return await PostM.find({
+        //         $and : [{groupId : {$eq : new ObjectId(groupId)}},
+        //         {$or : [{privacy : {$eq : 'public'}}, {privacy : {$eq : 'private'}}]}]
+        //     },function(err:any, doc:any){
+        //         if(err) return console.error(err)
+        //         console.log(doc)
+        //     })
+        // }
+        else return undefined
     }
+
     async createPost(post: Post, groupeId?: string | undefined, userId?: string | undefined): Promise<void> {
         console.log("post was create successfully")
     }

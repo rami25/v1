@@ -12,3 +12,5 @@ export async function connectDb(): Promise<void> {
     conn.connection.on('error' , (error) => {console.error(error);process.exit(1)})
     conn.connection.once('open', () => console.log('Connected to Database'))
 }
+
+// export const ObjectId = mongoose.Types.ObjectId

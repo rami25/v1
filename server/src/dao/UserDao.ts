@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { Group } from '../../../shared/src/types/Group';
 import { User } from './../../../shared/src/types/User';
 
@@ -5,7 +6,7 @@ export interface UserDao {
   createUser(user: User): Promise<void>;
   deleteUser(user: User) : Promise<void>;
   updateCurrentUser(user: Partial<User>): Promise<void>;
-  getUserById(id: string): Promise<User | undefined>;
+  getUserById(id: Types.ObjectId): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByUsername(userName: string): Promise<User | undefined>;
   searchUser(userName : string) : Promise<User | undefined>;

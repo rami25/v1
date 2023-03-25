@@ -1,14 +1,14 @@
-import { Schema, model, Types} from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 
 export interface User {
-    id?: string;
+    _id?: Types.ObjectId;
     userName: string;
     email: string;
     password: string;
-    createdAt: number;
+    createdAt: Date;
     description?: string;
-    posts?: string[];
-    groups?: string[];
+    posts?: Types.ObjectId[];
+    groups?: Types.ObjectId[];
 }
 
 const userSchema = new Schema<User>({
@@ -25,7 +25,7 @@ const userSchema = new Schema<User>({
         required : true
     },
     createdAt : {
-        type : Number,
+        type : Date,
         default : Date.now()
     },
     description : {
