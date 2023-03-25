@@ -61,7 +61,7 @@ export class MongoDB implements DataStore {
         throw new Error("Method not implemented.");
     }
 
-    async listPosts(userId?: string, groupId?: string, profileId?: string, privacy?: string | undefined): Promise<Post[] | undefined> {
+    async listPosts(userId?: Types.ObjectId, groupId?: string, profileId?: string, privacy?: string): Promise<Post[] | undefined> {
         /////////////////////Handle tests
         // publics main posts as (visitor or user)
         if(!userId && !groupId && !profileId && (privacy === 'public'))
@@ -108,8 +108,13 @@ export class MongoDB implements DataStore {
         else return undefined
     }
 
-    async createPost(post: Post, groupeId?: string | undefined, userId?: string | undefined): Promise<void> {
-        console.log("post was create successfully")
+    async createPost(post: Post, groupId?: string): Promise<void> {
+        if(!groupId){
+            const newPost = await PostM.create(post)
+            await (await newPost).save()
+            return
+        }
+        //TODO add to use posts
     }
     getPost(id: string, userId?: string | undefined): Post | undefined {
         throw new Error("Method not implemented.");

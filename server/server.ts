@@ -2,10 +2,10 @@ import express from 'express'
 import { initDb } from './src/dao';
 import { errHandler } from './src/middlewares/errorMiddleware';
 import { loggerMiddleware } from './src/middlewares/loggerMiddleware';
-import dotenv from 'dotenv'
+import { config } from 'dotenv'
 (async() => {
     await initDb()
-    dotenv.config()
+    config()
     const app = express()
     app.use(express.json())
     app.use(loggerMiddleware)

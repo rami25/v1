@@ -6,6 +6,6 @@ import { signInHandler, signUpHandler } from '../handlers/userHandler';
 const router = Router()
 router.get('/signin', asyncHandler(signInHandler))
 router.post('/signup', asyncHandler(signUpHandler))
-router.get('/', asyncHandler(listPostsHandler))
+router.get('/posts', asyncHandler(listPostsHandler))
 module.exports = router
 

@@ -3,7 +3,7 @@ import { Like } from './Like';
 import { Comment } from './Comment';
 
 export interface Post {
-    id?: Types.ObjectId;
+    _id?: Types.ObjectId;
     title: string;
     description: string;
     urls: string[];
@@ -12,7 +12,7 @@ export interface Post {
     groupId?: Types.ObjectId;
     comments? : Comment[];
     likes? : Like[];
-    postedAt?: number;
+    postedAt?: Date;
     privacy: string;
 }
 

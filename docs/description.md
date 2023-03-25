@@ -11,7 +11,7 @@ Resources(may be differents topics or specifically one) sharing app within a dev
     --discord:(same for messanger)
         1.comments issues(tod5el b3adhha)
         2.chat text (twali discription 3al post or comments)
-        3.save posts to your own bag with all comments ans upvotes
+        3.save posts to your own bag with all comments and upvotes(mafamech)
         4.issues : pin for message just a message (no comments or upvotes)
 
 ### pros  

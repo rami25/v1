@@ -19,6 +19,7 @@
         ->send group request
         ->join group(by accepting request) 
         ->update his own profile (description , UserName , email ...)
+        ->delete his profile
 
     -admin (extends from user):
         -> add user

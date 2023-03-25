@@ -17,36 +17,38 @@ ListPostsRequest,
 ListPostsResponse
 > = async (req, res) => {
     if(!req.body.groupId && !req.body.profileId){//as (visitor or user) to main posts
-        const posts = await db.listPosts('public')
+        const posts = await db.listPosts(undefined, undefined, undefined,'public')
         return res.status(200).send({posts})
     }
-    if(!req.body.userId && !req.body.groupId && req.body.profileId){//as visitor to specific profile
-        await db.listPosts(req.body.profileId, 'public')
+    const userId = res.locals.userId
+    if(!userId && !req.body.groupId && req.body.profileId){//as visitor to specific profile
+        await db.listPosts(undefined, undefined, req.body.profileId, 'public')
         return res.sendStatus(200)
     }
-    if(!req.body.userId && req.body.groupId){//as visitor search group
-        await db.listPosts(req.body.groupId, 'public')
+    if(!userId && req.body.groupId){//as visitor search group
+        await db.listPosts(undefined, req.body.groupId,undefined, 'public')
         return res.sendStatus(200)
     }
-    if(req.body.userId && !req.body.groupId && req.body.profileId){
-        if(req.body.userId === req.body.profileId){//owns posts(public and private)
-            await db.listPosts(req.body.userId)
+    if(userId && !req.body.groupId && req.body.profileId){
+        if(userId === req.body.profileId){//owns posts(public and private)
+            await db.listPosts(userId)
             return res.sendStatus(200)
         }
-        await db.listPosts(req.body.profileId, 'public')
+        await db.listPosts(undefined, undefined, req.body.profileId, 'public')
         return res.sendStatus(200)
     }
-    if(req.body.userId && req.body.groupId){//as user search group
-        const exists:boolean = await db.existUserById(req.body.userId) as boolean
+    if(userId && req.body.groupId){//as user search group
+        const exists:boolean = await db.existUserById(userId) as boolean
         if(exists){
-            await db.listGroupPosts(req.body.groupId)
+            await db.listPosts(undefined,req.body.groupId)
             return res.sendStatus(200)
         }
         else{
-            await db.listGroupPosts(req.body.groupId,'public')
+            await db.listPosts(undefined, req.body.groupId,undefined, 'public')
             return res.sendStatus(200)
         }
     }
+    res.sendStatus(401)
 }
 
 export const createPostHandler : ExpressHandler<
@@ -54,6 +56,7 @@ CreatePostRequest,
 CreatePostResponse
 > = async (req, res) => {
     const { title , description , privacy , urls , files} = req.body
+    const userId = res.locals.userId
     if(title && description && privacy && (urls || files)){
             //TODO Validations Fields
             const post: Post = {
@@ -61,19 +64,17 @@ CreatePostResponse
             description,
             urls,
             files,
-            userId: res.locals.userId,
-            groupId: req.body.groupId,
-            postedAt: Date.now(),
+            userId,
+            postedAt: new Date(),
             privacy
             } 
         if(req.body.groupId){
-            await db.createPost(post)//,req.body.groupId,req.body.userId)
+            post.groupId = req.body.groupId
+            await db.createPost(post, req.body.groupId)
             return res.sendStatus(200)
         } 
         else{
-            console.log(res.locals.userId)
-            console.log('post created')
-            await db.createPost(post,res.locals.userId)
+            await db.createPost(post)
             return res.sendStatus(200)
         }
     }
@@ -84,14 +85,16 @@ export const deletePostHandler : ExpressHandler<
 DeletePostRequest,
 DeletePostResponse
 > = async (req, res) => {
-    if(req.body.userId && req.body.postId){
-        await db.deletePost(req.body.postId, req.body.userId)
+    const userId = res.locals.userId
+    if(userId && req.body.postId && !req.body.groupId){
+        await db.deletePost(req.body.postId, userId)
         return res.sendStatus(200)
     }
-    if(req.body.groupId && req.body.postId){
+    if(userId && req.body.groupId && req.body.postId){
         await db.deletePost(req.body.postId, req.body.groupId)
         return res.sendStatus(200)
     }
+    res.sendStatus(401)
 }
 
 export const updatePostHandler : ExpressHandler<
