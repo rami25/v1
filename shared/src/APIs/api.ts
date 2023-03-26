@@ -1,3 +1,4 @@
+// import { Types } from "mongoose";
 import { Post } from "../types/Post";
 import { User } from "../types/User";
 ////////////////////////////posts
@@ -11,13 +12,13 @@ export interface ListPostsResponse {
 }
 //
 export type CreatePostRequest = {
- title: string;
- description: string;
- urls?: any;
- files?: any;      
 //  userId?: string;
- groupId?: any;
- privacy: string;
+   title: string;
+   description: string;
+   urls?: string[];
+   files?: string[];      
+   groupId?: string;
+   privacy: string;
 }
 export interface CreatePostResponse {}
 //
@@ -47,6 +48,6 @@ export interface SignUpRequest {
     description?: string;
 }
 export interface SignUpResponse {
-    user : Pick<User, '_id'|'userName'|'email'|'description'|'createdAt'|'posts'|'groups'>;
+    user : Pick<User, 'userName'|'email'|'description'|'createdAt'>;
     jwt: string;
 }

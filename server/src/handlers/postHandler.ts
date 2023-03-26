@@ -10,6 +10,7 @@ import { CreatePostRequest,
 import { db } from "../dao";
 import { ExpressHandler } from "../types";
 import { Post } from '../../../shared/src/types/Post';
+import { ObjectId } from '../../../shared';
 
 
 export const listPostsHandler : ExpressHandler<
@@ -37,7 +38,7 @@ ListPostsResponse
         await db.listPosts(undefined, undefined, req.body.profileId, 'public')
         return res.sendStatus(200)
     }
-    if(userId && req.body.groupId){//as user search group
+    if(userId && req.body.groupId){//as user search group or belong group
         const exists:boolean = await db.existUserById(userId) as boolean
         if(exists){
             await db.listPosts(undefined,req.body.groupId)
@@ -58,27 +59,22 @@ CreatePostResponse
     const { title , description , privacy , urls , files} = req.body
     const userId = res.locals.userId
     if(title && description && privacy && (urls || files)){
-            //TODO Validations Fields
-            const post: Post = {
+        //TODO Validations Fields
+        const post: Post = {
             title,
             description,
-            urls,
-            files,
+            urls: urls as string[],
+            files: files as string[],
             userId,
             postedAt: new Date(),
             privacy
-            } 
-        if(req.body.groupId){
-            post.groupId = req.body.groupId
-            await db.createPost(post, req.body.groupId)
-            return res.sendStatus(200)
         } 
-        else{
-            await db.createPost(post)
-            return res.sendStatus(200)
-        }
+        if(req.body.groupId)
+            post.groupId = new ObjectId(req.body.groupId)
+        await db.createPost(post)
+        return res.sendStatus(200)
     }
-    res.status(200).json({})
+    res.status(401).json({})
 }
 
 export const deletePostHandler : ExpressHandler<

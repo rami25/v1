@@ -15,6 +15,9 @@ import { config } from 'dotenv'
     app.use('/visitor', require('./src/routes/visitorRoute'))
     app.use('/users', require('./src/routes/userRoute'))
     app.use('/posts', require('./src/routes/postRoute'))
+    app.use('/groups', require('./src/routes/groupRoute'))
+    app.use('/comments', require('./src/routes/groupRoute'))
+    app.use('/likes', require('./src/routes/groupRoute'))
 
 
 

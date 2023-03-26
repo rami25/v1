@@ -3,7 +3,7 @@ import { Group } from '../../../shared/src/types/Group';
 import { User } from './../../../shared/src/types/User';
 
 export interface UserDao {
-  createUser(user: User): Promise<void>;
+  createUser(user: User): Promise<User>;
   deleteUser(user: User) : Promise<void>;
   updateCurrentUser(user: Partial<User>): Promise<void>;
   getUserById(id: Types.ObjectId): Promise<User | undefined>;

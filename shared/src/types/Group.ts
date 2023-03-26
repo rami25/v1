@@ -1,12 +1,12 @@
 import { Schema, model, Types} from 'mongoose';
 
 export interface Group {
-    id?: string;
+    _id?: Types.ObjectId;
     groupName : string;
     description : string;
-    usersId? : string[];
-    userAdmin? : string;
-    postsId? : string[]; 
+    usersId? : Types.ObjectId[];
+    userAdmin? : Types.ObjectId;
+    posts : Types.ObjectId[];
     createdAt : Date;
 }
 
@@ -25,7 +25,7 @@ const groupeSchema = new Schema<Group>({
         type : Types.ObjectId,
         required : true
     },
-    postsId : {
+    posts : {
         type : [Types.ObjectId]
     },
     createdAt : {
@@ -34,5 +34,5 @@ const groupeSchema = new Schema<Group>({
     }
 })
 
-const Group = model<Group>('Group', groupeSchema)
-export default Group
+const GroupM = model<Group>('GroupM', groupeSchema)
+export default GroupM

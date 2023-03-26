@@ -1,6 +1,4 @@
 import { Schema, model, Types} from 'mongoose';
-import { Like } from './Like';
-import { Comment } from './Comment';
 
 export interface Post {
     _id?: Types.ObjectId;
@@ -10,8 +8,8 @@ export interface Post {
     files: string[];
     userId?: Types.ObjectId;
     groupId?: Types.ObjectId;
-    comments? : Comment[];
-    likes? : Like[];
+    comments? : Types.ObjectId[];
+    likes? : Types.ObjectId[];
     postedAt?: Date;
     privacy: string;
 }

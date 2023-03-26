@@ -31,6 +31,8 @@ SignInResponse
             email: existing.email,
             description : existing.description,
             createdAt: existing.createdAt,
+            posts: existing.posts,
+            groups: existing.groups
         },
         jwt,
     })    
@@ -40,7 +42,7 @@ export const signUpHandler : ExpressHandler<
 SignUpRequest,
 SignUpResponse
 > = async (req, res) => {
-    const { userName , email, password ,description} = req.body
+    const { userName , email, password ,description } = req.body
     if(!userName || !email || !password)
         return res.sendStatus(400)
 
@@ -58,9 +60,15 @@ SignUpResponse
         createdAt: new Date(),
         description
     }    
-    await db.createUser(newUser)
-    const jwt = signJwt({userId : newUser._id!})
+    const user = await db.createUser(newUser)
+    const jwt = signJwt({userId : user._id!})
     res.status(200).send({
+        user : {
+            userName: user.userName,
+            email: user.email,
+            description: user.description,
+            createdAt: user.createdAt
+        },
         jwt,
     })
 }
@@ -74,3 +82,5 @@ export const deleteUserHandler : ExpressHandler<{},{}> = async (req, res) => {
 export const updateUserHandler : ExpressHandler<{},{}> = async (req, res) => {
 }
 
+export const resetPassword : ExpressHandler<{},{}> = async (req, res) => {
+}
