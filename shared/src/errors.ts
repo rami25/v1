@@ -6,6 +6,7 @@ export enum ERRORS {
   USER_REQUIRED_FIELDS = 'Email, username, and password are required',
   DUPLICATE_EMAIL = 'An account with this email already exists',
   DUPLICATE_USERNAME = 'An account with this username already exists',
+  DUPLICATE_GROUP_NAME = 'A group with this groupName already exists',
 
   POST_ID_MISSING = 'Post ID is missing',
   POST_NOT_FOUND = 'Post not found',

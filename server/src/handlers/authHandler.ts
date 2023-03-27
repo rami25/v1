@@ -79,6 +79,7 @@ SignUpResponse
     res.cookie('jwt', jwt);
     res.status(200).send({
         user : {
+            _id: user._id,
             userName: user.userName,
             email: user.email,
             description: user.description,

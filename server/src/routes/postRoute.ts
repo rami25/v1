@@ -1,6 +1,11 @@
 import  asyncHandler from 'express-async-handler';
 import { Router } from "express"
-import { createPostHandler, deletePostHandler, listPostsHandler, updatePostHandler } from '../handlers/postHandler';
+import { 
+        createPostHandler,
+        deletePostHandler,
+        listPostsHandler,
+        updatePostHandler 
+} from '../handlers/postHandler';
 import { jwtParseMiddleware } from '../middlewares/authMiddleware';
 
 const router = Router()

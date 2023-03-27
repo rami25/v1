@@ -2,11 +2,11 @@ import { Schema, model, Types} from 'mongoose';
 
 export interface Group {
     _id?: Types.ObjectId;
-    groupName : string;
-    description : string;
+    groupName? : string;
+    description? : string;
     usersId? : Types.ObjectId[];
     userAdmin? : Types.ObjectId;
-    posts : Types.ObjectId[];
+    posts? : Types.ObjectId[];
     createdAt : Date;
 }
 

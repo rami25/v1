@@ -1,4 +1,5 @@
 // import { Types } from "mongoose";
+import { Group } from "../types/Group";
 import { Post } from "../types/Post";
 import { User } from "../types/User";
 ////////////////////////////posts
@@ -24,11 +25,18 @@ export interface CreatePostResponse {}
 //
 export interface DeletePostRequest {
     // userId?: any;
-    postId: any;
-    groupId?: any;
+    postId: string;
+    groupId?: string;
 }
 export interface DeletePostResponse {}
-export interface UpdatePostRequest {}
+export interface UpdatePostRequest {
+    title?: string;
+    description?: string;
+    urls?: string[];
+    files?: string[];      
+    postId: string;
+    privacy?: string;
+}
 export interface UpdatePostResponse {}
 ///////////////////////////////////////////////////
 /////////////////////////////////////////Auth
@@ -48,7 +56,7 @@ export interface SignUpRequest {
     description?: string;
 }
 export interface SignUpResponse {
-    user : Pick<User, 'userName'|'email'|'description'|'createdAt'>;
+    user : Pick<User, '_id'|'userName'|'email'|'description'|'createdAt'>;
     jwt: string;
 }
 export interface SignOutRequest {}
@@ -82,3 +90,25 @@ export interface UpdateUserRequest {
     description?: string;
 }
 export interface UpdateUserResponse {}
+////////////////////////////////////////
+///////////////////////////////Group
+export interface CreateGroupRequest {
+    groupName: string;
+    description: string;
+}
+export interface CreateGroupResponse {
+     group: Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'createdAt'>
+}
+
+export interface DeleteGroupRequest {}
+export interface DeleteGroupResponse {}     
+export interface UpdateGroupRequest {}
+export interface UpdateGroupResponse {}     
+export interface ListGroupRequest {}
+export interface ListGroupResponse {}     
+export interface SendGroupRequest {}
+export interface SendGroupResponse {}     
+export interface InviteToRequest {}
+export interface InviteToResponse {}     
+export interface JoinGroupRequest {}
+export interface JoinGroupResponse {}     

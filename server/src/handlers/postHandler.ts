@@ -11,6 +11,7 @@ import { db } from "../dao";
 import { ExpressHandler } from "../types";
 import { Post } from '../../../shared/src/types/Post';
 import { ObjectId } from '../../../shared';
+import { ERRORS } from '../../../shared/src/errors';
 
 
 export const listPostsHandler : ExpressHandler<
@@ -82,13 +83,15 @@ DeletePostRequest,
 DeletePostResponse
 > = async (req, res) => {
     const userId = res.locals.userId
-    if(userId && req.body.postId && !req.body.groupId){
-        await db.deletePost(req.body.postId, userId)
-        return res.sendStatus(200)
-    }
-    if(userId && req.body.groupId && req.body.postId){
-        await db.deletePost(req.body.postId, req.body.groupId)
-        return res.sendStatus(200)
+    if(userId && req.body.postId){
+        if(!req.body.groupId){                             //tab9a fel group
+            await db.deletePost(req.body.postId, userId)   //w tetfasa5 fel main posts
+            return res.sendStatus(200)                     // if eli heya public post
+        }
+        else{//tab9a fel user profile w fel main public posts w ken user owner ydelety
+            await db.deletePost(req.body.postId, undefined, req.body.groupId)
+            return res.sendStatus(200)
+        }
     }
     res.sendStatus(401)
 }
@@ -97,5 +100,19 @@ export const updatePostHandler : ExpressHandler<
 UpdatePostRequest,
 UpdatePostResponse
 > = async (req, res) => {
-
+    const userId = res.locals.userId
+    const { title , description, urls, files, postId, privacy} = req.body
+    if(userId && postId){
+        const post = await db.getPost(postId, userId)
+        if(post){
+            if(title) post.title = title
+            if(description) post.description = description
+            if(urls) post.urls = urls
+            if(files) post.files = files
+            if(privacy) post.privacy = privacy
+            await db.updatePost(post)
+        }
+        return res.status(401).send({ error: ERRORS.POST_NOT_FOUND })
+    }
+    return res.status(401).send({ error: ERRORS.BAD_TOKEN }); 
 }

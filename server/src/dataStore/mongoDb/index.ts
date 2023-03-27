@@ -34,8 +34,7 @@ export class MongoDB implements DataStore {
         return user
     }
     async getUserByUsername(userName: string): Promise<User | undefined> {
-        const user = await UserM.findOne().where("userName").equals(userName) || undefined
-        return user
+        return await UserM.findOne().where("userName").equals(userName) || undefined
     }
     async getUserByToken(token: string): Promise<User | undefined> {
         const user = await UserM.findOne({
@@ -129,15 +128,43 @@ export class MongoDB implements DataStore {
         }
     }
 
-    getPost(id: string, userId?: string | undefined): Post | undefined {
-        throw new Error("Method not implemented.");
+    async getPost(id: string, userId?: Types.ObjectId): Promise<Post | undefined> {
+        return await PostM.findOne({_id: new ObjectId(id), userId: userId}) || undefined
     }
+
     getPostByUrl(url: string): Post | undefined {
         throw new Error("Method not implemented.");
     }
-    deletePost(postId: any, userId: any): Promise<void> {
-        throw new Error("Method not implemented.");
+
+    async deletePost(postId: string, userId?: Types.ObjectId, groupId?: string): Promise<void> {
+        if(postId && userId && !groupId){//removing from user profile
+            await UserM.updateOne({_id : userId}, {$pull: {posts:new ObjectId(postId)}})
+            const post = await this.getPost(postId)
+            if(post && post.privacy === 'public')
+                await PostM.deleteOne({_id : new ObjectId(postId)}, (err:any) => {
+                        if (err) {
+                          console.error(err)
+                        } else {
+                          console.log(`Deleted document with ID ${postId}`)
+                        }})
+        }
+        if(postId && userId && groupId){
+            await GroupM.updateOne({_id: new ObjectId(groupId)}, {$pull: {posts: new ObjectId(postId)}})
+        }
     }
+
+    async updatePost(post: Post, userId?: Types.ObjectId | undefined): Promise<void> {
+        const groupId = post.groupId || undefined
+        if(groupId){
+            await GroupM.updateOne({_id:groupId, posts:{$in:[post._id]}}, {$set:{'posts.$': post}}, {new:true})
+        }
+        else{
+            await UserM.updateOne({_id: userId , posts: {$in:[post._id]}}, {$set:{'posts.$': post}},{new:true})
+            await UserM.findByIdAndUpdate(post._id, post , {new : true})
+        }
+
+    }
+
     listGroups(userId?: string | undefined): Group[] {
         throw new Error("Method not implemented.");
     }
@@ -147,19 +174,23 @@ export class MongoDB implements DataStore {
     listUsers(userId?: string | undefined): User[] {
         throw new Error("Method not implemented.");
     }
-    createGroup(group: Group): void {
-        throw new Error("Method not implemented.");
+    async createGroup(group: Group): Promise<Group> {
+        const newGroup = await GroupM.create(group)
+        await newGroup.save()
+        await GroupM.updateOne({_id: newGroup._id}, { $push : {usersId : newGroup.userAdmin}})
+        const sendGroup = await GroupM.findById(newGroup._id).exec()
+        return sendGroup!
     }
     addUser(user: User): void {
         throw new Error("Method not implemented.");
     }
-    async getGroup(id: Types.ObjectId, userId?: string | undefined): Promise<Group | undefined> {
+    async getGroup(id: Types.ObjectId, userId?: Types.ObjectId): Promise<Group | undefined> {
         const group = await GroupM.findOne().where("_id").equals(id)
         if(!group) return undefined
         return group
     }
-    getGroupByGroupName(groupName: string): Promise<Group | undefined> {
-        throw new Error("Method not implemented.");
+    async getGroupByGroupName(groupName: string): Promise<Group | undefined> {
+        return await GroupM.findOne().where("groupName").equals(groupName) || undefined
     }
     deleteGroup(id: string): void {
         throw new Error("Method not implemented.");

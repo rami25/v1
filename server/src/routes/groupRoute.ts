@@ -5,6 +5,7 @@ import {
         createGroup,
         deleteGroup,
         inviteTo,
+        joinGroup,
         listGroup,
         sendRequest,
         updateGroup 
@@ -17,5 +18,5 @@ router.get('/', jwtParseMiddleware, asyncHandler(listGroup))
 router.patch('/update', jwtParseMiddleware, asyncHandler(updateGroup))
 router.post('/request', jwtParseMiddleware, asyncHandler(sendRequest))
 router.post('/invite', jwtParseMiddleware, asyncHandler(inviteTo))
-router.post('/join', jwtParseMiddleware, asyncHandler(sendRequest))
+router.post('/join', jwtParseMiddleware, asyncHandler(joinGroup))
 module.exports = router
