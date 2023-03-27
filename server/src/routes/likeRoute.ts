@@ -17,3 +17,4 @@ router.post('/post', jwtParseMiddleware, asyncHandler(likePost))
 router.post('/comment', jwtParseMiddleware, asyncHandler(likeComment))
 router.delete('/post', jwtParseMiddleware, asyncHandler(removeLikePost))
 router.delete('/comment', jwtParseMiddleware, asyncHandler(removeLikeComment))
+module.exports = router

@@ -15,33 +15,33 @@ export class MongoDB implements DataStore {
         await newUser.save()
         return newUser
     }
-    async deleteUser(user: User, userName?: string): Promise<void> {
-        const USER = UserM.find().where('userName').equals(userName)
-        await USER.deleteOne()
+    async deleteUser(id: Types.ObjectId): Promise<void> {
+        const user = await UserM.findOne().where('_id').equals(id)
+        if(user)
+            await user.deleteOne()
  
     }
-    updateCurrentUser(user: Partial<User>): Promise<void> {
-        throw new Error("Method not implemented.");
+    async updateCurrentUser(user: Partial<User>): Promise<void> {
+        await UserM.findByIdAndUpdate(user._id, user , {new : true})
     }
     async getUserById(id: Types.ObjectId): Promise<User | undefined> {
         const userDoc = await UserM.findById(id).exec()
-        // .then(doc => { user = doc })
-        // .catch((err) => { console.error(err)})
-        // const user = await UserM.findById(id) || undefined//.where("_id").equals(id) || undefined
-        // const user = await UserM.findOne().where("_id").equals(id) || undefined
         if(!userDoc) return undefined
         return userDoc
     }
     async getUserByEmail(email: string): Promise<User | undefined> {
         const user = await UserM.findOne().where("email").equals(email) || undefined
-        // const user = await UserM.findOne({email : { $eq : email}},function(err:any, user:any){
-        //     if(err) return console.error(err)
-        //     console.log(user)
-        // }) || undefined
         return user
     }
     async getUserByUsername(userName: string): Promise<User | undefined> {
         const user = await UserM.findOne().where("userName").equals(userName) || undefined
+        return user
+    }
+    async getUserByToken(token: string): Promise<User | undefined> {
+        const user = await UserM.findOne({
+                        resetPasswordToken: token,
+                        resetPasswordExpires: { $gt: Date.now() }
+                    }) || undefined
         return user
     }
     searchUser(userName: string): Promise<User | undefined> {
@@ -164,8 +164,10 @@ export class MongoDB implements DataStore {
     deleteGroup(id: string): void {
         throw new Error("Method not implemented.");
     }
-    existUserById(id: any): Promise<boolean | undefined> {
-        throw new Error("Method not implemented.");
+    async existsUserById(groupId: string, userId: Types.ObjectId): Promise<boolean | undefined> {
+        const group = await GroupM.findOne({_id : new ObjectId(groupId), usersId : { $in:[userId]}})
+        if(group) return true
+        return false
     }
     createLike(like: Like): void {
         throw new Error("Method not implemented.");

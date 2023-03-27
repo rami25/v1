@@ -15,4 +15,5 @@ export enum ERRORS {
   COMMENT_ID_MISSING = 'Comment ID is missing',
 
   DUPLICATE_LIKE = 'Duplicate like',
+  PASSWORD_INCORRECT = 'Password incorrect'
 }

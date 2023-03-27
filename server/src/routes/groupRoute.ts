@@ -18,3 +18,4 @@ router.patch('/update', jwtParseMiddleware, asyncHandler(updateGroup))
 router.post('/request', jwtParseMiddleware, asyncHandler(sendRequest))
 router.post('/invite', jwtParseMiddleware, asyncHandler(inviteTo))
 router.post('/join', jwtParseMiddleware, asyncHandler(sendRequest))
+module.exports = router

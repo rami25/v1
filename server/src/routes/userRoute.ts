@@ -2,15 +2,13 @@ import asyncHandler from 'express-async-handler';
 import { Router } from 'express'
 import { 
         deleteUserHandler,
-        resetPassword,
         signOutUserHandler, 
         updateUserHandler 
-} from '../handlers/userHandler';
+} from '../handlers/authHandler';
 import { jwtParseMiddleware } from '../middlewares/authMiddleware';
 const router = Router()
-router.post('/signout', jwtParseMiddleware, asyncHandler(signOutUserHandler))
-router.patch('/update', jwtParseMiddleware, asyncHandler(updateUserHandler))
-router.delete('/delete', jwtParseMiddleware, asyncHandler(deleteUserHandler))
-router.post('/resetPassword', jwtParseMiddleware, asyncHandler(resetPassword))
+router.post('/sign-out', jwtParseMiddleware, asyncHandler(signOutUserHandler))
+router.patch('/update-user', jwtParseMiddleware, asyncHandler(updateUserHandler))
+router.delete('/delete-user', jwtParseMiddleware, asyncHandler(deleteUserHandler))
 module.exports = router
 

@@ -31,7 +31,7 @@ export interface DeletePostResponse {}
 export interface UpdatePostRequest {}
 export interface UpdatePostResponse {}
 ///////////////////////////////////////////////////
-/////////////////////////////////////////users
+/////////////////////////////////////////Auth
 export interface SignInRequest {
     login : string;
     password: string;
@@ -51,3 +51,34 @@ export interface SignUpResponse {
     user : Pick<User, 'userName'|'email'|'description'|'createdAt'>;
     jwt: string;
 }
+export interface SignOutRequest {}
+export interface SignOutResponse {
+    message: string;
+}
+
+export interface ForgotPasswordRequest {
+    email: string;
+}
+export interface ForgotPasswordResponse {
+    message: string;
+}
+
+export interface ResetPasswordRequest {
+    newPassword: string;
+}
+export interface ResetPasswordResponse {
+    message: string;
+}
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////User
+export interface DeleteUserRequest {
+    // userId: string;
+    password: string;
+}
+export interface DeleteUserResponse {}
+export interface UpdateUserRequest {
+    userName : string;
+    email : string;
+    description?: string;
+}
+export interface UpdateUserResponse {}

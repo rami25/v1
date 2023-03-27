@@ -1,7 +1,8 @@
 import { Schema, model, Types} from 'mongoose';
 
 export interface Like {
-    userId?: string;
+    _id?: Types.ObjectId;
+    userId?: Types.ObjectId;
     likedAt : Date;
 }
 
@@ -16,5 +17,5 @@ const LikeSchema = new Schema<Like>({
     }
 })
 
-const Like = model<Like>('postLike', LikeSchema)
-export default Like
+const LikeM = model<Like>('LikeM', LikeSchema)
+export default LikeM

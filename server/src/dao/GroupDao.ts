@@ -12,7 +12,7 @@ export interface GroupDao {
     getGroup(id : Types.ObjectId , userId?:string) : Promise<Group | undefined>;
     getGroupByGroupName(groupName : string) : Promise<Group | undefined>;
     deleteGroup(id : string) : void;
-    existUserById(id: any) : Promise<boolean | undefined>; 
+    existsUserById(groupId: string, userId: Types.ObjectId) : Promise<boolean | undefined>; 
     //deleteGroupPost(id:string,groupId:string) : Promise<void>;
     //addGroupPost(post: Post, groupName?:string, id?: string) :Promise<void>;
 }

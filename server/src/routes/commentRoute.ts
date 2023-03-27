@@ -13,3 +13,4 @@ router.get('/', jwtParseMiddleware, asyncHandler(listComment))
 router.post('/', jwtParseMiddleware, asyncHandler(addComment))
 router.patch('/', jwtParseMiddleware, asyncHandler(updateComment))
 router.delete('/', jwtParseMiddleware, asyncHandler(deleteComment))
+module.exports = router

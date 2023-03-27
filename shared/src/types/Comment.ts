@@ -1,11 +1,10 @@
 import { Schema, model, Types} from 'mongoose';
-import { Like } from './Like';
 
 export interface Comment {
-    id?: string;
-    userId?: string;
+    _id?: Types.ObjectId;
+    userId?: Types.ObjectId;
     content : string;
-    likes : Like[];
+    likes : Types.ObjectId[];
     commentedAt: Date;
 }
 
@@ -27,5 +26,5 @@ const commentSchema = new Schema<Comment>({
     }
 })
 
-const Comment = model<Comment>('Comment', commentSchema)
-export default Comment
+const CommentM = model<Comment>('CommentM', commentSchema)
+export default CommentM

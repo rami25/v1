@@ -26,12 +26,12 @@ ListPostsResponse
         await db.listPosts(undefined, undefined, req.body.profileId, 'public')
         return res.sendStatus(200)
     }
-    if(!userId && req.body.groupId){//as visitor search group
+    if(!userId && req.body.groupId && !req.body.profileId){//as visitor search group
         await db.listPosts(undefined, req.body.groupId,undefined, 'public')
         return res.sendStatus(200)
     }
     if(userId && !req.body.groupId && req.body.profileId){
-        if(userId === req.body.profileId){//owns posts(public and private)
+        if(userId === new ObjectId(req.body.profileId)){//owns posts(public and private)
             await db.listPosts(userId)
             return res.sendStatus(200)
         }
@@ -39,7 +39,7 @@ ListPostsResponse
         return res.sendStatus(200)
     }
     if(userId && req.body.groupId){//as user search group or belong group
-        const exists:boolean = await db.existUserById(userId) as boolean
+        const exists:boolean = await db.existsUserById(req.body.groupId,userId) as boolean
         if(exists){
             await db.listPosts(undefined,req.body.groupId)
             return res.sendStatus(200)

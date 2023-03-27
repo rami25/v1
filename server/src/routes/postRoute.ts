@@ -4,7 +4,7 @@ import { createPostHandler, deletePostHandler, listPostsHandler, updatePostHandl
 import { jwtParseMiddleware } from '../middlewares/authMiddleware';
 
 const router = Router()
-router.get('/posts' , jwtParseMiddleware, asyncHandler(listPostsHandler))
+router.get('/list-posts' , jwtParseMiddleware, asyncHandler(listPostsHandler))
 router.post('/create' , jwtParseMiddleware, asyncHandler( createPostHandler))
 router.delete('/delete' , jwtParseMiddleware, asyncHandler( deletePostHandler))
 router.patch('/update' , jwtParseMiddleware, asyncHandler(updatePostHandler))
