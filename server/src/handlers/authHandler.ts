@@ -46,7 +46,8 @@ SignInResponse
             description : existing.description,
             createdAt: existing.createdAt,
             posts: existing.posts,
-            groups: existing.groups
+            groups: existing.groups,
+            groupsIdInvitations: existing.groupsIdInvitations
         },
         jwt,
     })    
@@ -132,6 +133,7 @@ UpdateUserResponse
             if(email) user.email = email
             if(description) user.description = description
             await db.updateCurrentUser(user)
+            return res.sendStatus(200)
         }
         return res.status(401).send({ error: ERRORS.USER_NOT_FOUND })
     }

@@ -1,4 +1,3 @@
-// import { Types } from "mongoose";
 import { Group } from "../types/Group";
 import { Post } from "../types/Post";
 import { User } from "../types/User";
@@ -45,7 +44,7 @@ export interface SignInRequest {
     password: string;
 }
 export interface SignInResponse { 
-    user : Pick<User, '_id'|'userName'|'email'|'description'|'createdAt'|'posts'|'groups'>;
+    user : Pick<User, '_id'|'userName'|'email'|'description'|'createdAt'|'posts'|'groups'|'groupsIdInvitations'>;
     jwt: string;
 }
 
@@ -100,15 +99,44 @@ export interface CreateGroupResponse {
      group: Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'createdAt'>
 }
 
-export interface DeleteGroupRequest {}
+export interface DeleteGroupRequest {
+    groupId: string;
+}
 export interface DeleteGroupResponse {}     
-export interface UpdateGroupRequest {}
+
+export interface UpdateGroupRequest {
+    groupId: string;
+    groupName?: string;
+    description? : string;
+}
 export interface UpdateGroupResponse {}     
 export interface ListGroupRequest {}
-export interface ListGroupResponse {}     
-export interface SendGroupRequest {}
+export interface ListGroupResponse {
+    groups : Pick<Group,'groupName'|'description'|'userAdmin'|'usersId'|'createdAt'>[]
+}     
+export interface SendGroupRequest {
+    groupId : string;
+}
 export interface SendGroupResponse {}     
-export interface InviteToRequest {}
+
+export interface DeleteSendRequest {
+    groupId: string;
+}     
+export interface DeleteSendResponse {}     
+
+export interface DeleteRequest {
+    groupId: string;
+    profileId: string;
+}     
+export interface DeleteResponse {}     
+
+export interface InviteToRequest {
+    groupId: string;
+    profileId: string;
+}
 export interface InviteToResponse {}     
+
 export interface JoinGroupRequest {}
 export interface JoinGroupResponse {}     
+export interface LeaveGroupRequest {}
+export interface LeaveGroupResponse {}     

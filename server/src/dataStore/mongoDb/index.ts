@@ -165,8 +165,12 @@ export class MongoDB implements DataStore {
 
     }
 
-    listGroups(userId?: string | undefined): Group[] {
-        throw new Error("Method not implemented.");
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async listGroups(): Promise<Group[] | undefined> {
+        return await GroupM.find({},{groupName : 1 , description : 1 , userAdmin : 1 , usersId : 1 , createdAt : 1}) || undefined
     }
     listGroupPosts(id: string, groupName?: string | undefined, privacy?: string | undefined): Promise<Post[]> {
         throw new Error("Method not implemented.");
@@ -181,25 +185,47 @@ export class MongoDB implements DataStore {
         const sendGroup = await GroupM.findById(newGroup._id).exec()
         return sendGroup!
     }
+
+    async sendGroupRequest(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
+        await GroupM.findByIdAndUpdate(id , {$push : {usersIdRequest : userId}}, {new : true})
+    }
+
     addUser(user: User): void {
         throw new Error("Method not implemented.");
     }
     async getGroup(id: Types.ObjectId, userId?: Types.ObjectId): Promise<Group | undefined> {
-        const group = await GroupM.findOne().where("_id").equals(id)
-        if(!group) return undefined
-        return group
+        if(!userId)
+            return await GroupM.findOne().where("_id").equals(id) || undefined
+        return await GroupM.findOne({_id:id , userAdmin : userId}) || undefined
+
     }
     async getGroupByGroupName(groupName: string): Promise<Group | undefined> {
         return await GroupM.findOne().where("groupName").equals(groupName) || undefined
     }
-    deleteGroup(id: string): void {
-        throw new Error("Method not implemented.");
+    async deleteGroup(id: string): Promise<void> {
+        await GroupM.findByIdAndDelete(new ObjectId(id))
+    }
+
+    async deleteUserRequest(id: Types.ObjectId, profileId: Types.ObjectId): Promise<void> {
+        await GroupM.findByIdAndUpdate(id, {$pull : {usersIdRequest : profileId}}, {new : true}).exec() 
+    }
+    async deleteSendGroupRequest(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
+        await GroupM.findByIdAndUpdate(id , {$pull : {usersIdRequest : userId}}, {new : true})
+    }
+
+    async updateGroup(group: Group): Promise<void> {
+        await GroupM.findByIdAndUpdate(group._id , group , {new: true})
     }
     async existsUserById(groupId: string, userId: Types.ObjectId): Promise<boolean | undefined> {
         const group = await GroupM.findOne({_id : new ObjectId(groupId), usersId : { $in:[userId]}})
         if(group) return true
         return false
     }
+
+    async inviteUserToGroup(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
+        await UserM.findByIdAndUpdate(userId , {$push : {groupsIdInvitations:id}},{new : true}).exec()
+    }
+
     createLike(like: Like): void {
         throw new Error("Method not implemented.");
     }

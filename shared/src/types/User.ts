@@ -9,6 +9,7 @@ export interface User {
     description?: string;
     posts?: Types.ObjectId[];
     groups?: Types.ObjectId[];
+    groupsIdInvitations? : Types.ObjectId[];
     resetPasswordToken? : string;
     resetPasswordExpires?: number;
 }
@@ -37,6 +38,9 @@ const userSchema = new Schema<User>({
         type : [Types.ObjectId]
     },
     groups : {
+        type : [Types.ObjectId]
+    },
+    groupsIdInvitations : {
         type : [Types.ObjectId]
     },
     //reset password
