@@ -130,13 +130,23 @@ export interface DeleteRequest {
 }     
 export interface DeleteResponse {}     
 
+export interface AcceptRequest {}     
+export interface AcceptResponse {}     
+
 export interface InviteToRequest {
     groupId: string;
     profileId: string;
 }
 export interface InviteToResponse {}     
 
+export interface RemoveInvitationRequest {}     
+export interface RemoveInvitationResponse {}
+
 export interface JoinGroupRequest {}
 export interface JoinGroupResponse {}     
+
+export interface DeleteInvitationRequest {}
+export interface DeleteInvitationResponse {}
+
 export interface LeaveGroupRequest {}
 export interface LeaveGroupResponse {}     

@@ -1,9 +1,13 @@
 import { ObjectId } from "../../../shared";
 import { 
+        AcceptRequest,
+        AcceptResponse,
         CreateGroupRequest,
         CreateGroupResponse,
         DeleteGroupRequest,
         DeleteGroupResponse,
+        DeleteInvitationRequest,
+        DeleteInvitationResponse,
         DeleteRequest,
         DeleteResponse,
         DeleteSendRequest,
@@ -16,6 +20,8 @@ import {
         LeaveGroupResponse,
         ListGroupRequest,
         ListGroupResponse,
+        RemoveInvitationRequest,
+        RemoveInvitationResponse,
         SendGroupRequest,
         SendGroupResponse,
         UpdateGroupRequest,
@@ -26,7 +32,7 @@ import { Group } from "../../../shared/src/types/Group";
 import { db } from "../dao";
 import { ExpressHandler } from "../types";
 
-export const createGroup : ExpressHandler<
+export const createGroup : ExpressHandler<// as an admin
 CreateGroupRequest,
 CreateGroupResponse
 > = async (req, res) => {
@@ -55,7 +61,7 @@ CreateGroupResponse
         }
     })
 }
-export const deleteGroup : ExpressHandler<
+export const deleteGroup : ExpressHandler<// as an admin
 DeleteGroupRequest,
 DeleteGroupResponse
 > = async (req, res) => {
@@ -71,7 +77,7 @@ DeleteGroupResponse
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
 
-export const updateGroup : ExpressHandler<
+export const updateGroup : ExpressHandler<// as an admin
 UpdateGroupRequest,
 UpdateGroupResponse
 > = async (req, res) => {
@@ -98,7 +104,7 @@ ListGroupResponse
     const groups = await db.listGroups()
     res.status(200).send({groups})
 }
-export const sendRequest : ExpressHandler<// as u user
+export const sendRequest : ExpressHandler<// as a user to a group
 SendGroupRequest,
 SendGroupResponse
 > = async (req, res) => {
@@ -115,7 +121,7 @@ SendGroupResponse
     res.status(403).send({error: 'unauthorized'})
 }
 
-export const deleteSendRequest : ExpressHandler<//as u user
+export const deleteSendRequest : ExpressHandler<//as u user for group
 DeleteSendRequest,
 DeleteSendResponse
 > = async (req, res) => {
@@ -147,6 +153,13 @@ DeleteResponse
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
 
+export const acceptRequest : ExpressHandler<// as an admin
+AcceptRequest,
+AcceptResponse
+> = async (req, res) => {
+
+}
+
 export const inviteTo : ExpressHandler<// as an admin
 InviteToRequest,
 InviteToResponse
@@ -161,6 +174,20 @@ InviteToResponse
         return res.sendStatus(200)
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
+}
+
+export const removeInvitation : ExpressHandler<// as an admin
+RemoveInvitationRequest,
+RemoveInvitationResponse
+> = async (req, res) => {
+
+}
+
+export const deleteInvitation : ExpressHandler<// as an admin
+DeleteInvitationRequest,
+DeleteInvitationResponse
+> = async (req, res) => {
+
 }
 
 export const joinGroup : ExpressHandler<// as a user
