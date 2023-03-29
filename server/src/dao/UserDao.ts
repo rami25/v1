@@ -13,7 +13,6 @@ export interface UserDao {
   searchUser(userName : string) : Promise<User | undefined>;
   sendRequestToUser(userName : string) : Promise<void>;
   sendRequestToGroup(group : Group) : Promise<void>;
-  joinGroup(group : Group) : Promise<void>;
   addGroup(group : Group) : Promise<void>;
   addFriend(user : User) : Promise<void>;
   //addUserPost(post : Post, userId?:string) : Promise<void>;

@@ -44,7 +44,15 @@ export interface SignInRequest {
     password: string;
 }
 export interface SignInResponse { 
-    user : Pick<User, '_id'|'userName'|'email'|'description'|'createdAt'|'posts'|'groups'|'groupsIdInvitations'>;
+    user : Pick<User, '_id'|
+                 'userName'|
+                    'email'|
+              'description'|
+                'createdAt'|
+                    'posts'|
+                   'groups'|
+      'groupsIdInvitations'|
+       'groupsIdRequests' >;
     jwt: string;
 }
 
@@ -110,10 +118,19 @@ export interface UpdateGroupRequest {
     description? : string;
 }
 export interface UpdateGroupResponse {}     
-export interface ListGroupRequest {}
-export interface ListGroupResponse {
-    groups : Pick<Group,'groupName'|'description'|'userAdmin'|'usersId'|'createdAt'>[]
+
+export interface ListGroupsRequest {}
+export interface ListGroupsResponse {
+    groups : Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'createdAt'>[];
 }     
+
+export interface GetGroupRequest {
+    groupId : string;
+}
+export interface GetGroupResponse {
+    adminGroup : Group;
+}     
+
 export interface SendGroupRequest {
     groupId : string;
 }
@@ -124,13 +141,16 @@ export interface DeleteSendRequest {
 }     
 export interface DeleteSendResponse {}     
 
-export interface DeleteRequest {
+export interface RejectRequest {
     groupId: string;
     profileId: string;
 }     
-export interface DeleteResponse {}     
+export interface RejectResponse {}     
 
-export interface AcceptRequest {}     
+export interface AcceptRequest {
+    groupId : string;
+    profileId : string;
+}     
 export interface AcceptResponse {}     
 
 export interface InviteToRequest {
@@ -139,14 +159,29 @@ export interface InviteToRequest {
 }
 export interface InviteToResponse {}     
 
-export interface RemoveInvitationRequest {}     
+export interface RemoveInvitationRequest {
+    groupId: string;
+    profileId: string;
+}     
 export interface RemoveInvitationResponse {}
 
-export interface JoinGroupRequest {}
-export interface JoinGroupResponse {}     
-
-export interface DeleteInvitationRequest {}
+export interface DeleteInvitationRequest {
+    groupId: string;
+}
 export interface DeleteInvitationResponse {}
 
-export interface LeaveGroupRequest {}
+export interface JoinGroupRequest {
+    groupId : string;
+}
+export interface JoinGroupResponse {}     
+
+export interface LeaveGroupRequest {
+    groupId: string;
+}
 export interface LeaveGroupResponse {}     
+
+export interface RejectUserRequest {
+    groupId: string;
+    profileId: string;
+}
+export interface RejectUserResponse {}

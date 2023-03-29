@@ -8,7 +8,8 @@ export interface Group {
     userAdmin? : Types.ObjectId;
     posts? : Types.ObjectId[];
     createdAt : Date;
-    usersIdRequest?: Types.ObjectId[];
+    usersIdInvitations?: Types.ObjectId[];
+    usersIdRequests?: Types.ObjectId[];
 }
 
 const groupeSchema = new Schema<Group>({
@@ -33,7 +34,10 @@ const groupeSchema = new Schema<Group>({
         type : Date,
         default : Date.now()
     },
-    usersIdRequest : {
+    usersIdInvitations : {
+        type : [Types.ObjectId]
+    },
+    usersIdRequests : {
         type : [Types.ObjectId]
     }
 })

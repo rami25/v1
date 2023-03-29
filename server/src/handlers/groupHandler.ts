@@ -8,8 +8,8 @@ import {
         DeleteGroupResponse,
         DeleteInvitationRequest,
         DeleteInvitationResponse,
-        DeleteRequest,
-        DeleteResponse,
+        RejectRequest,
+        RejectResponse,
         DeleteSendRequest,
         DeleteSendResponse,
         InviteToRequest,
@@ -18,14 +18,18 @@ import {
         JoinGroupResponse,
         LeaveGroupRequest,
         LeaveGroupResponse,
-        ListGroupRequest,
-        ListGroupResponse,
+        ListGroupsRequest,
+        ListGroupsResponse,
         RemoveInvitationRequest,
         RemoveInvitationResponse,
         SendGroupRequest,
         SendGroupResponse,
         UpdateGroupRequest,
-        UpdateGroupResponse
+        UpdateGroupResponse,
+        RejectUserRequest,
+        RejectUserResponse,
+        GetGroupRequest,
+        GetGroupResponse
 } from "../../../shared/src/APIs/api";
 import { ERRORS } from "../../../shared/src/errors";
 import { Group } from "../../../shared/src/types/Group";
@@ -38,7 +42,7 @@ CreateGroupResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { groupName , description } = req.body
-    if(!groupName || !description || !userId)
+    if(!groupName || !description)
         return res.status(400).send({error:'all fields are required'})
     if(await db.getGroupByGroupName(groupName))    
       return res.status(403).send({ error: ERRORS.DUPLICATE_GROUP_NAME });
@@ -67,7 +71,7 @@ DeleteGroupResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { groupId } = req.body
-    if(!userId || !groupId)
+    if(!groupId)
         return res.sendStatus(400)
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
@@ -83,13 +87,17 @@ UpdateGroupResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { groupId , groupName , description } = req.body
-    if(!userId || !groupId)
+    if(!groupId)
         return res.status(403).send({error: 'unauthorized'})
     if(!groupName && !description)    
         return res.status(403).send({error: 'minimum one field is required'})
     const group = await db.getGroup(new ObjectId(groupId),userId)    
     if(group){
-        if(groupName) group.groupName = groupName
+        if(groupName) {
+            if(await db.getGroupByGroupName(groupName))    
+                return res.status(403).send({ error: ERRORS.DUPLICATE_GROUP_NAME });
+            group.groupName = groupName
+        }
         if(description) group.description = description
         await db.updateGroup(group)
         return res.sendStatus(200)
@@ -97,26 +105,43 @@ UpdateGroupResponse
 
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
-export const listGroups : ExpressHandler<
-ListGroupRequest,
-ListGroupResponse
+
+export const listGroups : ExpressHandler<// for all (publics)
+ListGroupsRequest,
+ListGroupsResponse
 > = async (req, res) => {
     const groups = await db.listGroups()
     res.status(200).send({groups})
 }
+
+export const getGroup : ExpressHandler<// only admin
+GetGroupRequest,
+GetGroupResponse
+> = async (req, res) => {
+    const userId = res.locals.userId
+    const { groupId } = req.body
+    if(!groupId)
+        return res.status(403).send({error: 'unauthorized'})
+    const adminGroup = await db.getGroup(new ObjectId(groupId), userId)    
+    if(adminGroup){
+        return res.status(200).send({adminGroup})
+    }
+    res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
+}
+
 export const sendRequest : ExpressHandler<// as a user to a group
 SendGroupRequest,
 SendGroupResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { groupId } = req.body
-    if(userId && groupId){
+    if(groupId){
         const group = await db.getGroup(new ObjectId(groupId))
         if(group){
             await db.sendGroupRequest(new ObjectId(groupId), userId)
             return res.sendStatus(200)
         }
-        res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
+        return res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
     }
     res.status(403).send({error: 'unauthorized'})
 }
@@ -127,7 +152,7 @@ DeleteSendResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { groupId } = req.body
-    if(!userId || !groupId)
+    if(!groupId)
         return res.status(403).send({error: 'unauthorized'})
     const group = await db.getGroup(new ObjectId(groupId))
     if(group){
@@ -137,13 +162,13 @@ DeleteSendResponse
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
 
-export const deleteRequest : ExpressHandler<//as an admin
-DeleteRequest,
-DeleteResponse
+export const rejectRequest : ExpressHandler<//as an admin
+RejectRequest,
+RejectResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { groupId , profileId } = req.body
-    if(!userId || !profileId)
+    if(!profileId || !groupId)
         return res.status(403).send({error: 'unauthorized'})
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
@@ -157,7 +182,16 @@ export const acceptRequest : ExpressHandler<// as an admin
 AcceptRequest,
 AcceptResponse
 > = async (req, res) => {
-
+    const userId = res.locals.userId
+    const { groupId , profileId } = req.body
+    if(!profileId || !groupId)
+        return res.status(403).send({error: 'unauthorized'})
+    const group = await db.getGroup(new ObjectId(groupId), userId)
+    if(group){
+        await db.acceptUserRequest(new ObjectId(groupId) , new ObjectId(profileId))
+        return res.sendStatus(200)
+    }
+    res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
 
 export const inviteTo : ExpressHandler<// as an admin
@@ -166,11 +200,11 @@ InviteToResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { groupId , profileId} = req.body
-    if(!userId || !profileId)
+    if(!groupId || !profileId)
         return res.status(403).send({error: 'unauthorized'})
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
-        await await db.inviteUserToGroup(new ObjectId(groupId) , new ObjectId(profileId))
+        await db.inviteUserToGroup(new ObjectId(groupId) , new ObjectId(profileId))
         return res.sendStatus(200)
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
@@ -180,26 +214,78 @@ export const removeInvitation : ExpressHandler<// as an admin
 RemoveInvitationRequest,
 RemoveInvitationResponse
 > = async (req, res) => {
-
+    const userId = res.locals.userId
+    const { groupId , profileId } = req.body
+    if(!groupId || !profileId)
+        return res.status(403).send({error: 'All fields are required'})
+    const group = await db.getGroup(new ObjectId(groupId), userId)
+    if(group){
+        await db.deleteInvitationUserToGroup(new ObjectId(groupId), new ObjectId(profileId))
+        return res.sendStatus(200)
+    }
+    res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
 
-export const deleteInvitation : ExpressHandler<// as an admin
+export const deleteInvitation : ExpressHandler<// as a user
 DeleteInvitationRequest,
 DeleteInvitationResponse
 > = async (req, res) => {
-
+    const userId = res.locals.userId
+    const { groupId } = req.body
+    if(!groupId)
+        return res.status(403).send({error: 'unauthorized'})
+    const group = await db.getGroup(new ObjectId(groupId))
+    if(group){
+        await db.deleteGroupInvitation(new ObjectId(groupId),userId)
+        res.sendStatus(200)
+    }
+    res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
 
 export const joinGroup : ExpressHandler<// as a user
 JoinGroupRequest,
 JoinGroupResponse
 > = async (req, res) => {
-
+    const userId = res.locals.userId
+    const { groupId } = req.body
+    if(!groupId)
+        return res.status(403).send({error: 'unauthorized'})
+    const group = await db.getGroup(new ObjectId(groupId))
+    if(group){
+        await db.joinGroup(new ObjectId(groupId), userId)
+        return res.sendStatus(200)
+    }
+    res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
 
 export const leaveGroup : ExpressHandler<//as a user
 LeaveGroupRequest,
 LeaveGroupResponse
 > = async (req, res) => {
+    const userId = res.locals.userId
+    const { groupId } = req.body
+    if(!groupId)
+        return res.status(403).send({error: 'unauthorized'})
+    const group = await db.getGroup(new ObjectId(groupId))
+    if(group){
+        await db.leaveGroup(new ObjectId(groupId), userId)
+        return res.sendStatus(200)
+    }
+    res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
+}
 
+export const rejectUser : ExpressHandler<//as a user
+RejectUserRequest,
+RejectUserResponse
+> = async (req, res) => {
+    const userId = res.locals.userId
+    const { groupId , profileId } = req.body
+    if(!groupId || !profileId)
+        return res.status(403).send({error: 'unauthorized'})
+    const group = await db.getGroup(new ObjectId(groupId), userId)
+    if(group){
+        await db.rejectUserFromGroup(new ObjectId(groupId), new ObjectId(profileId))
+        return res.sendStatus(200)
+    }
+    res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }

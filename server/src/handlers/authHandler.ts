@@ -47,7 +47,8 @@ SignInResponse
             createdAt: existing.createdAt,
             posts: existing.posts,
             groups: existing.groups,
-            groupsIdInvitations: existing.groupsIdInvitations
+            groupsIdInvitations: existing.groupsIdInvitations,
+            groupsIdRequests: existing.groupsIdRequests
         },
         jwt,
     })    
@@ -129,8 +130,16 @@ UpdateUserResponse
     if(userId){
         const user = await db.getUserById(userId)
         if(user){
-            if(userName) user.userName = userName
-            if(email) user.email = email
+            if(userName){
+                if (await db.getUserByUsername(userName)) 
+                  return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
+                user.userName = userName
+            }
+            if(email){
+                if (await db.getUserByEmail(email)) 
+                  return res.status(403).send({ error: ERRORS.DUPLICATE_EMAIL });
+                user.email = email
+            }
             if(description) user.description = description
             await db.updateCurrentUser(user)
             return res.sendStatus(200)

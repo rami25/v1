@@ -10,8 +10,10 @@ export interface User {
     posts?: Types.ObjectId[];
     groups?: Types.ObjectId[];
     groupsIdInvitations? : Types.ObjectId[];
+    groupsIdRequests? : Types.ObjectId[];
     resetPasswordToken? : string;
     resetPasswordExpires?: number;
+    // groupsIdAcceptedRequests? : Types.ObjectId[];
 }
 
 const userSchema = new Schema<User>({
@@ -43,6 +45,9 @@ const userSchema = new Schema<User>({
     groupsIdInvitations : {
         type : [Types.ObjectId]
     },
+    groupsIdRequests : {
+        type : [Types.ObjectId]
+    },
     //reset password
     resetPasswordToken : {
         type : String
@@ -50,6 +55,9 @@ const userSchema = new Schema<User>({
     resetPasswordExpires : {
         type : Date
     }
+    // groupsIdAcceptedRequests : {
+    //     type : [Types.ObjectId]
+    // }
 })
 
 const UserM = model<User>('UserM', userSchema)
