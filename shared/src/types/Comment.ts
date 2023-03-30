@@ -4,7 +4,7 @@ export interface Comment {
     _id?: Types.ObjectId;
     userId?: Types.ObjectId;
     content : string;
-    likes : Types.ObjectId[];
+    likes? : Types.ObjectId[];
     commentedAt: Date;
 }
 

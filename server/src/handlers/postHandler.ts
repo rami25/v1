@@ -57,8 +57,8 @@ export const createPostHandler : ExpressHandler<
 CreatePostRequest,
 CreatePostResponse
 > = async (req, res) => {
-    const { title , description , privacy , urls , files} = req.body
     const userId = res.locals.userId
+    const { title , description , privacy , urls , files} = req.body
     if(title && description && privacy && (urls || files)){
         //TODO Validations Fields
         const post: Post = {
@@ -75,7 +75,7 @@ CreatePostResponse
         await db.createPost(post)
         return res.sendStatus(200)
     }
-    res.status(401).json({})
+    res.status(400).send({error:'all fields are required'})
 }
 
 export const deletePostHandler : ExpressHandler<
@@ -83,13 +83,17 @@ DeletePostRequest,
 DeletePostResponse
 > = async (req, res) => {
     const userId = res.locals.userId
-    if(userId && req.body.postId){
-        if(!req.body.groupId){                             //tab9a fel group
-            await db.deletePost(req.body.postId, userId)   //w tetfasa5 fel main posts
+    const { postId , groupId} = req.body
+    if(postId){
+        const post = await db.getPost(postId, userId)
+        if(!post)
+            return res.status(400).send({error:'User not authorized to delete this post'})
+        if(!groupId){                                      //tab9a fel group
+            await db.deletePost(postId, userId)   //w tetfasa5 fel main posts
             return res.sendStatus(200)                     // if eli heya public post
         }
         else{//tab9a fel user profile w fel main public posts w ken user owner ydelety
-            await db.deletePost(req.body.postId, undefined, req.body.groupId)
+            await db.deletePost(postId, userId , req.body.groupId)
             return res.sendStatus(200)
         }
     }

@@ -1,4 +1,4 @@
-import { Comment } from "../../../../shared/src/types/Comment";
+import CommentM, { Comment } from "../../../../shared/src/types/Comment";
 import GroupM, { Group } from "../../../../shared/src/types/Group";
 import PostM, { Post } from "../../../../shared/src/types/Post";
 import { Like } from "../../../../shared/src/types/Like";
@@ -125,8 +125,10 @@ export class MongoDB implements DataStore {
         }
     }
 
-    async getPost(id: string, userId?: Types.ObjectId): Promise<Post | undefined> {
-        return await PostM.findOne({_id: new ObjectId(id), userId: userId}) || undefined
+    async getPost(id: string, Iduser?: Types.ObjectId): Promise<Post | undefined> {
+        if(!Iduser)
+            return await PostM.findOne({_id: new ObjectId(id)}) || undefined
+        return await PostM.findOne({_id: new ObjectId(id), userId: Iduser}) || undefined
     }
 
 
@@ -135,9 +137,9 @@ export class MongoDB implements DataStore {
     }
 
     async deletePost(postId: string, userId?: Types.ObjectId, groupId?: string): Promise<void> {
+        const post = await this.getPost(postId,userId)
         if(postId && userId && !groupId){//removing from user profile
             await UserM.updateOne({_id : userId}, {$pull: {posts:new ObjectId(postId)}})
-            const post = await this.getPost(postId)
             if(post && post.privacy === 'public')
                 await PostM.deleteOne({_id : new ObjectId(postId)}, (err:any) => {
                         if (err) {
@@ -145,9 +147,10 @@ export class MongoDB implements DataStore {
                         } else {
                           console.log(`Deleted document with ID ${postId}`)
                         }})
+            return
         }
         if(postId && userId && groupId){
-            await GroupM.updateOne({_id: new ObjectId(groupId)}, {$pull: {posts: new ObjectId(postId)}})
+            await GroupM.updateOne({_id: new ObjectId(groupId)}, {$pull: {posts: post!._id}})
         }
     }
 
@@ -170,13 +173,20 @@ export class MongoDB implements DataStore {
     async createGroup(group: Group): Promise<Group> {
         const newGroup = await GroupM.create(group)
         await newGroup.save()
+        const user = await UserM.findById(newGroup.userAdmin)
+        if(user){
+            await user.groups?.push(newGroup._id)
+            await user.save()
+        }
         await GroupM.updateOne({_id: newGroup._id}, { $push : {usersId : newGroup.userAdmin}})
         const sendGroup = await GroupM.findById(newGroup._id).exec()
         return sendGroup!
     }
 
     async deleteGroup(id: string): Promise<void> {
-        await GroupM.findByIdAndDelete(new ObjectId(id))
+        const groupId = new ObjectId(id)
+        await UserM.updateMany({groups : {$in : groupId}}, {$pull : {groups : groupId}})
+        await GroupM.findByIdAndDelete(groupId)
     }
 
     async updateGroup(group: Group): Promise<void> {
@@ -205,13 +215,13 @@ export class MongoDB implements DataStore {
     }
 
     async deleteUserRequest(id: Types.ObjectId, profileId: Types.ObjectId): Promise<void> {
-        this.deleteSendGroupRequest(id,profileId)
+        await this.deleteSendGroupRequest(id,profileId)
         // await GroupM.findByIdAndUpdate(id, {$pull : {usersIdInvitations : profileId}}, {new : true}).exec() 
         // await UserM.findByIdAndUpdate(profileId , {$pull : {groupsIdRequests : id}}, {new : true})
     }
 
     async acceptUserRequest(id: Types.ObjectId, profileId: Types.ObjectId): Promise<void> {
-        this.deleteUserRequest(id,profileId)
+        await this.deleteUserRequest(id,profileId)
         await GroupM.updateOne({_id: id}, { $push : {usersId : profileId}})
         await UserM.findByIdAndUpdate(profileId, {$push : {groups : id}})
     }
@@ -227,7 +237,7 @@ export class MongoDB implements DataStore {
     }
 
     async deleteGroupInvitation(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
-        this.deleteInvitationUserToGroup(id,userId)
+        await this.deleteInvitationUserToGroup(id,userId)
         // await GroupM.findByIdAndUpdate(id , {$pull : {usersIdRequests : userId}}, {new : true})
         // await UserM.findByIdAndUpdate(userId , {$pull : {groupsIdInvitations : id}}, {new : true})
     }
@@ -235,8 +245,8 @@ export class MongoDB implements DataStore {
     async joinGroup(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
         // await UserM.findByIdAndUpdate(userId, {$pull : {groupsIdInvitations: id}},{new : true})
         // await GroupM.findByIdAndUpdate(id, {$pull : {usersIdRequests : userId}},{new : true})
-        this.deleteGroupInvitation(id,userId)
-        this.acceptUserRequest(id,userId)
+        await this.deleteGroupInvitation(id,userId)
+        await this.acceptUserRequest(id,userId)
         // await GroupM.updateOne({_id: id}, { $push : {usersId : userId}})
         // await UserM.findByIdAndUpdate(userId, {$push : {groups : id}})
     }
@@ -246,7 +256,7 @@ export class MongoDB implements DataStore {
         await UserM.findByIdAndUpdate(userId, {$pull : {groups : id}})
     }
     async rejectUserFromGroup(id: Types.ObjectId, profileId: Types.ObjectId): Promise<void> {
-        this.leaveGroup(id,profileId)
+        await this.leaveGroup(id,profileId)
     }
 
 
@@ -285,16 +295,33 @@ export class MongoDB implements DataStore {
 
 ///////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////Comments
-    createComment(comment: Comment): void {
-        throw new Error("Method not implemented.");
+    async createComment(postId: string, comment: Comment): Promise<void> {
+        const newComment = await CommentM.create(comment)
+        newComment.save()
+        await PostM.findByIdAndUpdate(new ObjectId(postId), {$push : {comments: newComment._id}},{new : true})
     }
-    countComments(postId: string): number {
-        throw new Error("Method not implemented.");
+    async updateComment(comment: Partial<Comment>): Promise<void> {
+        await CommentM.findByIdAndUpdate(comment._id, comment , {new : true})
     }
-    listComments(postId: string): Comment[] {
-        throw new Error("Method not implemented.");
+    async countComments(postId: string): Promise<number> {
+        const post = await this.getPost(postId)
+        if(post){
+            return post.comments!.length
+        } else {
+            throw new Error(`No post found with ID ${postId}`);
+        }
     }
-    deleteComment(id: string): void {
+    async listComments(postId: string): Promise<any[] | undefined> {
+        const post = await PostM.findOne({_id: new ObjectId(postId)}).populate('comments')
+        return post!.comments
+    }
+
+    async deleteComment(postId: string, commentId: string): Promise<void> {
+        await CommentM.deleteOne({_id: new ObjectId(commentId)})
+        await PostM.findByIdAndUpdate(new ObjectId(postId), {$pull : {comments: new ObjectId(commentId)}},{new : true})
+    }
+
+    async getComment(postId: string, commentId: string): Promise<Comment | undefined> {
         throw new Error("Method not implemented.");
     }
 

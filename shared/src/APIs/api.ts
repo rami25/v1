@@ -1,6 +1,8 @@
 import { Group } from "../types/Group";
 import { Post } from "../types/Post";
 import { User } from "../types/User";
+import { Comment } from "../types/Comment";
+// import { Like } from "../types/Like";
 ////////////////////////////posts
 export interface ListPostsRequest {
     // userId? : string;
@@ -12,7 +14,6 @@ export interface ListPostsResponse {
 }
 //
 export type CreatePostRequest = {
-//  userId?: string;
    title: string;
    description: string;
    urls?: string[];
@@ -21,9 +22,8 @@ export type CreatePostRequest = {
    privacy: string;
 }
 export interface CreatePostResponse {}
-//
+
 export interface DeletePostRequest {
-    // userId?: any;
     postId: string;
     groupId?: string;
 }
@@ -185,3 +185,38 @@ export interface RejectUserRequest {
     profileId: string;
 }
 export interface RejectUserResponse {}
+////////////////////////////////////////////
+/////////////////Comment
+
+export interface CountCommentsRequest {
+    postId : string;
+}
+export interface CountCommentsResponse {
+    numberOfComments : number;
+}
+
+export interface ListCommentsRequest {
+    postId : string;
+}
+export interface ListCommentsResponse {
+    comments : Comment[];
+}
+
+export interface AddCommentRequest {
+    postId : string;
+    content : string;
+}
+export interface AddCommentResponse {}
+
+export interface UpdateCommentRequest {
+    postId : string;
+    commentId : string;
+    content : string;
+}
+export interface UpdateCommentResponse {}
+
+export interface DeleteCommentRequest {
+    postId : string;
+    commentId : string;
+}
+export interface DeleteCommentResponse {}

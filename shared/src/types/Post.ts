@@ -1,4 +1,5 @@
 import { Schema, model, Types} from 'mongoose';
+// import { Comment } from './Comment'
 
 export interface Post {
     _id?: Types.ObjectId;
@@ -8,6 +9,7 @@ export interface Post {
     files: string[];
     userId?: Types.ObjectId;
     groupId?: Types.ObjectId;
+    // comments? : Comment['_id'][];
     comments? : Types.ObjectId[];
     likes? : Types.ObjectId[];
     postedAt?: Date;
@@ -35,9 +37,10 @@ const postSchema = new Schema<Post>({
     groupId : {
         type : Types.ObjectId
     },
-    comments : {
-        type : [Types.ObjectId]
-    },
+    comments :[{
+        type : Types.ObjectId,
+        ref: 'CommentM'
+    }],
     likes : {
         type : [Types.ObjectId]
     },
