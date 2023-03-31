@@ -3,6 +3,8 @@ import {
         DeleteUserResponse,
         ForgotPasswordRequest,
         ForgotPasswordResponse,
+        ListUserRequest,
+        ListUserResponse,
         ResetPasswordRequest,
         ResetPasswordResponse,
         SignInRequest, 
@@ -22,6 +24,13 @@ import { signJwt } from '../auth'
 import { hashPassword } from '../env';
 import crypto from 'crypto'
 import nodemailer from 'nodemailer'
+
+export  const listUserHandler : ExpressHandler<
+ListUserRequest,
+ListUserResponse
+> = async (req, res) => {
+   res.status(200).send({ users : await db.listUsers()})
+}
 
 export const signInHandler : ExpressHandler<
 SignInRequest,
@@ -48,7 +57,8 @@ SignInResponse
             posts: existing.posts,
             groups: existing.groups,
             groupsIdInvitations: existing.groupsIdInvitations,
-            groupsIdRequests: existing.groupsIdRequests
+            groupsIdRequests: existing.groupsIdRequests,
+            acceptedRequests: existing.acceptedRequests
         },
         jwt,
     })    
@@ -95,7 +105,8 @@ export const signOutUserHandler : ExpressHandler<
 SignOutRequest,
 SignOutResponse
 > = async (req, res) => {
-    if(res.locals.userId){
+    const userId = res.locals.userId
+    if(userId){
         res.clearCookie('jwt');
         // res.redirect('/visitor')
         return res.status(204).send({ message: 'User signed out successfully' });
@@ -103,7 +114,7 @@ SignOutResponse
     return res.status(403).send({error: 'unauthorized'})
 }
 
-export const deleteUserHandler : ExpressHandler<
+export const deleteUserHandler : ExpressHandler<// remove from group and app
 DeleteUserRequest,
 DeleteUserResponse
 > = async (req, res) => {

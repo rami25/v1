@@ -1,4 +1,3 @@
-import { ObjectId } from "../../../shared";
 import { 
         AddCommentRequest,
         AddCommentResponse,
@@ -70,20 +69,17 @@ UpdateCommentRequest,
 UpdateCommentResponse
 > = async (req, res) => {
     const userId = res.locals.userId
-    const { postId , commentId , content} = req.body
-    if(!postId || !commentId)
+    const { commentId , content} = req.body
+    if(!commentId)
         return res.status(400).send({error : 'unauthorized'})
     if(!content)
         return res.status(400).send({error : 'content is required'})
-    const post = await db.getPost(postId)
-    if(!post)
-        return res.status(400).send({error : ERRORS.POST_NOT_FOUND})
-    const comment : Comment = {
-        _id: new ObjectId(commentId),
-        userId,
-        content,
-        commentedAt : new Date()
-    }
+    const comment = await db.getComment(commentId)
+    if(!comment)
+        return res.status(400).send({error : ERRORS.COMMENT_NOT_FOUND})
+    if(!userId.equals(comment.userId))
+        return res.status(400).send({error : 'unauthorized'})
+    comment.content = content   
     await db.updateComment(comment)    
     res.sendStatus(200)
 
@@ -100,6 +96,11 @@ DeleteCommentResponse
     const post = await db.getPost(postId)
     if(!post)
         return res.status(400).send({error : ERRORS.POST_NOT_FOUND})
+    const comment = await db.getComment(commentId)
+    if(!comment)
+        return res.status(400).send({error : ERRORS.COMMENT_NOT_FOUND})
+    if(!userId.equals(comment.userId))
+        return res.status(400).send({error : 'unauthorized'})
     await db.deleteComment(postId, commentId)    
     res.sendStatus(200)
 

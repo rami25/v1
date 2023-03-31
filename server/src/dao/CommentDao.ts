@@ -6,5 +6,5 @@ export interface CommentDao {
   deleteComment(postId: string, commentId: string): Promise<void>;
   countComments(postId: string): Promise<number>;
   listComments(postId: string): Promise<Comment[] | undefined>;
-  getComment(postId: string, commentId: string): Promise<Comment | undefined>;
+  getComment(commentId: string): Promise<Comment | undefined>;
 }

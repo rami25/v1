@@ -11,9 +11,9 @@ export interface User {
     groups?: Types.ObjectId[];
     groupsIdInvitations? : Types.ObjectId[];
     groupsIdRequests? : Types.ObjectId[];
+    acceptedRequests? : string[];
     resetPasswordToken? : string;
     resetPasswordExpires?: number;
-    // groupsIdAcceptedRequests? : Types.ObjectId[];
 }
 
 const userSchema = new Schema<User>({
@@ -36,18 +36,25 @@ const userSchema = new Schema<User>({
     description : {
         type : String
     },
-    posts : {
-        type : [Types.ObjectId]
-    },
-    groups : {
-        type : [Types.ObjectId]
-    },
-    groupsIdInvitations : {
-        type : [Types.ObjectId]
-    },
-    groupsIdRequests : {
-        type : [Types.ObjectId]
-    },
+    posts : [{
+        type : Types.ObjectId,
+        ref : 'PostM'
+    }],
+    groups : [{
+        type : Types.ObjectId,
+        ref : 'GroupM'
+    }],
+    groupsIdInvitations : [{
+        type : Types.ObjectId,
+        ref : 'GroupM'
+    }],
+    groupsIdRequests : [{
+        type : Types.ObjectId,
+        ref : 'GroupM'
+    }],
+    acceptedRequests : [{
+        type : String
+    }],
     //reset password
     resetPasswordToken : {
         type : String
@@ -55,9 +62,6 @@ const userSchema = new Schema<User>({
     resetPasswordExpires : {
         type : Date
     }
-    // groupsIdAcceptedRequests : {
-    //     type : [Types.ObjectId]
-    // }
 })
 
 const UserM = model<User>('UserM', userSchema)

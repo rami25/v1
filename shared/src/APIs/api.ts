@@ -5,7 +5,6 @@ import { Comment } from "../types/Comment";
 // import { Like } from "../types/Like";
 ////////////////////////////posts
 export interface ListPostsRequest {
-    // userId? : string;
     groupId? : string;
     profileId? : string;
 }
@@ -39,6 +38,12 @@ export interface UpdatePostRequest {
 export interface UpdatePostResponse {}
 ///////////////////////////////////////////////////
 /////////////////////////////////////////Auth
+export interface ListUserRequest {}
+export interface ListUserResponse {
+    users : Partial<User>[]
+}
+
+
 export interface SignInRequest {
     login : string;
     password: string;
@@ -52,7 +57,8 @@ export interface SignInResponse {
                     'posts'|
                    'groups'|
       'groupsIdInvitations'|
-       'groupsIdRequests' >;
+         'groupsIdRequests'| 
+         'acceptedRequests'>;
     jwt: string;
 }
 
@@ -87,13 +93,13 @@ export interface ResetPasswordResponse {
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////User
 export interface DeleteUserRequest {
-    // userId: string;
     password: string;
 }
 export interface DeleteUserResponse {}
+
 export interface UpdateUserRequest {
-    userName : string;
-    email : string;
+    userName? : string;
+    email? : string;
     description?: string;
 }
 export interface UpdateUserResponse {}
@@ -209,7 +215,6 @@ export interface AddCommentRequest {
 export interface AddCommentResponse {}
 
 export interface UpdateCommentRequest {
-    postId : string;
     commentId : string;
     content : string;
 }

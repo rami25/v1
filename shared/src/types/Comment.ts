@@ -17,9 +17,10 @@ const commentSchema = new Schema<Comment>({
         type : String,
         required : true
     },
-    likes : {
-        type : [Types.ObjectId]
-    },
+    likes : [{
+        type : Types.ObjectId,
+        ref : 'LikeM'
+    }],
     commentedAt : {
         type : Date,
         default : Date.now()

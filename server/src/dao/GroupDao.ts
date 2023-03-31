@@ -21,7 +21,7 @@ export interface GroupDao {
     rejectUserFromGroup(id : Types.ObjectId , profileId : Types.ObjectId): Promise<void>;
 
     listGroupPosts(id: string, groupName?:string, privacy?: string) : Promise<Post[]>;
-    listUsers(userId?: string) : User[];
+    // listUsers(userId?: string) : User[];
     addUser(user: User) : void;
     getGroupByGroupName(groupName : string) : Promise<Group | undefined>;
     existsUserById(groupId: string, userId: Types.ObjectId) : Promise<boolean | undefined>; 

@@ -1,5 +1,4 @@
 import { Schema, model, Types} from 'mongoose';
-// import { Comment } from './Comment'
 
 export interface Post {
     _id?: Types.ObjectId;
@@ -9,7 +8,6 @@ export interface Post {
     files: string[];
     userId?: Types.ObjectId;
     groupId?: Types.ObjectId;
-    // comments? : Comment['_id'][];
     comments? : Types.ObjectId[];
     likes? : Types.ObjectId[];
     postedAt?: Date;

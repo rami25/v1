@@ -11,6 +11,7 @@ export enum ERRORS {
   POST_ID_MISSING = 'Post ID is missing',
   POST_NOT_FOUND = 'Post not found',
   GROUP_NOT_FOUND = 'Group not found',
+  COMMENT_NOT_FOUND = 'Comment not found',
   DUPLICATE_URL = 'A post with this URL already exists',
 
   COMMENT_MISSING = 'Comment is missing',

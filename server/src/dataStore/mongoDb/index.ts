@@ -9,29 +9,29 @@ import { ObjectId } from "../../../../shared";
 
 
 export class MongoDB implements DataStore {
+    /////////////////////////////////////////////////////////////////////////////Users
+    async listUsers(): Promise<Partial<User>[] | undefined> {
+        return await UserM.find({},{userName: 1 , email: 1, description : 1, createdAt: 1}) || undefined
+    }
 
     async createUser(user: User): Promise<User> {
         const newUser = await UserM.create(user)
         await newUser.save()
         return newUser
     }
+    // {$set:{'posts.$': post}}
     async deleteUser(id: Types.ObjectId): Promise<void> {
-        const user = await UserM.findOne().where('_id').equals(id)
-        if(user)
-            await user.deleteOne()
- 
+        await UserM.findByIdAndDelete(id)
+        await GroupM.updateMany({ usersId : {$in : [id]}}, {$unset: {'usersId.$' : id}})
     }
     async updateCurrentUser(user: Partial<User>): Promise<void> {
         await UserM.findByIdAndUpdate(user._id, user , {new : true})
     }
     async getUserById(id: Types.ObjectId): Promise<User | undefined> {
-        const userDoc = await UserM.findById(id).exec()
-        if(!userDoc) return undefined
-        return userDoc
+        return await UserM.findOne().where("_id").equals(id) || undefined
     }
     async getUserByEmail(email: string): Promise<User | undefined> {
-        const user = await UserM.findOne().where("email").equals(email) || undefined
-        return user
+        return await UserM.findOne().where("email").equals(email) || undefined
     }
     async getUserByUsername(userName: string): Promise<User | undefined> {
         return await UserM.findOne().where("userName").equals(userName) || undefined
@@ -272,9 +272,6 @@ export class MongoDB implements DataStore {
     listGroupPosts(id: string, groupName?: string | undefined, privacy?: string | undefined): Promise<Post[]> {
         throw new Error("Method not implemented.");
     }
-    listUsers(userId?: string | undefined): User[] {
-        throw new Error("Method not implemented.");
-    }
 
 
     addUser(user: User): void {
@@ -321,8 +318,8 @@ export class MongoDB implements DataStore {
         await PostM.findByIdAndUpdate(new ObjectId(postId), {$pull : {comments: new ObjectId(commentId)}},{new : true})
     }
 
-    async getComment(postId: string, commentId: string): Promise<Comment | undefined> {
-        throw new Error("Method not implemented.");
+    async getComment(commentId: string): Promise<Comment | undefined> {
+        return await CommentM.findById(new ObjectId(commentId)) || undefined
     }
 
 
