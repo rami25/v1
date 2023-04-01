@@ -8,6 +8,7 @@ export interface User {
     createdAt: Date;
     description?: string;
     posts?: Types.ObjectId[];
+    psts? : number;
     groups?: Types.ObjectId[];
     groupsIdInvitations? : Types.ObjectId[];
     groupsIdRequests? : Types.ObjectId[];
@@ -44,6 +45,10 @@ const userSchema = new Schema<User>({
         type : Types.ObjectId,
         ref : 'GroupM'
     }],
+    psts : {
+        type : Number,
+        default : 0
+    },
     groupsIdInvitations : [{
         type : Types.ObjectId,
         ref : 'GroupM'

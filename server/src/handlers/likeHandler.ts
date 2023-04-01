@@ -1,8 +1,17 @@
 import { ExpressHandler } from "../types";
 
+export const countPostLikes : ExpressHandler<{},{}> = async (req, res) => {
+
+}
+
 export const listPostLikes : ExpressHandler<{},{}> = async (req, res) => {
 
 }
+
+export const countCommentLikes : ExpressHandler<{},{}> = async (req, res) => {
+
+}
+
 export const listCommentLikes : ExpressHandler<{},{}> = async (req, res) => {
 
 }

@@ -12,44 +12,68 @@ import { ExpressHandler } from "../types";
 import { Post } from '../../../shared/src/types/Post';
 import { ObjectId } from '../../../shared';
 import { ERRORS } from '../../../shared/src/errors';
+import { getUserIdMiddleware } from '../middlewares/authMiddleware';
 
+export const countPostsHandler : ExpressHandler<{},{posts : number}> = async (req, res) => {
+    res.status(200).send({ posts : await db.countPosts()})
+}
 
 export const listPostsHandler : ExpressHandler<
 ListPostsRequest,
 ListPostsResponse
 > = async (req, res) => {
-    if(!req.body.groupId && !req.body.profileId){//as (visitor or user) to main posts
+    const { groupId , profileId } = req.body
+    if(!groupId && !profileId){//as (visitor or user) to main posts
         const posts = await db.listPosts(undefined, undefined, undefined,'public')
         return res.status(200).send({posts})
     }
-    const userId = res.locals.userId
-    if(!userId && !req.body.groupId && req.body.profileId){//as visitor to specific profile
-        await db.listPosts(undefined, undefined, req.body.profileId, 'public')
-        return res.sendStatus(200)
-    }
-    if(!userId && req.body.groupId && !req.body.profileId){//as visitor search group
-        await db.listPosts(undefined, req.body.groupId,undefined, 'public')
-        return res.sendStatus(200)
-    }
-    if(userId && !req.body.groupId && req.body.profileId){
-        if(userId === new ObjectId(req.body.profileId)){//owns posts(public and private)
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    let userId = null
+    if(token)
+        userId = await getUserIdMiddleware(token)
+    if(userId) userId = new ObjectId(userId)    
+    if(!groupId && profileId){//as (visitor or user) to specific profile or own profile
+        if(userId && userId === new ObjectId(profileId)){
             await db.listPosts(userId)
             return res.sendStatus(200)
         }
-        await db.listPosts(undefined, undefined, req.body.profileId, 'public')
+        await db.listPosts(undefined, undefined, profileId, 'public')
         return res.sendStatus(200)
     }
-    if(userId && req.body.groupId){//as user search group or belong group
-        const exists:boolean = await db.existsUserById(req.body.groupId,userId) as boolean
-        if(exists){
-            await db.listPosts(undefined,req.body.groupId)
-            return res.sendStatus(200)
+    if(groupId && !profileId){//as (visitor or user) search group or own group
+        if(userId){
+            const exists:boolean = await db.existsUserById(groupId,userId) as boolean
+            if(exists){
+                await db.listPosts(undefined,groupId)
+                return res.sendStatus(200)
+            }
         }
-        else{
-            await db.listPosts(undefined, req.body.groupId,undefined, 'public')
-            return res.sendStatus(200)
-        }
+        await db.listPosts(undefined, groupId,undefined, 'public')
+        return res.sendStatus(200)
     }
+
+    // if(userId && !groupId && profileId){
+    //     if(userId === new ObjectId(profileId)){//owns posts(public and private) User
+    //         await db.listPosts(userId)
+    //         return res.sendStatus(200)
+    //     }
+    //     await db.listPosts(undefined, undefined, profileId, 'public')
+    //     return res.sendStatus(200)
+    // }
+
+    // if(userId && groupId && !profileId){//as user search group or belong group
+    //     const exists:boolean = await db.existsUserById(groupId,userId) as boolean
+    //     if(exists){
+    //         await db.listPosts(undefined,groupId)
+    //         return res.sendStatus(200)
+    //     }
+    //     else{
+    //         await db.listPosts(undefined, groupId, undefined, 'public')
+    //         return res.sendStatus(200)
+    //     }
+    // }
+
     res.sendStatus(401)
 }
 
@@ -83,17 +107,17 @@ DeletePostRequest,
 DeletePostResponse
 > = async (req, res) => {
     const userId = res.locals.userId
-    const { postId , groupId} = req.body
+    const { postId , groupId } = req.body
     if(postId){
         const post = await db.getPost(postId, userId)
         if(!post)
-            return res.status(400).send({error:'User not authorized to delete this post'})
+            return res.status(400).send({error:'User not authorized for deleting this post'})
         if(!groupId){                                      //tab9a fel group
-            await db.deletePost(postId, userId)   //w tetfasa5 fel main posts
+            await db.deletePost(postId, userId)            //w tetfasa5 fel main posts
             return res.sendStatus(200)                     // if eli heya public post
         }
         else{//tab9a fel user profile w fel main public posts w ken user owner ydelety
-            await db.deletePost(postId, userId , req.body.groupId)
+            await db.deletePost(postId, userId , groupId)
             return res.sendStatus(200)
         }
     }
@@ -106,7 +130,7 @@ UpdatePostResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { title , description, urls, files, postId, privacy} = req.body
-    if(userId && postId){
+    if(postId){
         const post = await db.getPost(postId, userId)
         if(post){
             if(title) post.title = title

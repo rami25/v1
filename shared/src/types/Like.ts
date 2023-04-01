@@ -9,6 +9,7 @@ export interface Like {
 const LikeSchema = new Schema<Like>({
     userId : {
         type : Types.ObjectId,
+        ref: 'UserM',
         required : true
     },
     likedAt : {

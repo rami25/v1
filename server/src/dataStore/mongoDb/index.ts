@@ -10,8 +10,12 @@ import { ObjectId } from "../../../../shared";
 
 export class MongoDB implements DataStore {
     /////////////////////////////////////////////////////////////////////////////Users
+    async countUsers(): Promise<number> {
+        return await UserM.countDocuments()
+    }
+
     async listUsers(): Promise<Partial<User>[] | undefined> {
-        return await UserM.find({},{userName: 1 , email: 1, description : 1, createdAt: 1}) || undefined
+        return await UserM.find({},{userName: 1 , email: 1, description : 1, createdAt: 1, psts: 1}) || undefined
     }
 
     async createUser(user: User): Promise<User> {
@@ -19,11 +23,16 @@ export class MongoDB implements DataStore {
         await newUser.save()
         return newUser
     }
-    // {$set:{'posts.$': post}}
+    
     async deleteUser(id: Types.ObjectId): Promise<void> {
+        const groupIds = UserM.findOne(id).select('groups')
+        console.log(groupIds)
+        for(let gId in groupIds){
+            await GroupM.updateOne({_id: gId}, {$pull : {usersId : id}})
+        }
         await UserM.findByIdAndDelete(id)
-        await GroupM.updateMany({ usersId : {$in : [id]}}, {$unset: {'usersId.$' : id}})
     }
+
     async updateCurrentUser(user: Partial<User>): Promise<void> {
         await UserM.findByIdAndUpdate(user._id, user , {new : true})
     }
@@ -58,7 +67,10 @@ export class MongoDB implements DataStore {
     addFriend(user: User): Promise<void> {
         throw new Error("Method not implemented.");
     }
-
+///////////////////////////////////////////////////////////////////////////////Posts
+    async countPosts(): Promise<number> {
+        return  await PostM.countDocuments()
+    }
     async listPosts(userId?: Types.ObjectId, groupId?: string, profileId?: string, privacy?: string): Promise<Post[] | undefined> {
         // publics main posts as (visitor or user)
         if(!userId && !groupId && !profileId && (privacy === 'public'))
@@ -107,11 +119,12 @@ export class MongoDB implements DataStore {
     async createPost(post: Post): Promise<void> {
         //add to main posts and user profile
         const newPost = await PostM.create(post)
-        await newPost.save()
         const user = await UserM.findById(post.userId)
         if(user){
             await user.posts?.push(newPost._id)
+            await UserM.updateOne({_id : user._id}, {$inc : {psts:1}})
             await user.save()
+            newPost.userName = user.userName
         }
         // in group 
         const groupId = post.groupId
@@ -119,10 +132,13 @@ export class MongoDB implements DataStore {
             const group = await this.getGroup(groupId)
             if(group){
                 await GroupM.updateOne({_id: groupId},{
-                    $push: {posts: newPost._id}
+                    $push: {posts: newPost._id},
+                    $inc : {psts : 1}
                 })
+                newPost.groupName = group.groupName
             }
         }
+        await newPost.save()
     }
 
     async getPost(id: string, Iduser?: Types.ObjectId): Promise<Post | undefined> {
@@ -139,7 +155,7 @@ export class MongoDB implements DataStore {
     async deletePost(postId: string, userId?: Types.ObjectId, groupId?: string): Promise<void> {
         const post = await this.getPost(postId,userId)
         if(postId && userId && !groupId){//removing from user profile
-            await UserM.updateOne({_id : userId}, {$pull: {posts:new ObjectId(postId)}})
+            await UserM.updateOne({_id : userId}, {$pull: {posts:new ObjectId(postId)}, $inc : {psts : -1}})
             if(post && post.privacy === 'public')
                 await PostM.deleteOne({_id : new ObjectId(postId)}, (err:any) => {
                         if (err) {
@@ -150,19 +166,20 @@ export class MongoDB implements DataStore {
             return
         }
         if(postId && userId && groupId){
-            await GroupM.updateOne({_id: new ObjectId(groupId)}, {$pull: {posts: post!._id}})
+            await GroupM.updateOne({_id: new ObjectId(groupId)}, {$pull: {posts: post!._id}, $inc : {psts : -1}})
         }
     }
 
     async updatePost(post: Post, userId?: Types.ObjectId | undefined): Promise<void> {
-        const groupId = post.groupId || undefined
-        if(groupId){
-            await GroupM.updateOne({_id:groupId, posts:{$in:[post._id]}}, {$set:{'posts.$': post}}, {new:true})
-        }
-        else{
-            await UserM.updateOne({_id: userId , posts: {$in:[post._id]}}, {$set:{'posts.$': post}},{new:true})
-            await UserM.findByIdAndUpdate(post._id, post , {new : true})
-        }
+        // const groupId = post.groupId || undefined
+        // if(groupId){
+        //     await GroupM.updateOne({_id:groupId, posts:{$in:[post._id]}}, {$set:{'posts.$': post}}, {new:true})
+        // }
+        // else{
+        //     await UserM.updateOne({_id: userId , posts: {$in:[post._id]}}, {$set:{'posts.$': post}},{new:true})
+        //     await PostM.findByIdAndUpdate(post._id, post , {new : true})
+        // }
+        await PostM.findByIdAndUpdate(post._id , post , {new : true})
 
     }
 
@@ -178,7 +195,7 @@ export class MongoDB implements DataStore {
             await user.groups?.push(newGroup._id)
             await user.save()
         }
-        await GroupM.updateOne({_id: newGroup._id}, { $push : {usersId : newGroup.userAdmin}})
+        await GroupM.updateOne({_id: newGroup._id}, { $push : {usersId : newGroup.userAdmin}, $inc : {users : 1}})
         const sendGroup = await GroupM.findById(newGroup._id).exec()
         return sendGroup!
     }
@@ -193,8 +210,12 @@ export class MongoDB implements DataStore {
         await GroupM.findByIdAndUpdate(group._id , group , {new: true})
     }
 
+    async countGroups(): Promise<number> {
+        return await GroupM.countDocuments()
+    }
+
     async listGroups(): Promise<Group[] | undefined> {
-        return await GroupM.find({},{groupName : 1 , description : 1 , userAdmin : 1 , usersId : 1 , createdAt : 1}) || undefined
+        return await GroupM.find({},{groupName : 1 , description : 1 , userAdmin : 1 , usersId : 1 ,users : 1,psts : 1, createdAt : 1}) || undefined
     }
 
     async getGroup(id: Types.ObjectId, userId?: Types.ObjectId): Promise<Group | undefined> {
@@ -203,7 +224,7 @@ export class MongoDB implements DataStore {
         return await GroupM.findOne({_id:id , userAdmin : userId}) || undefined
 
     }
-
+//interact with other
     async sendGroupRequest(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
         await GroupM.findByIdAndUpdate(id , {$push : {usersIdInvitations : userId}}, {new : true})
         await UserM.findByIdAndUpdate(userId , {$push : {groupsIdRequests : id}}, {new : true})
@@ -222,10 +243,23 @@ export class MongoDB implements DataStore {
 
     async acceptUserRequest(id: Types.ObjectId, profileId: Types.ObjectId): Promise<void> {
         await this.deleteUserRequest(id,profileId)
-        await GroupM.updateOne({_id: id}, { $push : {usersId : profileId}})
+        await GroupM.updateOne({_id: id}, { $push : {usersId : profileId}, $inc : {users : 1}})
         await UserM.findByIdAndUpdate(profileId, {$push : {groups : id}})
     }
 
+    async notification(id : Types.ObjectId, profileId : Types.ObjectId, target:boolean) : Promise<void> {
+        const group = await this.getGroup(id)
+        const user = await this.getUserById(profileId)
+        if(target){
+            const message = `hi ${user!.userName}, you have accepted in ${group!.groupName} group`
+            user!.acceptedRequests?.push(message)
+            await UserM.findByIdAndUpdate(profileId , user , {new : true})
+            return
+        }
+        const message = `hi ${group!.groupName}, ${user!.userName} have been a member of ${group!.groupName} group`
+        group!.acceptedRequests?.push(message)
+        await GroupM.findByIdAndUpdate(id , group , {new : true})
+    }
     async inviteUserToGroup(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
         await GroupM.findByIdAndUpdate(id , {$push : {usersIdRequests : userId}}, {new : true})
         await UserM.findByIdAndUpdate(userId , {$push : {groupsIdInvitations:id}},{new : true}).exec()
@@ -252,7 +286,7 @@ export class MongoDB implements DataStore {
     }
 
     async leaveGroup(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
-        await GroupM.updateOne({_id: id}, { $pull : {usersId : userId}})
+        await GroupM.updateOne({_id: id}, { $pull : {usersId : userId}, $inc : {users : -1}})
         await UserM.findByIdAndUpdate(userId, {$pull : {groups : id}})
     }
     async rejectUserFromGroup(id: Types.ObjectId, profileId: Types.ObjectId): Promise<void> {

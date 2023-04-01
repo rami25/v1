@@ -25,6 +25,9 @@ import { hashPassword } from '../env';
 import crypto from 'crypto'
 import nodemailer from 'nodemailer'
 
+export const countUserHandler : ExpressHandler<{},{users: number}> = async(req, res) => {
+    res.status(200).send({users : await db.countUsers()})
+}
 export  const listUserHandler : ExpressHandler<
 ListUserRequest,
 ListUserResponse
@@ -120,7 +123,7 @@ DeleteUserResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { password } = req.body
-    if(userId && password){
+    if(password){
         const user = await db.getUserById(userId)
         if(user && (hashPassword(password) === user.password)){
             await db.deleteUser(userId)
@@ -128,9 +131,9 @@ DeleteUserResponse
         }
         return res.status(401).send({ error: ERRORS.PASSWORD_INCORRECT })
     }
-    return res.status(400).send({error:'all fields are required'})
-    
+    return res.status(400).send({error:'password is required'})
 }
+
 
 export const updateUserHandler : ExpressHandler<
 UpdateUserRequest,
@@ -164,7 +167,11 @@ export const forgotPassword : ExpressHandler<
 ForgotPasswordRequest,
 ForgotPasswordResponse
 >  = async (req, res) => {
-    const user = await db.getUserByEmail(req.body.email!)
+    const { email } = req.body
+    if(!email) 
+        return res.status(400).send({error : 'email is required'})
+
+    const user = await db.getUserByEmail(email)
 
     if (!user) {
        return res.status(400).json({ error: 'User not found' });

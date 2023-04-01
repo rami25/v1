@@ -5,12 +5,14 @@ export interface Comment {
     userId?: Types.ObjectId;
     content : string;
     likes? : Types.ObjectId[];
+    lks? : number;
     commentedAt: Date;
 }
 
 const commentSchema = new Schema<Comment>({
     userId : {
         type : Types.ObjectId,
+        ref: 'UserM',
         required : true
     },
     content : {
@@ -21,6 +23,10 @@ const commentSchema = new Schema<Comment>({
         type : Types.ObjectId,
         ref : 'LikeM'
     }],
+    lks : {
+        type : Number,
+        default : 0
+    },
     commentedAt : {
         type : Date,
         default : Date.now()

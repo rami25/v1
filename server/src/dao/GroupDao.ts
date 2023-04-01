@@ -8,6 +8,7 @@ export interface GroupDao {
     deleteGroup(id : string) : Promise<void>;
     updateGroup(group : Group) : Promise<void>;
     listGroups() : Promise<Group[] | undefined>;
+    countGroups() : Promise<number>;
     getGroup(id : Types.ObjectId , userId?:Types.ObjectId) : Promise<Group | undefined>;
     sendGroupRequest(id : Types.ObjectId, userId : Types.ObjectId): Promise<void>;
     deleteSendGroupRequest(id : Types.ObjectId, userId : Types.ObjectId): Promise<void>;
@@ -19,6 +20,7 @@ export interface GroupDao {
     joinGroup(id : Types.ObjectId , userId : Types.ObjectId): Promise<void>;
     leaveGroup(id : Types.ObjectId , userId : Types.ObjectId): Promise<void>;
     rejectUserFromGroup(id : Types.ObjectId , profileId : Types.ObjectId): Promise<void>;
+    notification(id : Types.ObjectId , userId : Types.ObjectId , target : boolean): Promise<void>;
 
     listGroupPosts(id: string, groupName?:string, privacy?: string) : Promise<Post[]>;
     // listUsers(userId?: string) : User[];

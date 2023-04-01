@@ -4,6 +4,7 @@ import { User } from './../../../shared/src/types/User';
 
 export interface UserDao {
   listUsers() : Promise<Partial<User>[] | undefined>;
+  countUsers() : Promise<number>;
   createUser(user: User): Promise<User>;//
   deleteUser(id: Types.ObjectId) : Promise<void>;//
   updateCurrentUser(user: Partial<User>): Promise<void>;//

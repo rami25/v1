@@ -9,7 +9,16 @@ export interface ListPostsRequest {
     profileId? : string;
 }
 export interface ListPostsResponse {
-    posts : Post[];
+    posts : Pick<Post,
+                '_id'|
+                'title'|
+                'description'|
+                'urls'|
+                'files'|
+                'userName'|
+                'groupName'|
+                'cmnts'|
+                'lks'>[];
 }
 //
 export type CreatePostRequest = {
@@ -103,8 +112,8 @@ export interface UpdateUserRequest {
     description?: string;
 }
 export interface UpdateUserResponse {}
-////////////////////////////////////////
-///////////////////////////////Group
+//////////////////////////////////////////////////////////
+////////////////////////////////////////////////Group
 export interface CreateGroupRequest {
     groupName: string;
     description: string;
@@ -125,9 +134,9 @@ export interface UpdateGroupRequest {
 }
 export interface UpdateGroupResponse {}     
 
-export interface ListGroupsRequest {}
+export interface ListGroupsRequest {}// or list group of profile
 export interface ListGroupsResponse {
-    groups : Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'createdAt'>[];
+    groups : Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'users'|'psts'|'createdAt'>[];
 }     
 
 export interface GetGroupRequest {

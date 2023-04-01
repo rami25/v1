@@ -13,8 +13,8 @@ export async function createServer(logRequests = true) {
 
 
 
-    app.use('/',   require('./src/routes/listRoute'))// for user and visitor
-    app.use('/visitors', require('./src/routes/visitorRoute'))
+    app.use('/',        require('./src/routes/listRoute'))// for user or visitor OnInit
+    app.use('/visitors',require('./src/routes/visitorRoute'))
     app.use('/users',   require('./src/routes/userRoute'))
     app.use('/posts',   require('./src/routes/postRoute'))
     app.use('/groups',  require('./src/routes/groupRoute'))

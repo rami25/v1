@@ -28,3 +28,21 @@ export const jwtParseMiddleware: ExpressHandler<any,any> = async (req, res, next
     res.locals.userId = user._id
     next()
 }
+
+export async function getUserIdMiddleware (token: string) {
+    let payload: JwtObject;
+    try {
+      payload = verifyJwt(token);
+    } catch(e) {
+      const verifyErr = e as VerifyErrors;
+      if (verifyErr instanceof TokenExpiredError) {
+        return null
+      }
+      return null
+    }
+    const user = await db.getUserById(payload.userId);
+    if (!user) {
+      return null
+    }
+    return user._id
+}

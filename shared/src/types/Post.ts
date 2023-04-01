@@ -7,9 +7,13 @@ export interface Post {
     urls: string[];
     files: string[];
     userId?: Types.ObjectId;
+    userName?: string;
     groupId?: Types.ObjectId;
+    groupName?:string;
     comments? : Types.ObjectId[];
+    cmnts? : number;
     likes? : Types.ObjectId[];
+    lks?:number;
     postedAt?: Date;
     privacy: string;
 }
@@ -30,17 +34,34 @@ const postSchema = new Schema<Post>({
     },
     userId : {
         type : Types.ObjectId,
+        ref: 'UserM',
         required : true
     },
+    userName : {
+        type : String
+    },
     groupId : {
-        type : Types.ObjectId
+        type : Types.ObjectId,
+        ref: 'GroupM'
+    },
+    groupName : {
+        type : String
     },
     comments :[{
         type : Types.ObjectId,
         ref: 'CommentM'
     }],
-    likes : {
-        type : [Types.ObjectId]
+    cmnts : {
+        type : Number,
+        default : 0
+    },
+    likes : [{
+        type : Types.ObjectId,
+        ref: 'LikeM'
+    }],
+    lks : {
+        type : Number,
+        default : 0
     },
     postedAt : {
         type : Date,

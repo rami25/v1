@@ -106,6 +106,10 @@ UpdateGroupResponse
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
 
+export const countGroups : ExpressHandler<{},{groups: number}> = async(req, res) =>{
+    res.status(200).send({groups : await db.countGroups()})
+}
+
 export const listGroups : ExpressHandler<// for all (publics)
 ListGroupsRequest,
 ListGroupsResponse
@@ -189,6 +193,7 @@ AcceptResponse
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
         await db.acceptUserRequest(new ObjectId(groupId) , new ObjectId(profileId))
+        await db.notification(new ObjectId(groupId), new ObjectId(profileId), false)
         return res.sendStatus(200)
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
@@ -253,6 +258,7 @@ JoinGroupResponse
     const group = await db.getGroup(new ObjectId(groupId))
     if(group){
         await db.joinGroup(new ObjectId(groupId), userId)
+        await db.notification(new ObjectId(groupId), userId, true)
         return res.sendStatus(200)
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})

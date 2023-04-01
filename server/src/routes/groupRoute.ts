@@ -11,7 +11,6 @@ import {
         inviteTo,
         joinGroup,
         leaveGroup,
-        listGroups,
         removeInvitation,
         sendRequest,
         updateGroup, 
@@ -20,7 +19,6 @@ import {
 } from '../handlers/groupHandler';
 const router = Router()
 
-router.get('/', asyncHandler(listGroups))//groupName , description , users
 router.get('/get',jwtParseMiddleware, asyncHandler(getGroup))// as an admin
 router.post('/create', jwtParseMiddleware, asyncHandler(createGroup))// as an admin
 router.delete('/delete', jwtParseMiddleware, asyncHandler(deleteGroup))
