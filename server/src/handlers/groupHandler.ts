@@ -1,4 +1,4 @@
-import { ObjectId } from "../../../shared";
+import { ObjectId } from "../../../shared/src/connection";
 import { 
         AcceptRequest,
         AcceptResponse,
@@ -102,8 +102,6 @@ UpdateGroupResponse
         await db.updateGroup(group)
         return res.sendStatus(200)
     }
-
-    res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
 
 export const countGroups : ExpressHandler<{},{groups: number}> = async(req, res) =>{

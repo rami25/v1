@@ -5,7 +5,7 @@ import { Like } from "../../../../shared/src/types/Like";
 import UserM, { User } from "../../../../shared/src/types/User";
 import { DataStore } from "../../dao";
 import { Types } from "mongoose";
-import { ObjectId } from "../../../../shared";
+import { ObjectId } from "../../../../shared/src/connection";
 
 
 export class MongoDB implements DataStore {
@@ -195,7 +195,7 @@ export class MongoDB implements DataStore {
             await user.groups?.push(newGroup._id)
             await user.save()
         }
-        await GroupM.updateOne({_id: newGroup._id}, { $push : {usersId : newGroup.userAdmin}, $inc : {users : 1}})
+        await GroupM.updateOne({_id: newGroup._id}, {admin : user?.userName, $push : {usersId : newGroup.userAdmin}, $inc : {users : 1}})
         const sendGroup = await GroupM.findById(newGroup._id).exec()
         return sendGroup!
     }

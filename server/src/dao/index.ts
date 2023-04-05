@@ -4,7 +4,7 @@ import { PostDao } from "./PostDao";
 import { LikeDao } from "./LikeDao";
 import { UserDao } from "./UserDao";
 import { MongoDB } from "../dataStore/mongoDb";
-import { connectDb } from "../../../shared"
+import { connectDb } from "../../../shared/src/connection"
 
 export interface DataStore extends 
     UserDao, 
