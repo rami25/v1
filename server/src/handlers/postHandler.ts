@@ -10,7 +10,7 @@ import { CreatePostRequest,
 import { db } from "../dao";
 import { ExpressHandler } from "../types";
 import { Post } from '../../../shared/src/types/Post';
-import { ObjectId } from '../../../shared';
+import { ObjectId } from '../../../shared/src/connection';
 import { ERRORS } from '../../../shared/src/errors';
 import { getUserIdMiddleware } from '../middlewares/authMiddleware';
 

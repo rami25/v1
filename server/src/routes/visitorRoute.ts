@@ -7,7 +7,7 @@ import { forgotPassword,
 } from '../handlers/authHandler';
 
 const router = Router()
-router.get('/sign-in', asyncHandler(signInHandler))
+router.post('/sign-in', asyncHandler(signInHandler))
 router.post('/sign-up', asyncHandler(signUpHandler))
 router.post('/forgot-Password', asyncHandler(forgotPassword))
 router.post('/reset-Password', asyncHandler(resetPassword))

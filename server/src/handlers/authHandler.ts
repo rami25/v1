@@ -49,8 +49,8 @@ SignInResponse
     }
     const jwt = signJwt({userId : existing._id!})
     // Store JWT in cookie or local storage or session storage
-    res.cookie('jwt', jwt);
-    return res.status(200).send({
+    // res.cookie('jwt', jwt);
+    res.status(200).send({
         user: {
             _id: existing._id,
             userName: existing.userName,
