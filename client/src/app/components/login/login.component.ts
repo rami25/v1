@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { NavbarService } from 'src/app/services/navbar/navbar.service';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +12,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class LoginComponent {
 
-  constructor(private _auth : AuthService,
-              private _router : Router) {}
+  constructor(public _auth : AuthService,
+              private _router : Router,
+              private navbarService: NavbarService) {}
               
   login(credential:NgForm){
     this._auth.loginUser(credential.value)
@@ -21,14 +23,12 @@ export class LoginComponent {
         console.log(res.user)
         console.log(res.jwt)
         localStorage.setItem('token', res.jwt)
-        console.log('error',res.error)
-        // this._router.navigate(['/special'])
+        this.navbarService.userName = res.user.userName
+        this.navbarService.id = res.user._id
       },
       (error : HttpErrorResponse) => {
         alert(error.message);
-        console.log(error)
       }
     ) 
-    console.log('done')
   }             
 }

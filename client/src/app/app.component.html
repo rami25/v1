@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">RoomV1</a>
+  <a class="navbar-brand" href="#" routerLink="/home" routerLinkActive="active">RoomV1</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -14,10 +14,10 @@
       </li>
     </ul>
     <ul class="navbar-nav">
-        <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
-        <!-- <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/login" routerLinkActive="active">Login</a>
-        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/register" routerLinkActive="active">Register</a>
-        <a class="nav-link" style="cursor:pointer" *ngIf="_authService.loggedIn()" (click)="_authService.logoutUser()">Logout</a>         -->
+        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/log-in" routerLinkActive="active">Login</a>
+        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up" routerLinkActive="active">Register</a>
+        <a class="nav-link" style="cursor:pointer" *ngIf="_authService.loggedIn()" (click)="_authService.logoutUser()">Logout</a>        
+        <a class="nav-link" style="cursor:pointer" *ngIf="_authService.loggedIn()" routerLink="/user/{{id}}" routerLinkActive="active">{{userName}}</a>        
     </ul>
   </div>
 </nav>    
