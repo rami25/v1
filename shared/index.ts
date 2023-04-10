@@ -1,1 +1,5 @@
 export * from './src/types/User'
+export * from './src/types/Post'
+export * from './src/types/Group'
+export * from './src/types/Like'
+export * from './src/types/Comment'

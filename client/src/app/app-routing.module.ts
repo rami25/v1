@@ -4,6 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { AuthGuard } from './services/authGuard/auth.guard';
 
 const routes: Routes = [
   {
@@ -13,7 +14,7 @@ const routes: Routes = [
   },
   {
     path : 'home',
-    component : HomeComponent,
+    component : HomeComponent
   },
   {
     path : 'log-in',
@@ -24,8 +25,8 @@ const routes: Routes = [
     component : SignUpComponent 
   },
   {
-    path : 'user/:id',
-    component : ProfileComponent 
+    path : 'user/:id/:meta',
+    component : ProfileComponent
   }
 ];
 

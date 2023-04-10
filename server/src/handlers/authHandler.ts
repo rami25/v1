@@ -48,7 +48,23 @@ export const getUserHandler : ExpressHandler<{},{
          'acceptedRequests'>
 }> = async(req,res) => {
     const userId = res.locals.userId
-    res.status(200).send({user : await db.getUserById(userId)})
+    const existing = await db.getUserById(userId) 
+    if(existing)
+    return res.status(200).send({
+        user: {
+            _id: existing._id,
+            userName: existing.userName,
+            email: existing.email,
+            description : existing.description,
+            createdAt: existing.createdAt,
+            posts: existing.posts,
+            groups: existing.groups,
+            groupsIdInvitations: existing.groupsIdInvitations,
+            groupsIdRequests: existing.groupsIdRequests,
+            acceptedRequests: existing.acceptedRequests
+        }
+    })   
+    res.sendStatus(404)
 }
 export const signInHandler : ExpressHandler<
 SignInRequest,

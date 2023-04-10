@@ -7,3 +7,26 @@
 <div>{{user.groups}}</div>
 <div>{{user.description}}</div>
 <div>{{user.createdAt}}</div>
+<div>{{user.groupsIdInvitations}}</div>
+
+<!-- <a class="nav-link dropdown-toggle" id="dropdownMenuButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Posts</a>        
+
+    <div class="dropdown-menu"  aria-labelledby="navbarDropdown" id="posts">
+        <div *ngFor="let post of posts">
+            <div>{{post._id}}</div>
+            <div>{{post.title}}</div>
+            <div>{{post.userName}}</div>
+            <hr>
+        </div>
+    </div> -->
+
+<button (click)="togglePosts()" id="posts"> Posts </button>
+
+    <div *ngIf="showPosts">
+        <div *ngFor="let post of posts">
+            <div>{{post._id}}</div>
+            <div>{{post.title}}</div>
+            <div>{{post.userName}}</div>
+            <hr>
+        </div>
+    </div>
