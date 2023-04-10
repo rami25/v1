@@ -111,7 +111,9 @@ export interface UpdateUserRequest {
     email? : string;
     description?: string;
 }
-export interface UpdateUserResponse {}
+export interface UpdateUserResponse {
+    user : Pick<User , 'userName'|'email'|'description'>
+}
 //////////////////////////////////////////////////////////
 ////////////////////////////////////////////////Group
 export interface CreateGroupRequest {

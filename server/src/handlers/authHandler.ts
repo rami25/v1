@@ -35,6 +35,21 @@ ListUserResponse
    res.status(200).send({ users : await db.listUsers()})
 }
 
+export const getUserHandler : ExpressHandler<{},{
+     user :Pick<User, '_id'|
+                 'userName'|
+                    'email'|
+              'description'|
+                'createdAt'|
+                    'posts'|
+                   'groups'|
+      'groupsIdInvitations'|
+         'groupsIdRequests'| 
+         'acceptedRequests'>
+}> = async(req,res) => {
+    const userId = res.locals.userId
+    res.status(200).send({user : await db.getUserById(userId)})
+}
 export const signInHandler : ExpressHandler<
 SignInRequest,
 SignInResponse
@@ -139,24 +154,31 @@ export const updateUserHandler : ExpressHandler<
 UpdateUserRequest,
 UpdateUserResponse
 > = async (req, res) => {
-    const { userId } = res.locals.userId
+    const userId = res.locals.userId
     const { userName , email , description } = req.body
     if(userId){
         const user = await db.getUserById(userId)
         if(user){
-            if(userName){
+            if(userName && userName !== user.userName){
                 if (await db.getUserByUsername(userName)) 
                   return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
                 user.userName = userName
             }
-            if(email){
+            if(email && email !== user.email){
                 if (await db.getUserByEmail(email)) 
                   return res.status(403).send({ error: ERRORS.DUPLICATE_EMAIL });
                 user.email = email
             }
-            if(description) user.description = description
+            if(description && description !== '') user.description = description
             await db.updateCurrentUser(user)
-            return res.sendStatus(200)
+            console.log(await db.getUserById(userId))
+            return res.status(200).send({
+                user : {
+                    userName : user.userName,
+                    email : user.email,
+                    description : user.description
+                }
+            })
         }
         return res.status(401).send({ error: ERRORS.USER_NOT_FOUND })
     }

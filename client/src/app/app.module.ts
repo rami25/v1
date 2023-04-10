@@ -15,6 +15,7 @@ import { AuthGuard } from './services/authGuard/auth.guard';
 import { TokenInterceptorService } from './services/interceptor/token-interceptor.service';
 import { ProfileComponent } from './components/profile/profile.component';
 import { NavbarService } from './services/navbar/navbar.service';
+import { UpdateUserComponent } from './components/update-user/update-user/update-user.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { NavbarService } from './services/navbar/navbar.service';
     SignUpComponent,
     PostComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    UpdateUserComponent
   ],
 
   imports: [

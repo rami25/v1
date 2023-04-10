@@ -25,6 +25,9 @@ export class LoginComponent {
         localStorage.setItem('token', res.jwt)
         this.navbarService.userName = res.user.userName
         this.navbarService.id = res.user._id
+        this.navbarService.email = res.user.email
+        this.navbarService.desc = res.user.description
+        this._router.navigate(['/'])
       },
       (error : HttpErrorResponse) => {
         alert(error.message);

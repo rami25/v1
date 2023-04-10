@@ -1,0 +1,12 @@
+a{ cursor:pointer }
+.userMenu{
+  margin-left:-100px;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  border-radius: 0.25rem;
+  /* color: #fff; */
+  text-align: center;
+}
+.dropdown-item:hover {
+  background-color: gray;
+}

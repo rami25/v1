@@ -14,13 +14,96 @@
       </li>
     </ul>
     <ul class="navbar-nav">
-        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/log-in" routerLinkActive="active">Login</a>
-        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up" routerLinkActive="active">Register</a>
-        <a class="nav-link" style="cursor:pointer" *ngIf="_authService.loggedIn()" (click)="_authService.logoutUser()">Logout</a>        
-        <a class="nav-link" style="cursor:pointer" *ngIf="_authService.loggedIn()" routerLink="/user/{{id}}" routerLinkActive="active">{{userName}}</a>        
+        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/log-in" routerLinkActive="active">Log in</a>
+        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up" routerLinkActive="active">Sign up</a>
+        <!-- <a class="nav-link" *ngIf="_authService.loggedIn()" (click)="_authService.logoutUser()">Logout</a>         -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{userName}}</a>        
+  
+           <div class="dropdown-menu userMenu" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
+               <!-- <div class="dropdown-divider"></div> -->
+               <a class="dropdown-item">{{userName}}</a>
+               <a class="dropdown-item">{{email}}</a>
+               <hr>
+               <a class="dropdown-item" routerLink="/user/{{id}}" routerLinkActive="active">Your Profile</a>
+               <a class="dropdown-item"data-toggle="modal" data-target="#updateUser">Update Profile</a>
+               <a class="dropdown-item" data-toggle="modal" data-target="#logoutUser">Log out</a>
+           </div>
+        </li>
     </ul>
   </div>
 </nav>    
+
+<!-- logout Modal -->
+<div class="modal fade" id="logoutUser" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deleteModelLabel">Logout User</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <p>Are you sure you want to logout?</p>
+           <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+              <button (click)="_authService.logoutUser()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+
+
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="employeeEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="updateEmployeeModalLabel">Update User "{{userName}}"</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <form #editForm="ngForm" (ngSubmit)="updateUser(editForm)">
+              <div class="form-group">
+                 <label for="name">userName</label>
+                 <input type="text" ngModel name="userName" class="form-control" id="name" aria-describedby="emailHelp" value="{{userName}}">
+              </div>
+              <!-- <input type="hidden" ngModel name="email" class="form-control" id="id" placeholder="Email">
+              <input type="hidden" ngModel="{{editEmployee?.employeeCode}}" name="userCode" class="form-control" id="userCode" placeholder="Email"> -->
+              <div class="form-group">
+                 <label for="email">Email</label>
+                 <input type="email" ngModel name="email" class="form-control" id="email" value="{{email}}">
+              </div>
+              <div class="form-group">
+                 <label for="desc">Description</label>
+                 <input type="text" ngModel name="description" class="form-control" id="desc" value="{{description}}">
+              </div>
+              <div class="modal-footer">
+                 <button type="button" id="update-user" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                 <button [disabled]="editForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+              </div>
+           </form>
+        </div>
+     </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
 <div class="container">
   <router-outlet></router-outlet>            
 </div>
+
+
