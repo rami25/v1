@@ -9,24 +9,25 @@
 <div>{{user.createdAt}}</div>
 <div>{{user.groupsIdInvitations}}</div>
 
-<!-- <a class="nav-link dropdown-toggle" id="dropdownMenuButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Posts</a>        
 
-    <div class="dropdown-menu"  aria-labelledby="navbarDropdown" id="posts">
+<button (click)="togglePosts()" > Posts </button>
+
+    <div class="container" id="posts" *ngIf="showPosts">
         <div *ngFor="let post of posts">
             <div>{{post._id}}</div>
             <div>{{post.title}}</div>
             <div>{{post.userName}}</div>
             <hr>
         </div>
-    </div> -->
+    </div>
+<br>
+<button (click)="toggleGroups()" > Groups </button>
 
-<button (click)="togglePosts()" id="posts"> Posts </button>
-
-    <div *ngIf="showPosts">
-        <div *ngFor="let post of posts">
-            <div>{{post._id}}</div>
-            <div>{{post.title}}</div>
-            <div>{{post.userName}}</div>
+    <div class="container" id="groups" *ngIf="showGroups">
+        <div *ngFor="let group of groups">
+            <div>{{group._id}}</div>
+            <div>{{group.groupName}}</div>
+            <div>{{group.description}}</div>
             <hr>
         </div>
     </div>

@@ -16,25 +16,138 @@
     <ul class="navbar-nav">
         <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/log-in" routerLinkActive="active">Log in</a>
         <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up" routerLinkActive="active">Sign up</a>
-        <!-- <a class="nav-link" *ngIf="_authService.loggedIn()" (click)="_authService.logoutUser()">Logout</a>         -->
+        <li class="nav-item dropdown create">
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create +</a>        
+  
+           <div class="dropdown-menu userMenu" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
+               <a class="dropdown-item" data-toggle="modal" data-target="#createPost">Post</a>
+               <a class="dropdown-item" data-toggle="modal" data-target="#createGroup">Group</a>
+           </div>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{userName}}</a>        
   
            <div class="dropdown-menu userMenu" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
-               <!-- <div class="dropdown-divider"></div> -->
                <a class="dropdown-item">{{userName}}</a>
                <a class="dropdown-item">{{email}}</a>
                <hr>
                <a class="dropdown-item" routerLink="/user/{{id}}/posts" fragment="posts">Your Posts</a>
-               <a class="dropdown-item" routerLink="/user/{{id}}">Your Groups</a>
+               <a class="dropdown-item" routerLink="/user/{{id}}/groups" fragment="groups">Your Groups</a>
                <a class="dropdown-item" routerLink="/user/{{id}}/profile">Your Profile</a>
-               <a class="dropdown-item"data-toggle="modal" data-target="#updateUser">Update Profile</a>
+               <a class="dropdown-item" data-toggle="modal" data-target="#updateUser">Update Profile</a>
                <a class="dropdown-item" data-toggle="modal" data-target="#logoutUser">Log out</a>
            </div>
         </li>
     </ul>
   </div>
 </nav>    
+
+
+
+<!-- Create Group Modal -->
+<div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="addEmployeeModalLabel">Add Employee</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form #addForm="ngForm" (ngSubmit)="createGroup(addForm)">
+          <div class="form-group">
+             <label for="name">Name</label>
+             <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Name" required>
+          </div>
+          <div class="form-group">
+             <label for="email">Email Address</label>
+             <input type="email" ngModel name="email" class="form-control" id="email" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+             <label for="phone">Job title</label>
+             <input type="text" ngModel name="jobTitle" class="form-control" id="jobTile" placeholder="Job title" required>
+          </div>
+          <div class="form-group">
+             <label for="phone">Phone</label>
+             <input type="text" ngModel name="phone" class="form-control" id="phone" placeholder="Phone" required>
+          </div>
+          <div class="form-group">
+             <label for="phone">Image URL</label>
+             <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL" required>
+          </div>
+          <div class="modal-footer">
+             <button type="button" id="add-employee-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+          </div>
+          </form>
+       </div>
+    </div>
+  </div>
+  </div>
+
+
+
+<!-- Create Post Modal -->
+<div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="addEmployeeModalLabel">Create Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form #postForm="ngForm" (ngSubmit)="createPost(postForm)">
+          <div class="form-group">
+             <label for="title">Title</label>
+             <input type="text" ngModel name="title" class="form-control" id="title" placeholder="Title" required>
+          </div>
+          <div class="form-group">
+             <label for="desc">Description</label>
+             <input type="email" ngModel name="description" class="form-control" id="desc" placeholder="Description" required>
+          </div>
+          <div class="form-group">
+             <label for="links">Links</label>
+             <input type="text" ngModel name="urls" class="form-control" id="links" placeholder="Url">
+          </div>
+          <div class="form-group">
+             <label for="files">Files</label>
+             <input type="text" ngModel name="files" class="form-control" id="files" placeholder="Files">
+          </div>
+          <div class="form-group">
+             <span>Privacy : </span>
+             <label class="form-check-label radio-label" for="public">Public</label>
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="public" value="public">
+             <span class="p2">
+             <label class="form-check-label radio-label" for="private">Private</label>
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private">
+             </span>
+             <!-- <label for="privacy">Privacy</label>
+             <input type="text" ngModel name="privacy" class="form-control" id="privacy" placeholder="privacy" required> -->
+          </div>
+          <div class="modal-footer">
+             <button type="button" id="create-post" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             <button [disabled]="postForm.invalid" type="submit" class="btn btn-success" >Create</button>
+          </div>
+          </form>
+       </div>
+    </div>
+  </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- logout Modal -->
 <div class="modal fade" id="logoutUser" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">

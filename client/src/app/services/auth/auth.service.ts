@@ -32,7 +32,7 @@ export class AuthService {
 
   logoutUser() {
     localStorage.removeItem('token')
-    // this._router.navigate(['/log-in'])
+    this._router.navigate(['/home'])
   }
 
   loggedIn(){//?

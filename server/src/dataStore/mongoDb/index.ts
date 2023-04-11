@@ -215,7 +215,10 @@ export class MongoDB implements DataStore {
     }
 
     async listGroups(): Promise<Group[] | undefined> {
-        return await GroupM.find({},{groupName : 1 , description : 1 , userAdmin : 1 , usersId : 1 ,users : 1,psts : 1, createdAt : 1}) || undefined
+        return await GroupM.find({},{groupName : 1 , description : 1 , userAdmin : 1 , admin: 1 , usersId : 1 ,users : 1,psts : 1, createdAt : 1}) || undefined
+    }
+    async listUserGroups(userId: Types.ObjectId) : Promise<Group[] | undefined> {
+        return await GroupM.find({ usersId : { $in:[userId]}},{groupName : 1 , description : 1 , userAdmin : 1 , admin: 1 , users : 1,psts : 1, createdAt : 1}) || undefined
     }
 
     async getGroup(id: Types.ObjectId, userId?: Types.ObjectId): Promise<Group | undefined> {

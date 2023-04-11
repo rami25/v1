@@ -116,6 +116,22 @@ ListGroupsResponse
     res.status(200).send({groups})
 }
 
+export const listSharedGroups : ExpressHandler<{},
+{
+    groups : Pick<Group,'_id'|
+                    'groupName'|
+                    'description'|'userAdmin'|
+                    'admin'|
+                    'users'|
+                    'psts'|
+                    'createdAt'>[];
+}
+> = async (req, res) => {
+    const userId = res.locals.userId
+    const groups = await db.listUserGroups(userId)
+    res.status(200).send({groups})
+}
+
 export const getGroup : ExpressHandler<// only admin
 GetGroupRequest,
 GetGroupResponse

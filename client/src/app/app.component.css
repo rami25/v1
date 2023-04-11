@@ -10,3 +10,20 @@ a{ cursor:pointer }
 .dropdown-item:hover {
   background-color: gray;
 }
+.create{
+  /* display : float;
+  right : 30px; */
+  margin-right:30px;
+}
+
+.radio-label {
+  padding-left: 5px;
+  cursor: pointer;
+}
+
+.form-check-input{
+  margin-left: 10px;
+}
+.p2{
+  margin-left: 40px;
+}

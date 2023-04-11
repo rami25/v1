@@ -17,6 +17,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { NavbarService } from './services/navbar/navbar.service';
 import { UpdateUserComponent } from './components/update-user/update-user/update-user.component';
 import { PostService } from './services/post/post.service';
+import { GroupService } from './services/group/group.service';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { PostService } from './services/post/post.service';
     AuthGuard,
     NavbarService,
     PostService,
+    GroupService,
     {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptorService,

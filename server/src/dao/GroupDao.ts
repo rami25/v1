@@ -8,6 +8,7 @@ export interface GroupDao {
     deleteGroup(id : string) : Promise<void>;
     updateGroup(group : Group) : Promise<void>;
     listGroups() : Promise<Group[] | undefined>;
+    listUserGroups(id : Types.ObjectId) : Promise<Group[] | undefined>;
     countGroups() : Promise<number>;
     getGroup(id : Types.ObjectId , userId?:Types.ObjectId) : Promise<Group | undefined>;
     sendGroupRequest(id : Types.ObjectId, userId : Types.ObjectId): Promise<void>;

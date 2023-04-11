@@ -5,6 +5,8 @@ import { LoginComponent } from './components/login/login.component';
 import { NavbarService } from './services/navbar/navbar.service';
 import { NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { PostService } from './services/post/post.service';
+import { GroupService } from './services/group/group.service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +19,8 @@ export class AppComponent implements OnInit{
   email : string = '';
   description : string ='';
   constructor(public _authService : AuthService,
+              private _postService : PostService,
+              private _groupService : GroupService,
               private navbarService: NavbarService) {}
 
   ngOnInit(): void {
@@ -33,6 +37,7 @@ export class AppComponent implements OnInit{
       this.description = desc;
     });
   }
+  ///////////////////////////////////////// User
   
   updateUser(userData: NgForm){
     document.getElementById('update-user')?.click();
@@ -48,5 +53,21 @@ export class AppComponent implements OnInit{
         alert(error.message);
       }
     )
+  }
+  ///////////////////////////////////////// Post
+
+  createPost(postData : NgForm){
+    document.getElementById('create-post')?.click();
+    this._postService.createPost(postData.value)
+    .subscribe(
+      res => console.log(res.error),
+      err => alert(err.message)
+    )
+  }
+
+  ///////////////////////////////////////// Post
+
+  createGroup(groupData : NgForm){
+
   }
 }

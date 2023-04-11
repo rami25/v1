@@ -14,4 +14,15 @@ export class PostService {
   getUserPosts() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/list-posts`)
   }
+
+  createPost(postData : {
+    title : string,
+    description : string,
+    urls?: string[],
+    files? : string[],
+    groupId? : string;
+    privacy : string;
+  }) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/posts/create`, postData)
+  }
 }

@@ -15,10 +15,12 @@ import {
         sendRequest,
         updateGroup, 
         rejectUser,
-        getGroup
+        getGroup,
+        listSharedGroups
 } from '../handlers/groupHandler';
 const router = Router()
 
+router.get('/list-shared-groups',jwtParseMiddleware, asyncHandler(listSharedGroups))// as an admin
 router.get('/get',jwtParseMiddleware, asyncHandler(getGroup))// as an admin
 router.post('/create', jwtParseMiddleware, asyncHandler(createGroup))// as an admin
 router.delete('/delete', jwtParseMiddleware, asyncHandler(deleteGroup))
