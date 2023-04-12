@@ -8,7 +8,7 @@ import { CreatePostRequest,
          UpdatePostResponse
 } from './../../../shared/src/APIs/api';
 import { db } from "../dao";
-import { ExpressHandler } from "../types";
+import { ExpressHandler, ExpressHandlerWithParams } from "../types";
 import { Post } from '../../../shared/src/types/Post';
 import { ObjectId } from '../../../shared/src/connection';
 import { ERRORS } from '../../../shared/src/errors';
@@ -18,11 +18,15 @@ export const countPostsHandler : ExpressHandler<{},{posts : number}> = async (re
     res.status(200).send({ posts : await db.countPosts()})
 }
 
-export const listPostsHandler : ExpressHandler<
+export const listPostsHandler : ExpressHandlerWithParams<
+{
+    profileId? : string,
+    groupId? : string,
+},
 ListPostsRequest,
 ListPostsResponse
 > = async (req, res) => {
-    const { groupId , profileId } = req.body
+    const { groupId , profileId } = req.params
     if(!groupId && !profileId){//as (visitor or user) to main posts
         const posts = await db.listPosts(undefined, undefined, undefined,'public')
         return res.status(200).send({posts})
@@ -34,23 +38,23 @@ ListPostsResponse
         userId = await getUserIdMiddleware(token)
     if(userId) userId = new ObjectId(userId)    
     if(!groupId && profileId){//as (visitor or user) to specific profile or own profile
-        if(userId && userId === new ObjectId(profileId)){
-            await db.listPosts(userId)
-            return res.sendStatus(200)
+        if(!!userId && (userId.toString() === profileId)){
+            const posts = await db.listPosts(userId)
+            return res.status(200).send({posts})
         }
-        await db.listPosts(undefined, undefined, profileId, 'public')
-        return res.sendStatus(200)
+        const posts = await db.listPosts(undefined, undefined, profileId, 'public')
+        return res.status(200).send({posts})
     }
     if(groupId && !profileId){//as (visitor or user) search group or own group
         if(userId){
             const exists:boolean = await db.existsUserById(groupId,userId) as boolean
             if(exists){
-                await db.listPosts(undefined,groupId)
-                return res.sendStatus(200)
+                const posts = await db.listPosts(undefined,groupId)
+                return res.status(200).send({posts})
             }
         }
-        await db.listPosts(undefined, groupId,undefined, 'public')
-        return res.sendStatus(200)
+        const posts = await db.listPosts(undefined, groupId,undefined, 'public')
+        return res.status(200).send({posts})
     }
 
     // if(userId && !groupId && profileId){

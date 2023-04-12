@@ -7,7 +7,7 @@ import { countComments, listComments } from '../handlers/commentHandler';
 import { countCommentLikes, countPostLikes, listCommentLikes, listPostLikes } from '../handlers/likeHandler';
 
 const router = Router()
-router.get('/list-posts', asyncHandler(listPostsHandler))
+router.get('/list-posts/:profileId?/:groupId?', asyncHandler(listPostsHandler))
 router.get('/count-posts', asyncHandler(countPostsHandler))
 router.get('/list-users', asyncHandler(listUserHandler))
 router.get('/count-users', asyncHandler(countUserHandler))

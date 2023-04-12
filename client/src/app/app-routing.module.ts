@@ -26,7 +26,8 @@ const routes: Routes = [
   },
   {
     path : 'user/:id/:meta',
-    component : ProfileComponent
+    component : ProfileComponent,
+    canActivate : [AuthGuard]
   }
 ];
 

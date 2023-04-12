@@ -5,8 +5,8 @@ import { Comment } from "../types/Comment";
 // import { Like } from "../types/Like";
 ////////////////////////////posts
 export interface ListPostsRequest {
-    groupId? : string;
-    profileId? : string;
+    // groupId? : string;
+    // profileId? : string;
 }
 export interface ListPostsResponse {
     posts : Pick<Post,

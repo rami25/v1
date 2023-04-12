@@ -33,10 +33,12 @@ export class ProfileComponent implements OnInit {
           this.meta = params['meta'];
         });
         if(this.meta === 'posts' && this.showPosts === false){
+          this.getPosts()
           if(this.showGroups === true) this.toggleGroups()
           this.togglePosts()
         }
         if(this.meta === 'groups' && this.showGroups === false){
+          this.getGroups()
           if(this.showPosts === true) this.togglePosts()
           this.toggleGroups()
         }
@@ -53,13 +55,14 @@ export class ProfileComponent implements OnInit {
 
 ///////////////////////////////////////////// Posts
   getPosts() {
-    this._postService.getUserPosts()
+    this._postService.getUserPosts(this.user._id!.toString())
     .subscribe(
         res=> this.posts = res.posts,
         err => alert(err.message))
   }
   showPosts = false;
   togglePosts() {
+    this.getPosts();
     this.showPosts = !this.showPosts;
   }
 ///////////////////////////////////////////// Groups
@@ -71,6 +74,7 @@ export class ProfileComponent implements OnInit {
   }
   showGroups = false;
   toggleGroups() {
+    this.getGroups();
     this.showGroups = !this.showGroups;
   }
 

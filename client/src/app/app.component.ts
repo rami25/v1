@@ -1,7 +1,6 @@
 // import { User } from '@roomv1/shared'
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
-import { LoginComponent } from './components/login/login.component';
 import { NavbarService } from './services/navbar/navbar.service';
 import { NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -65,7 +64,7 @@ export class AppComponent implements OnInit{
     )
   }
 
-  ///////////////////////////////////////// Post
+  ///////////////////////////////////////// Group
 
   createGroup(groupData : NgForm){
 
