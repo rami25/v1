@@ -10,9 +10,9 @@
 <div>{{user.groupsIdInvitations}}</div>
 
 
-<button (click)="togglePosts()" > Posts </button>
+<button (click)="togglePosts()" id="posts"> Posts </button>
 
-    <div class="container" id="posts" *ngIf="showPosts">
+    <div class="container" *ngIf="showPosts">
         <div *ngFor="let post of posts">
             <div>{{post._id}}</div>
             <div>{{post.title}}</div>
@@ -21,9 +21,9 @@
         </div>
     </div>
 <br>
-<button (click)="toggleGroups()" > Groups </button>
+<button (click)="toggleGroups()" id="groups"> Groups </button>
 
-    <div class="container" id="groups" *ngIf="showGroups">
+    <div class="container" *ngIf="showGroups">
         <div *ngFor="let group of groups">
             <div>{{group._id}}</div>
             <div>{{group.groupName}}</div>

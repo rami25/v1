@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Group, Post, User } from '@roomv1/shared';
+import { Group, ListPostsResponse, Post, User } from '@roomv1/shared';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { GroupService } from 'src/app/services/group/group.service';
 import { PostService } from 'src/app/services/post/post.service';
@@ -21,24 +21,25 @@ export class ProfileComponent implements OnInit {
               private route : ActivatedRoute,
               private _router : Router){
     _auth.getUserById()
-    .subscribe(res => this.user = res.user,
+    .subscribe((res) => this.user = res.user,
               err => alert(err.message))
   }
   ngOnInit(): void {
-    this.getPosts()
-    this.getGroups()
     this._router.events.subscribe(event => {
       // if(event instanceof NavigationEnd){
         this.route.params.subscribe(params => {
+          // this.meta = fragment as string
           this.meta = params['meta'];
         });
         if(this.meta === 'posts' && this.showPosts === false){
           this.getPosts()
+          document.getElementById('posts')?.scrollIntoView();
           if(this.showGroups === true) this.toggleGroups()
           this.togglePosts()
         }
         if(this.meta === 'groups' && this.showGroups === false){
           this.getGroups()
+          document.getElementById('groups')?.scrollIntoView();
           if(this.showPosts === true) this.togglePosts()
           this.toggleGroups()
         }
@@ -55,7 +56,8 @@ export class ProfileComponent implements OnInit {
 
 ///////////////////////////////////////////// Posts
   getPosts() {
-    this._postService.getUserPosts(this.user._id!.toString())
+    // this._postService.getUserPosts(this.user._id!.toString())
+    this._postService.getP()
     .subscribe(
         res=> this.posts = res.posts,
         err => alert(err.message))

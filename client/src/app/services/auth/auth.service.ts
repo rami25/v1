@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { User } from '@roomv1/shared';
 // import { User } from '@roomv1/shared';
 
 @Injectable({

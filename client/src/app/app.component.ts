@@ -67,6 +67,12 @@ export class AppComponent implements OnInit{
   ///////////////////////////////////////// Group
 
   createGroup(groupData : NgForm){
+    document.getElementById('create-group')?.click();
+    this._groupService.createGroup(groupData.value)
+    .subscribe(
+      res => console.log(res.error),
+      err => alert(err.message)
+    )
 
   }
 }

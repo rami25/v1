@@ -8,18 +8,19 @@ export interface ListPostsRequest {
     // groupId? : string;
     // profileId? : string;
 }
-export interface ListPostsResponse {
-    posts : Pick<Post,
-                '_id'|
-                'title'|
-                'description'|
-                'urls'|
-                'files'|
-                'userName'|
-                'groupName'|
-                'cmnts'|
-                'lks'>[];
-}
+// export interface ListPostsResponse {
+//     posts : Pick<Post,
+//                 '_id'|
+//                 'title'|
+//                 'description'|
+//                 'urls'|
+//                 'files'|
+//                 'userName'|
+//                 'groupName'|
+//                 'cmnts'|
+//                 'lks'>[];
+// }
+export type ListPostsResponse = {posts : Post[]}
 //
 export type CreatePostRequest = {
    title: string;

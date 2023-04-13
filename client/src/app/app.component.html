@@ -7,10 +7,12 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/posts" routerLinkActive="active">posts</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/special" routerLinkActive="active">Members</a>
+            <form class="form-inline">
+               <span>
+               <input class="form-control mr-sm-2 formSearch" type="search" placeholder="Search" aria-label="Search">
+               </span>
+               <button class="btn btn-outline-outline-primary my-2 my-sm-0 sbtn" type="submit">Search</button>
+            </form>
       </li>
     </ul>
     <ul class="navbar-nav">
@@ -18,7 +20,6 @@
         <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up" routerLinkActive="active">Sign up</a>
         <li class="nav-item dropdown create">
           <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create +</a>        
-  
            <div class="dropdown-menu userMenu" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
                <a class="dropdown-item" data-toggle="modal" data-target="#createPost">Post</a>
                <a class="dropdown-item" data-toggle="modal" data-target="#createGroup">Group</a>
@@ -49,36 +50,24 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
        <div class="modal-header">
-          <h5 class="modal-title" id="addEmployeeModalLabel">Add Employee</h5>
+          <h5 class="modal-title" id="addEmployeeModalLabel">Create Group</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
           </button>
        </div>
        <div class="modal-body">
-          <form #addForm="ngForm" (ngSubmit)="createGroup(addForm)">
+          <form #groupForm="ngForm" (ngSubmit)="createGroup(groupForm)">
           <div class="form-group">
-             <label for="name">Name</label>
-             <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Name" required>
+             <label for="Gname">GroupName<span class="text-danger">*</span></label>
+             <input type="text" ngModel name="groupName" class="form-control" id="Gname" placeholder="groupName" required>
           </div>
           <div class="form-group">
-             <label for="email">Email Address</label>
-             <input type="email" ngModel name="email" class="form-control" id="email" placeholder="Email" required>
-          </div>
-          <div class="form-group">
-             <label for="phone">Job title</label>
-             <input type="text" ngModel name="jobTitle" class="form-control" id="jobTile" placeholder="Job title" required>
-          </div>
-          <div class="form-group">
-             <label for="phone">Phone</label>
-             <input type="text" ngModel name="phone" class="form-control" id="phone" placeholder="Phone" required>
-          </div>
-          <div class="form-group">
-             <label for="phone">Image URL</label>
-             <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL" required>
+             <label for="desc">Description<span class="text-danger">*</span></label>
+             <input type="text" ngModel name="description" class="form-control" id="desc" placeholder="description" required>
           </div>
           <div class="modal-footer">
-             <button type="button" id="add-employee-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
-             <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+             <button type="button" id="create-group" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             <button [disabled]="groupForm.invalid" type="submit" class="btn btn-success" >Save changes</button>
           </div>
           </form>
        </div>
@@ -101,11 +90,11 @@
        <div class="modal-body">
           <form #postForm="ngForm" (ngSubmit)="createPost(postForm)">
           <div class="form-group">
-             <label for="title">Title</label>
+             <label for="title">Title<span class="text-danger">*</span></label>
              <input type="text" ngModel name="title" class="form-control" id="title" placeholder="Title" required>
           </div>
           <div class="form-group">
-             <label for="desc">Description</label>
+             <label for="desc">Description<span class="text-danger">*</span></label>
              <input type="email" ngModel name="description" class="form-control" id="desc" placeholder="Description" required>
           </div>
           <div class="form-group">
@@ -117,12 +106,12 @@
              <input type="text" ngModel name="files" class="form-control" id="files" placeholder="Files">
           </div>
           <div class="form-group">
-             <span>Privacy : </span>
+             <span>Privacy<span class="text-danger">*</span> : </span>
              <label class="form-check-label radio-label" for="public">Public</label>
-             <input class="form-check-input" type="radio" ngModel name="privacy" id="public" value="public">
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="public" value="public" required>
              <span class="p2">
              <label class="form-check-label radio-label" for="private">Private</label>
-             <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private">
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private" required>
              </span>
              <!-- <label for="privacy">Privacy</label>
              <input type="text" ngModel name="privacy" class="form-control" id="privacy" placeholder="privacy" required> -->

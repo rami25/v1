@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ListPostsResponse, Post } from '@roomv1/shared';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -13,14 +14,17 @@ export class PostService {
   constructor(private http : HttpClient) { }
 
   getUserPosts(profileId: string) : Observable<any> {
-    return this.http.get<any>(`${this.apiServerUrl}/list-posts/${profileId}`)
+    return this.http.get<any>(`${this.apiServerUrl}/list-posts/${profileId}`);
+  }
+  getP() : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/posts/list-up`);
   }
 
   createPost(postData : {
-    title : string,
-    description : string,
-    urls?: string[],
-    files? : string[],
+    title : string;
+    description : string;
+    urls?: string[];
+    files? : string[];
     groupId? : string;
     privacy : string;
   }) : Observable<any> {

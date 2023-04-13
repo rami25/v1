@@ -18,6 +18,11 @@ export const countPostsHandler : ExpressHandler<{},{posts : number}> = async (re
     res.status(200).send({ posts : await db.countPosts()})
 }
 
+export const listUP : ExpressHandler<{},ListPostsResponse> = async (req, res) => {
+    const userId = res.locals.userId
+    const posts = await db.listPosts(userId)
+    return res.status(200).send({posts})
+}
 export const listPostsHandler : ExpressHandlerWithParams<
 {
     profileId? : string,
@@ -28,7 +33,7 @@ ListPostsResponse
 > = async (req, res) => {
     const { groupId , profileId } = req.params
     if(!groupId && !profileId){//as (visitor or user) to main posts
-        const posts = await db.listPosts(undefined, undefined, undefined,'public')
+        const posts = await db.listPosts(undefined, undefined, undefined,'public') 
         return res.status(200).send({posts})
     }
     const authHeader = req.headers['authorization'];

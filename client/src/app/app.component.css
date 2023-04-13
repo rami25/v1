@@ -1,4 +1,8 @@
 a{ cursor:pointer }
+.formSearch{
+  width:150%;
+}
+.sbtn{margin-left : 110px;}
 .userMenu{
   margin-left:-100px;
   background-color: rgba(255, 255, 255, 0.1);
@@ -6,6 +10,9 @@ a{ cursor:pointer }
   border-radius: 0.25rem;
   /* color: #fff; */
   text-align: center;
+}
+.dropdown-menu{
+  background-color : #fff;
 }
 .dropdown-item:hover {
   background-color: gray;
