@@ -67,7 +67,7 @@
           </div>
           <div class="modal-footer">
              <button type="button" id="create-group" class="btn btn-secondary" data-dismiss="modal">Close</button>
-             <button [disabled]="groupForm.invalid" type="submit" class="btn btn-success" >Save changes</button>
+             <button [disabled]="groupForm.invalid" type="submit" class="btn btn-success" >Create</button>
           </div>
           </form>
        </div>
@@ -178,8 +178,6 @@
                  <label for="name">userName</label>
                  <input type="text" ngModel name="userName" class="form-control" id="name" aria-describedby="emailHelp" value="{{userName}}">
               </div>
-              <!-- <input type="hidden" ngModel name="email" class="form-control" id="id" placeholder="Email">
-              <input type="hidden" ngModel="{{editEmployee?.employeeCode}}" name="userCode" class="form-control" id="userCode" placeholder="Email"> -->
               <div class="form-group">
                  <label for="email">Email</label>
                  <input type="email" ngModel name="email" class="form-control" id="email" value="{{email}}">

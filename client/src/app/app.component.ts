@@ -1,11 +1,13 @@
 // import { User } from '@roomv1/shared'
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
 import { NavbarService } from './services/navbar/navbar.service';
 import { NgForm } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PostService } from './services/post/post.service';
 import { GroupService } from './services/group/group.service';
+import { AuthGuard } from './services/authGuard/auth.guard';
+import { DataService } from './services/data/data.service';
 
 @Component({
   selector: 'app-root',
@@ -18,9 +20,11 @@ export class AppComponent implements OnInit{
   email : string = '';
   description : string ='';
   constructor(public _authService : AuthService,
+              public _guard : AuthGuard,
               private _postService : PostService,
               private _groupService : GroupService,
-              private navbarService: NavbarService) {}
+              private navbarService: NavbarService,
+              public _data : DataService) {}
 
   ngOnInit(): void {
     this.navbarService._userName$.subscribe(name => {

@@ -18,6 +18,7 @@ import { NavbarService } from './services/navbar/navbar.service';
 import { UpdateUserComponent } from './components/update-user/update-user/update-user.component';
 import { PostService } from './services/post/post.service';
 import { GroupService } from './services/group/group.service';
+import { DataService } from './services/data/data.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { GroupService } from './services/group/group.service';
     PostComponent,
     HomeComponent,
     ProfileComponent,
-    UpdateUserComponent
+    UpdateUserComponent,
   ],
 
   imports: [
@@ -44,6 +45,7 @@ import { GroupService } from './services/group/group.service';
     NavbarService,
     PostService,
     GroupService,
+    DataService,
     {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptorService,

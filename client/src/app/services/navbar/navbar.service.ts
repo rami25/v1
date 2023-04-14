@@ -17,7 +17,7 @@ export class NavbarService {
   
   ////////////////////////// userId
   set id(id: string) {
-    this._id.next(id);
+    this._id.next(id)
   }
 
   get id(): string {
