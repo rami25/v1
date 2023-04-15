@@ -7,7 +7,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PostService } from './services/post/post.service';
 import { GroupService } from './services/group/group.service';
 import { AuthGuard } from './services/authGuard/auth.guard';
-import { DataService } from './services/data/data.service';
 
 @Component({
   selector: 'app-root',
@@ -23,8 +22,7 @@ export class AppComponent implements OnInit{
               public _guard : AuthGuard,
               private _postService : PostService,
               private _groupService : GroupService,
-              private navbarService: NavbarService,
-              public _data : DataService) {}
+              private navbarService: NavbarService) {}
 
   ngOnInit(): void {
     this.navbarService._userName$.subscribe(name => {
@@ -38,6 +36,10 @@ export class AppComponent implements OnInit{
     });
     this.navbarService._description$.subscribe(desc => {
       this.description = desc;
+    });
+
+    window.addEventListener('beforeunload', () => {
+      // alert("updating")
     });
   }
   ///////////////////////////////////////// User
@@ -63,7 +65,9 @@ export class AppComponent implements OnInit{
     document.getElementById('create-post')?.click();
     this._postService.createPost(postData.value)
     .subscribe(
-      res => console.log(res.error),
+      res => {
+        this.navbarService.psts = res.psts
+      },
       err => alert(err.message)
     )
   }
@@ -74,7 +78,9 @@ export class AppComponent implements OnInit{
     document.getElementById('create-group')?.click();
     this._groupService.createGroup(groupData.value)
     .subscribe(
-      res => console.log(res.error),
+      res => {
+        this.navbarService.grps = res.grps
+      },
       err => alert(err.message)
     )
 

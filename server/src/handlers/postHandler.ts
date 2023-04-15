@@ -106,7 +106,8 @@ CreatePostResponse
         if(req.body.groupId)
             post.groupId = new ObjectId(req.body.groupId)
         await db.createPost(post)
-        return res.sendStatus(200)
+        const user = await db.getUserById(userId)
+        return res.status(200).send({psts : user!.psts})
     }
     res.status(400).send({error:'all fields are required'})
 }

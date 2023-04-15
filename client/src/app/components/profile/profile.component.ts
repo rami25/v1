@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Group, ListPostsResponse, Post, User } from '@roomv1/shared';
+import { ActivatedRoute,  Router } from '@angular/router';
+import { Group, Post, User } from '@roomv1/shared';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { GroupService } from 'src/app/services/group/group.service';
+import { NavbarService } from 'src/app/services/navbar/navbar.service';
 import { PostService } from 'src/app/services/post/post.service';
 
 @Component({
@@ -19,7 +20,8 @@ export class ProfileComponent implements OnInit {
               private _postService : PostService,
               private _groupService : GroupService,
               private route : ActivatedRoute,
-              private _router : Router){
+              private _router : Router,
+              private navbarService : NavbarService){
     _auth.getUserById()
     .subscribe((res) => this.user = res.user,
               err => alert(err.message))
@@ -28,7 +30,6 @@ export class ProfileComponent implements OnInit {
     this._router.events.subscribe(event => {
       // if(event instanceof NavigationEnd){
         this.route.params.subscribe(params => {
-          // this.meta = fragment as string
           this.meta = params['meta'];
         });
         if(this.meta === 'posts' && this.showPosts === false){
@@ -52,6 +53,21 @@ export class ProfileComponent implements OnInit {
       // }
     })
 
+    this.navbarService._userName$.subscribe(name => {
+      this.user.userName = name;
+    });
+    this.navbarService._email$.subscribe(email => {
+      this.user.email = email;
+    });
+    this.navbarService._description$.subscribe(desc => {
+      this.user.description = desc;
+    });
+    this.navbarService._psts$.subscribe(psts => {
+      this.user.psts = psts;
+    });
+    this.navbarService._grps$.subscribe(grps => {
+      this.user.grps = grps;
+    });
   }
 
 ///////////////////////////////////////////// Posts

@@ -1,0 +1,32 @@
+.container{
+    text-align: center;
+}
+.desc{
+    text-align : left;
+    margin-bottom: 50px;
+}
+.hi{
+    text-align : center;
+    font-size: 30px;
+    color : rgb(77, 6, 6);
+}
+hr{
+    background-color : rgb(77, 6, 6);
+}
+span{
+    color : rgb(139, 13, 62);
+}
+.posts{
+    margin-bottom : 20px;
+}
+.btn{
+    width : 300px;
+}
+a{ cursor:pointer; }
+.groupBtn{
+    margin-bottom : 20px;
+    margin-top : 20px;
+}
+.card{
+    border : 2px solid gray;
+}

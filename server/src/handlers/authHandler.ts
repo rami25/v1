@@ -42,7 +42,9 @@ export const getUserHandler : ExpressHandler<{},{
               'description'|
                 'createdAt'|
                     'posts'|
+                     'psts'|
                    'groups'|
+                     'grps'|
       'groupsIdInvitations'|
          'groupsIdRequests'| 
          'acceptedRequests'>
@@ -58,7 +60,9 @@ export const getUserHandler : ExpressHandler<{},{
             description : existing.description,
             createdAt: existing.createdAt,
             posts: existing.posts,
+            psts : existing.psts,
             groups: existing.groups,
+            grps: existing.grps,
             groupsIdInvitations: existing.groupsIdInvitations,
             groupsIdRequests: existing.groupsIdRequests,
             acceptedRequests: existing.acceptedRequests
@@ -89,6 +93,8 @@ SignInResponse
             description : existing.description,
             createdAt: existing.createdAt,
             posts: existing.posts,
+            psts: existing.psts,
+            grps: existing.grps,
             groups: existing.groups,
             groupsIdInvitations: existing.groupsIdInvitations,
             groupsIdRequests: existing.groupsIdRequests,

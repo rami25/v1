@@ -54,6 +54,7 @@ CreateGroupResponse
         createdAt : new Date()
     }
     const group = await db.createGroup(newGroup)
+    const user = await db.getUserById(userId)
     res.status(200).send({
         group : {
             _id : group._id,
@@ -62,7 +63,8 @@ CreateGroupResponse
             userAdmin: group.userAdmin,
             usersId: group.usersId,
             createdAt: group.createdAt
-        }
+        },
+        grps : user!.grps
     })
 }
 export const deleteGroup : ExpressHandler<// as an admin

@@ -1,33 +1,147 @@
-<p>profile works!</p>
-<div>{{user._id}}</div>
-<div>{{user.userName}}</div>
-<div>{{user.email}}</div>
-<div>{{user.password}}</div>
-<div>{{user.posts}}</div>
-<div>{{user.groups}}</div>
-<div>{{user.description}}</div>
-<div>{{user.createdAt}}</div>
-<div>{{user.groupsIdInvitations}}</div>
-
-
-<button (click)="togglePosts()" id="posts"> Posts </button>
-
-    <div class="container" *ngIf="showPosts">
-        <div *ngFor="let post of posts">
-            <div>{{post._id}}</div>
-            <div>{{post.title}}</div>
-            <div>{{post.userName}}</div>
-            <hr>
-        </div>
+<div class="container">
+    <div class="desc">
+        <div class="font-weight-bold font-italic hi">Hi! {{user.userName}}</div>
+        <div><span class="font-weight-bold font-italic" >User Name : </span>{{user.userName}}</div>
+        <hr>
+        <div><span class="font-weight-bold font-italic" >Email : </span>{{user.email}}</div>
+        <hr>
+        <div><span class="font-weight-bold font-italic" >Description : </span>{{user.description}}</div>
+        <hr>
+        <div><span class="font-weight-bold font-italic" >Created At : </span>{{user.createdAt | date:'medium'}}</div>
+        <hr>
     </div>
-<br>
-<button (click)="toggleGroups()" id="groups"> Groups </button>
 
-    <div class="container" *ngIf="showGroups">
-        <div *ngFor="let group of groups">
-            <div>{{group._id}}</div>
-            <div>{{group.groupName}}</div>
-            <div>{{group.description}}</div>
-            <hr>
+
+    <button class="btn btn-outline-secondary posts" (click)="togglePosts()" id="posts"><b>{{user.psts}} Posts </b></button>
+
+        <div class="container" *ngIf="showPosts">
+            <div *ngFor="let post of posts">
+                <div class="card">
+                    <a data-toggle="modal" data-target="#showPost">
+                        <div>{{post._id}}</div>
+                        <div>{{post.title}}</div>
+                        <div>{{post.userName}}</div>
+                    </a>
+                </div>
+                <hr>
+            </div>
         </div>
+    <br>
+    <hr style="height:10px;border-radius:5px">
+    <button class="btn btn-outline-secondary groupBtn" (click)="toggleGroups()" id="groups"><b>{{user.grps}} Groups </b></button>
+
+        <div class="container" *ngIf="showGroups">
+            <div *ngFor="let group of groups">
+                <div class="card">
+                    <a data-toggle="modal" data-target="#showGroup">
+                        <div>{{group._id}}</div>
+                        <div>{{group.groupName}}</div>
+                        <div>{{group.description}}</div>
+                    </a>
+                </div>
+                <hr>
+            </div>
+        </div>
+</div>
+
+
+<!-- Show Post Modal -->
+<div class="modal fade" id="showPost" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="addEmployeeModalLabel">Create Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form #postForm="ngForm">
+          <div class="form-group">
+             <label for="title">Title<span class="text-danger">*</span></label>
+             <input type="text" ngModel name="title" class="form-control" id="title" placeholder="Title" required>
+          </div>
+          <div class="form-group">
+             <label for="desc">Description<span class="text-danger">*</span></label>
+             <input type="email" ngModel name="description" class="form-control" id="desc" placeholder="Description" required>
+          </div>
+          <div class="form-group">
+             <label for="links">Links</label>
+             <input type="text" ngModel name="urls" class="form-control" id="links" placeholder="Url">
+          </div>
+          <div class="form-group">
+             <label for="files">Files</label>
+             <input type="text" ngModel name="files" class="form-control" id="files" placeholder="Files">
+          </div>
+          <div class="form-group">
+             <span>Privacy<span class="text-danger">*</span> : </span>
+             <label class="form-check-label radio-label" for="public">Public</label>
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="public" value="public" required>
+             <span class="p2">
+             <label class="form-check-label radio-label" for="private">Private</label>
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private" required>
+             </span>
+             <!-- <label for="privacy">Privacy</label>
+             <input type="text" ngModel name="privacy" class="form-control" id="privacy" placeholder="privacy" required> -->
+          </div>
+          <div class="modal-footer">
+             <button type="button" id="create-post" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             <button [disabled]="postForm.invalid" type="submit" class="btn btn-success" >Create</button>
+          </div>
+          </form>
+       </div>
     </div>
+  </div>
+  </div>
+
+
+<!-- Show Group Modal -->
+<div class="modal fade" id="showGroup" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="addEmployeeModalLabel">Create Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form #postForm="ngForm">
+          <div class="form-group">
+             <label for="title">Title<span class="text-danger">*</span></label>
+             <input type="text" ngModel name="title" class="form-control" id="title" placeholder="Title" required>
+          </div>
+          <div class="form-group">
+             <label for="desc">Description<span class="text-danger">*</span></label>
+             <input type="email" ngModel name="description" class="form-control" id="desc" placeholder="Description" required>
+          </div>
+          <div class="form-group">
+             <label for="links">Links</label>
+             <input type="text" ngModel name="urls" class="form-control" id="links" placeholder="Url">
+          </div>
+          <div class="form-group">
+             <label for="files">Files</label>
+             <input type="text" ngModel name="files" class="form-control" id="files" placeholder="Files">
+          </div>
+          <div class="form-group">
+             <span>Privacy<span class="text-danger">*</span> : </span>
+             <label class="form-check-label radio-label" for="public">Public</label>
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="public" value="public" required>
+             <span class="p2">
+             <label class="form-check-label radio-label" for="private">Private</label>
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private" required>
+             </span>
+             <!-- <label for="privacy">Privacy</label>
+             <input type="text" ngModel name="privacy" class="form-control" id="privacy" placeholder="privacy" required> -->
+          </div>
+          <div class="modal-footer">
+             <button type="button" id="create-post" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             <button [disabled]="postForm.invalid" type="submit" class="btn btn-success" >Create</button>
+          </div>
+          </form>
+       </div>
+    </div>
+  </div>
+  </div>
+
+

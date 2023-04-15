@@ -194,6 +194,7 @@ export class MongoDB implements DataStore {
         const user = await UserM.findById(newGroup.userAdmin)
         if(user){
             await user.groups?.push(newGroup._id)
+            await UserM.updateOne({_id : user._id}, {$inc : {grps:1}})
             await user.save()
         }
         await GroupM.updateOne({_id: newGroup._id}, {admin : user?.userName, $push : {usersId : newGroup.userAdmin}, $inc : {users : 1}})

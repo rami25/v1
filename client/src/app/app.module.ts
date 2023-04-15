@@ -15,10 +15,8 @@ import { AuthGuard } from './services/authGuard/auth.guard';
 import { TokenInterceptorService } from './services/interceptor/token-interceptor.service';
 import { ProfileComponent } from './components/profile/profile.component';
 import { NavbarService } from './services/navbar/navbar.service';
-import { UpdateUserComponent } from './components/update-user/update-user/update-user.component';
 import { PostService } from './services/post/post.service';
 import { GroupService } from './services/group/group.service';
-import { DataService } from './services/data/data.service';
 
 @NgModule({
   declarations: [
@@ -27,8 +25,7 @@ import { DataService } from './services/data/data.service';
     SignUpComponent,
     PostComponent,
     HomeComponent,
-    ProfileComponent,
-    UpdateUserComponent,
+    ProfileComponent
   ],
 
   imports: [
@@ -45,7 +42,6 @@ import { DataService } from './services/data/data.service';
     NavbarService,
     PostService,
     GroupService,
-    DataService,
     {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptorService,

@@ -30,7 +30,9 @@ export type CreatePostRequest = {
    groupId?: string;
    privacy: string;
 }
-export interface CreatePostResponse {}
+export interface CreatePostResponse {
+    psts : number;
+}
 
 export interface DeletePostRequest {
     postId: string;
@@ -65,7 +67,9 @@ export interface SignInResponse {
               'description'|
                 'createdAt'|
                     'posts'|
+                     'psts'|
                    'groups'|
+                     'grps'|
       'groupsIdInvitations'|
          'groupsIdRequests'| 
          'acceptedRequests'>;
@@ -123,6 +127,7 @@ export interface CreateGroupRequest {
 }
 export interface CreateGroupResponse {
      group: Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'createdAt'>
+     grps : number;
 }
 
 export interface DeleteGroupRequest {

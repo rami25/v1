@@ -10,6 +10,7 @@ export interface User {
     posts?: Types.ObjectId[];
     psts? : number;
     groups?: Types.ObjectId[];
+    grps? : number;
     groupsIdInvitations? : Types.ObjectId[];
     groupsIdRequests? : Types.ObjectId[];
     acceptedRequests? : string[];
@@ -46,6 +47,10 @@ const userSchema = new Schema<User>({
         ref : 'GroupM'
     }],
     psts : {
+        type : Number,
+        default : 0
+    },
+    grps : {
         type : Number,
         default : 0
     },
