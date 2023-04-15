@@ -46,11 +46,11 @@
 
 
 <!-- Create Group Modal -->
-<div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+<div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
        <div class="modal-header">
-          <h5 class="modal-title" id="addEmployeeModalLabel">Create Group</h5>
+          <h5 class="modal-title" id="createGroupModalLabel">Create Group</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
           </button>
@@ -78,11 +78,11 @@
 
 
 <!-- Create Post Modal -->
-<div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+<div class="modal fade" id="createPost" tabindex="-1" role="dialog" aria-labelledby="createPostModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
        <div class="modal-header">
-          <h5 class="modal-title" id="addEmployeeModalLabel">Create Post</h5>
+          <h5 class="modal-title" id="createPostModalLabel">Create Post</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
           </button>
@@ -103,7 +103,7 @@
           </div>
           <div class="form-group">
              <label for="files">Files</label>
-             <input type="text" ngModel name="files" class="form-control" id="files" placeholder="Files">
+             <input type="file" ngModel name="files" class="form-control" id="files" placeholder="Files">
           </div>
           <div class="form-group">
              <span>Privacy<span class="text-danger">*</span> : </span>
@@ -113,8 +113,6 @@
              <label class="form-check-label radio-label" for="private">Private</label>
              <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private" required>
              </span>
-             <!-- <label for="privacy">Privacy</label>
-             <input type="text" ngModel name="privacy" class="form-control" id="privacy" placeholder="privacy" required> -->
           </div>
           <div class="modal-footer">
              <button type="button" id="create-post" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -139,11 +137,11 @@
 
 
 <!-- logout Modal -->
-<div class="modal fade" id="logoutUser" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+<div class="modal fade" id="logoutUser" tabindex="-1" role="dialog" aria-labelledby="logoutModelLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
      <div class="modal-content">
         <div class="modal-header">
-           <h5 class="modal-title" id="deleteModelLabel">Logout User</h5>
+           <h5 class="modal-title" id="logoutModelLabel">Logout User</h5>
            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
            <span aria-hidden="true">&times;</span>
            </button>
@@ -162,12 +160,12 @@
 
 
 
-<!-- Edit Modal -->
-<div class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="employeeEditModalLabel" aria-hidden="true">
+<!-- Update User Modal -->
+<div class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="updateUserModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
      <div class="modal-content">
         <div class="modal-header">
-           <h5 class="modal-title" id="updateEmployeeModalLabel">Update User "{{userName}}"</h5>
+           <h5 class="modal-title" id="updateUserModalLabel">Update User "{{userName}}"</h5>
            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
            <span aria-hidden="true">&times;</span>
            </button>

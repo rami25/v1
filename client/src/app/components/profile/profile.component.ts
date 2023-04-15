@@ -14,6 +14,7 @@ import { PostService } from 'src/app/services/post/post.service';
 export class ProfileComponent implements OnInit {
   user! : User;
   posts! : Post[];
+  showPost! :Post;
   groups! : Group[];
   meta!: string;
   constructor(public _auth : AuthService,
@@ -80,7 +81,7 @@ export class ProfileComponent implements OnInit {
   }
   showPosts = false;
   togglePosts() {
-    this.getPosts();
+    if(this.showPosts === false) this.getPosts();
     this.showPosts = !this.showPosts;
   }
 ///////////////////////////////////////////// Groups
@@ -92,8 +93,20 @@ export class ProfileComponent implements OnInit {
   }
   showGroups = false;
   toggleGroups() {
-    this.getGroups();
+    if(this.showGroups === false) this.getGroups();
     this.showGroups = !this.showGroups;
+  }
+
+  catchPost(post: Post){
+    this.showPost = post;
+    console.log(this.showPost)
+  }
+
+
+
+
+  getPrivacy(post : Post){
+    return post.privacy === 'public'
   }
 
 }

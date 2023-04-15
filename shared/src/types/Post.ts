@@ -5,7 +5,9 @@ export interface Post {
     title: string;
     description: string;
     urls: string[];
+    nurls? : number;
     files: string[];
+    nfiles? : number;
     userId?: Types.ObjectId;
     userName?: string;
     groupId?: Types.ObjectId;
@@ -29,8 +31,16 @@ const postSchema = new Schema<Post>({
     urls : {
         type : [String]
     },
+    nurls : {
+        type : Number,
+        default : 0
+    },
     files : {
         type : [String]
+    },
+    nfiles : {
+        type : Number,
+        default : 0
     },
     userId : {
         type : Types.ObjectId,

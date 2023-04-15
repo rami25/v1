@@ -15,16 +15,24 @@
     <button class="btn btn-outline-secondary posts" (click)="togglePosts()" id="posts"><b>{{user.psts}} Posts </b></button>
 
         <div class="container" *ngIf="showPosts">
-            <div *ngFor="let post of posts">
+            <a *ngFor="let post of posts" >
                 <div class="card">
-                    <a data-toggle="modal" data-target="#showPost">
-                        <div>{{post._id}}</div>
-                        <div>{{post.title}}</div>
-                        <div>{{post.userName}}</div>
+                    <div class="in">
+                    <a data-toggle="modal" data-target="#showPost" *ngIf="showPosts" (click)="catchPost(post)">
+                        <div id="Ptitle">{{post.title}}</div>
+                        <div id=""><span>Desctiption :</span> {{post.description}}</div>
+                        <div id="">{{post.nurls}} (Urls : Web Sources)</div>
+                        <div id="">{{post.nfiles}} (Files)</div>
+                        <div id="">{{post.cmnts}} (comments)</div>
+                        <div id="">{{post.lks}} (upvotes)</div>
+                        <div>privacy : <span *ngIf="getPrivacy(post)"id="public">{{post.privacy}}</span><span *ngIf="!getPrivacy(post)"id="private">{{post.privacy}}</span></div>
+                        <div id=""><span>Posted At :</span> {{post.postedAt | date:'medium'}}</div>
+                        <div id="author"><span>Author : </span>{{post.userName}}</div>
                     </a>
+                    </div>
                 </div>
                 <hr>
-            </div>
+            </a>
         </div>
     <br>
     <hr style="height:10px;border-radius:5px">
@@ -46,11 +54,11 @@
 
 
 <!-- Show Post Modal -->
-<div class="modal fade" id="showPost" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+<div class="modal fade" id="showPost" tabindex="-1" role="dialog" aria-labelledby="showPostModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
        <div class="modal-header">
-          <h5 class="modal-title" id="addEmployeeModalLabel">Create Post</h5>
+          <h5 class="modal-title" id="showPostModalLabel" *ngIf="showPosts">{{showPost.title}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
           </button>
@@ -59,7 +67,7 @@
           <form #postForm="ngForm">
           <div class="form-group">
              <label for="title">Title<span class="text-danger">*</span></label>
-             <input type="text" ngModel name="title" class="form-control" id="title" placeholder="Title" required>
+             <input type="text" ngModel name="title" class="form-control" id="title" *ngIf="showPosts" placeholder="{{showPost.userId}}" required>
           </div>
           <div class="form-group">
              <label for="desc">Description<span class="text-danger">*</span></label>
@@ -71,7 +79,7 @@
           </div>
           <div class="form-group">
              <label for="files">Files</label>
-             <input type="text" ngModel name="files" class="form-control" id="files" placeholder="Files">
+             <input type="file" ngModel name="files" class="form-control" id="files" placeholder="Files">
           </div>
           <div class="form-group">
              <span>Privacy<span class="text-danger">*</span> : </span>
@@ -81,8 +89,6 @@
              <label class="form-check-label radio-label" for="private">Private</label>
              <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private" required>
              </span>
-             <!-- <label for="privacy">Privacy</label>
-             <input type="text" ngModel name="privacy" class="form-control" id="privacy" placeholder="privacy" required> -->
           </div>
           <div class="modal-footer">
              <button type="button" id="create-post" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -96,11 +102,11 @@
 
 
 <!-- Show Group Modal -->
-<div class="modal fade" id="showGroup" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+<div class="modal fade" id="showGroup" tabindex="-1" role="dialog" aria-labelledby="showGroupModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
        <div class="modal-header">
-          <h5 class="modal-title" id="addEmployeeModalLabel">Create Post</h5>
+          <h5 class="modal-title" id="showGroupModalLabel">Create Post</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
           </button>
@@ -131,8 +137,6 @@
              <label class="form-check-label radio-label" for="private">Private</label>
              <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private" required>
              </span>
-             <!-- <label for="privacy">Privacy</label>
-             <input type="text" ngModel name="privacy" class="form-control" id="privacy" placeholder="privacy" required> -->
           </div>
           <div class="modal-footer">
              <button type="button" id="create-post" class="btn btn-secondary" data-dismiss="modal">Close</button>
