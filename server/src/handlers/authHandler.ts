@@ -164,9 +164,9 @@ DeleteUserResponse
         const user = await db.getUserById(userId)
         if(user && (hashPassword(password) === user.password)){
             await db.deleteUser(userId)
-            return res.sendStatus(200)
+            return res.status(200).send({message : 'User deleted successfully'})
         }
-        return res.status(401).send({ error: ERRORS.PASSWORD_INCORRECT })
+        return res.status(200).send({ error: ERRORS.PASSWORD_INCORRECT })
     }
     return res.status(400).send({error:'password is required'})
 }

@@ -102,8 +102,10 @@
              <input type="text" ngModel name="urls" class="form-control" id="links" placeholder="Url">
           </div>
           <div class="form-group">
-             <label for="files">Files</label>
-             <input type="file" ngModel name="files" class="form-control" id="files" placeholder="Files">
+            <span>Files : </span>
+            <button data-toggle="modal" data-target="#openFiles">Add+</button>
+            <!-- <label for="files">Files</label>
+            <input type="file" multiple ngModel name="files" class="form-control" id="files" placeholder="Files"> -->
           </div>
           <div class="form-group">
              <span>Privacy<span class="text-danger">*</span> : </span>
@@ -123,6 +125,27 @@
     </div>
   </div>
   </div>
+
+<!-- Files Modal -->
+<div class="modal fade" id="openFiles" tabindex="-1" role="dialog" aria-labelledby="filesModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="filesModelLabel">Logout User</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <p>Are you sure you want to logout?</p>
+           <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+              <button (click)="_authService.logoutUser()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
 
 
 
@@ -199,9 +222,8 @@
 
 
 
-
-<div class="container">
-  <router-outlet></router-outlet>            
-</div>
-
-
+<body>
+   <div class="container">
+     <router-outlet></router-outlet>            
+   </div>
+</body>

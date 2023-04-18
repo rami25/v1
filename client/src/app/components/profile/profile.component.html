@@ -1,4 +1,5 @@
 <div class="container">
+
     <div class="desc">
         <div class="font-weight-bold font-italic hi">Hi! {{user.userName}}</div>
         <div><span class="font-weight-bold font-italic" >User Name : </span>{{user.userName}}</div>
@@ -9,9 +10,12 @@
         <hr>
         <div><span class="font-weight-bold font-italic" >Created At : </span>{{user.createdAt | date:'medium'}}</div>
         <hr>
+<button class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteAccount">Delete Account</button> 
     </div>
 
 
+
+<hr>
     <button class="btn btn-outline-secondary posts" (click)="togglePosts()" id="posts"><b>{{user.psts}} Posts </b></button>
 
         <div class="container" *ngIf="showPosts">
@@ -53,57 +57,145 @@
 </div>
 
 
-<!-- Show Post Modal -->
-<div class="modal fade" id="showPost" tabindex="-1" role="dialog" aria-labelledby="showPostModalLabel" aria-hidden="true">
+
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccount" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deleteAccountModalLabel">Remove {{user.userName}}'s Account</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+         <form #deleteForm ="ngForm">
+            <div class="form-group">
+              <label>Password<span class="text-danger">*</span></label>
+              <input type="password" class="form-control rounded-0" ngModel name="password" placeholder="password" required>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button (click)="deleteAccount(deleteForm)" [disabled]="deleteForm.invalid" type="submit" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+         </form>
+        </div>
+     </div>
+  </div>
+</div>
+
+<!-- Show Post Modal -->
+<div *ngIf="showPosts" class="modal fade" id="showPost" tabindex="-1" role="dialog" aria-labelledby="showPostModalLabel" aria-hidden="true">
+  <div class="modal-dialog modalDialog" role="document">
     <div class="modal-content">
        <div class="modal-header">
-          <h5 class="modal-title" id="showPostModalLabel" *ngIf="showPosts">{{showPost.title}}</h5>
+<button class="btn btn-outline-danger deletePost" data-toggle="modal" data-target="#deletePost">Delete Post</button> 
+          <h5 class="modal-title postTitle" id="showPostModalLabel">{{showPost.title}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
           </button>
        </div>
        <div class="modal-body">
-          <form #postForm="ngForm">
-          <div class="form-group">
-             <label for="title">Title<span class="text-danger">*</span></label>
-             <input type="text" ngModel name="title" class="form-control" id="title" *ngIf="showPosts" placeholder="{{showPost.userId}}" required>
-          </div>
-          <div class="form-group">
-             <label for="desc">Description<span class="text-danger">*</span></label>
-             <input type="email" ngModel name="description" class="form-control" id="desc" placeholder="Description" required>
-          </div>
-          <div class="form-group">
-             <label for="links">Links</label>
-             <input type="text" ngModel name="urls" class="form-control" id="links" placeholder="Url">
-          </div>
-          <div class="form-group">
-             <label for="files">Files</label>
-             <input type="file" ngModel name="files" class="form-control" id="files" placeholder="Files">
-          </div>
-          <div class="form-group">
-             <span>Privacy<span class="text-danger">*</span> : </span>
-             <label class="form-check-label radio-label" for="public">Public</label>
-             <input class="form-check-input" type="radio" ngModel name="privacy" id="public" value="public" required>
-             <span class="p2">
-             <label class="form-check-label radio-label" for="private">Private</label>
-             <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private" required>
-             </span>
-          </div>
-          <div class="modal-footer">
-             <button type="button" id="create-post" class="btn btn-secondary" data-dismiss="modal">Close</button>
-             <button [disabled]="postForm.invalid" type="submit" class="btn btn-success" >Create</button>
-          </div>
-          </form>
+         <div class="container postData">
+            <div><span class="font-weight-bold font-italic">Desctiption :</span> {{showPost.description}}</div>
+            <hr>
+               <div class="container sources">
+                  <div class="sourceTitle"><b>Sources</b></div>
+                  <div class="sourceButtons">
+                     <span>
+                        <button data-toggle="modal" data-target="#showLinks" class="btn btn-outline-ordinary cmntsButton float-left"><b>{{showPost.nurls}} Links</b></button> 
+                     </span>
+                        <button data-toggle="modal" data-target="#showFiles" class="btn btn-outline-ordinary cmntsButton float-right"><b>{{showPost.nfiles}} Files</b></button> 
+                  </div>
+            <hr>
+            <div class="cmnts">
+               <button (click)="addStar()" class="btn btn-outline-ordinary upvote" data-toggle="modal" data-target="#deleteAccount">
+                  <img *ngIf="!star" src="data:image/png;base64,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" 
+                       alt="star" width="25px" height="25px">
+                  <img *ngIf="star" src="data:image/png;base64,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"
+                       alt="star" width="25px" height="25px">
+               </button> 
+               <button class="btn btn-outline-ordinary cmntsButton">{{showPost.lks}} Upvotes</button> 
+               <button class="btn btn-outline-ordinary cmntsButton" (click)="toggleComments()">{{showPost.cmnts}} Comments</button> 
+            </div>
+            <hr>
+            <div class="container">
+               <div *ngIf="showComments">
+                  <p>fsdfsfsfsfsfs</p>
+                  <p>fsdfsfsfsfsfs</p>
+                  <p>fsdfsfsfsfsfs</p>
+                  <p>fsdfsfsfsfsfs</p>
+                  <p>fsdfsfsfsfsfs</p>
+               </div>
+            </div>
+
+         </div>
        </div>
     </div>
   </div>
   </div>
 
 
+
+
+<!-- delete Post Modal -->
+<div class="modal fade" id="deletePost" tabindex="-1" role="dialog" aria-labelledby="deletePostModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deletePostModelLabel">Delete Post</h5>
+           <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button> -->
+        </div>
+        <div class="modal-body">
+           <p>Are you sure you want to delete this post?</p>
+           <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button> -->
+              <button (click)="deletePost()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+
+<!-- show files Modal -->
+<div class="modal fade showSources" id="showFiles" tabindex="-1" role="dialog" aria-labelledby="showFilesLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="showFilesModelLabel">Files</h5>
+        </div>
+        <div class="modal-body">
+        </div>
+     </div>
+  </div>
+</div>
+
+<!-- show links Modal -->
+<div class="modal fade showSources" id="showLinks" tabindex="-1" role="dialog" aria-labelledby="showLinksModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="showLinksModalLabel">Links</h5>
+        </div>
+        <div class="modal-body">
+         hello
+        </div>
+     </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 <!-- Show Group Modal -->
 <div class="modal fade" id="showGroup" tabindex="-1" role="dialog" aria-labelledby="showGroupModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modalDialog" role="document">
     <div class="modal-content">
        <div class="modal-header">
           <h5 class="modal-title" id="showGroupModalLabel">Create Post</h5>
@@ -147,5 +239,3 @@
     </div>
   </div>
   </div>
-
-

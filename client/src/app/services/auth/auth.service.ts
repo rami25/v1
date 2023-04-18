@@ -50,5 +50,8 @@ export class AuthService {
     return this.http.patch<any>(`${this.apiServerUrl}/users/update-user` , userData)
   }
 
+  deleteAccount(data : { password : string }) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/users/delete-user` , data)
+  }
 
 }

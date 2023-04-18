@@ -30,4 +30,8 @@ export class PostService {
   }) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/posts/create`, postData)
   }
+
+  deleteUserPost(postData : { postId : string}) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/posts/delete`, postData)
+  }
 }

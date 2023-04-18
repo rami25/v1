@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute,  Router } from '@angular/router';
 import { Group, Post, User } from '@roomv1/shared';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -26,6 +27,21 @@ export class ProfileComponent implements OnInit {
     _auth.getUserById()
     .subscribe((res) => this.user = res.user,
               err => alert(err.message))
+  }
+  deleteAccount(deleteForm : NgForm){
+    this._auth.deleteAccount(deleteForm.value)
+    .subscribe(
+      res => {
+        if(res.message){
+          alert(res.message)
+          this._auth.logoutUser()
+        }
+        if(res.error)
+          alert(res.error)
+
+      },
+      err => alert(err.message)
+    )
   }
   ngOnInit(): void {
     this._router.events.subscribe(event => {
@@ -69,6 +85,7 @@ export class ProfileComponent implements OnInit {
     this.navbarService._grps$.subscribe(grps => {
       this.user.grps = grps;
     });
+
   }
 
 ///////////////////////////////////////////// Posts
@@ -84,6 +101,37 @@ export class ProfileComponent implements OnInit {
     if(this.showPosts === false) this.getPosts();
     this.showPosts = !this.showPosts;
   }
+  catchPost(post: Post){
+    this.showPost = post;
+    console.log(this.showPost)
+  }
+  getPrivacy(post : Post){
+    return post.privacy === 'public'
+  }
+  star = false
+  addStar(){
+    this.star = !this.star
+  }
+  showComments = false
+  toggleComments() {
+    this.showComments = !this.showComments
+  }
+  deletePost(){
+    this._postService.deleteUserPost({postId : this.showPost._id!.toString()})
+    .subscribe(
+      res => {
+        if(res.message){
+          alert(res.message)
+          this._router.navigate([`/user/${this.user._id}/profile`])
+          this._auth.getUserById()
+          .subscribe((res) => this.user = res.user,
+              err => alert(err.message))
+        }
+        if(res.error) alert(res.error)
+      },
+      err => alert(err.message)
+    )
+  }
 ///////////////////////////////////////////// Groups
   getGroups() {
     this._groupService.getUserGroups()
@@ -97,16 +145,7 @@ export class ProfileComponent implements OnInit {
     this.showGroups = !this.showGroups;
   }
 
-  catchPost(post: Post){
-    this.showPost = post;
-    console.log(this.showPost)
-  }
 
 
-
-
-  getPrivacy(post : Post){
-    return post.privacy === 'public'
-  }
 
 }

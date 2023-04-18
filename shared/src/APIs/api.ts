@@ -38,7 +38,9 @@ export interface DeletePostRequest {
     postId: string;
     groupId?: string;
 }
-export interface DeletePostResponse {}
+export interface DeletePostResponse {
+    message?: string;
+}
 export interface UpdatePostRequest {
     title?: string;
     description?: string;
@@ -109,7 +111,9 @@ export interface ResetPasswordResponse {
 export interface DeleteUserRequest {
     password: string;
 }
-export interface DeleteUserResponse {}
+export interface DeleteUserResponse {
+    message? : string;
+}
 
 export interface UpdateUserRequest {
     userName? : string;

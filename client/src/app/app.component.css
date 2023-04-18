@@ -1,3 +1,8 @@
+body {
+  /* background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5_E4HE79PNgDUmaGsqYi4PVSO9NIg4YGV2A&usqp=CAU'); */
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 a{ cursor:pointer }
 .formSearch{
   width:150%;
@@ -8,7 +13,6 @@ a{ cursor:pointer }
   background-color: rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
   border-radius: 0.25rem;
-  /* color: #fff; */
   text-align: center;
 }
 .dropdown-menu{
@@ -34,3 +38,12 @@ a{ cursor:pointer }
 .p2{
   margin-left: 40px;
 }
+
+
+
+
+
+
+
+
+

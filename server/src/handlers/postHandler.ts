@@ -124,7 +124,7 @@ DeletePostResponse
             return res.status(400).send({error:'User not authorized for deleting this post'})
         if(!groupId){                                      //tab9a fel group
             await db.deletePost(postId, userId)            //w tetfasa5 fel main posts
-            return res.sendStatus(200)                     // if eli heya public post
+            return res.status(200).send({message :'Post deleted successfully!'})                     // if eli heya public post
         }
         else{//tab9a fel user profile w fel main public posts w ken user owner ydelety
             await db.deletePost(postId, userId , groupId)

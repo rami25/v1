@@ -25,11 +25,11 @@ export class MongoDB implements DataStore {
     }
     
     async deleteUser(id: Types.ObjectId): Promise<void> {
-        const groupIds = UserM.findOne(id).select('groups')
-        console.log(groupIds)
-        for(let gId in groupIds){
-            await GroupM.updateOne({_id: gId}, {$pull : {usersId : id}})
-        }
+        const user = await UserM.findOne(id).select('groups')
+        if(user && user.groups)
+            for(let gId of user.groups){
+                await GroupM.updateOne({_id: gId}, {$pull : {usersId : id}})
+            }
         await UserM.findByIdAndDelete(id)
     }
 
@@ -157,14 +157,8 @@ export class MongoDB implements DataStore {
         const post = await this.getPost(postId,userId)
         if(postId && userId && !groupId){//removing from user profile
             await UserM.updateOne({_id : userId}, {$pull: {posts:new ObjectId(postId)}, $inc : {psts : -1}})
-            if(post && post.privacy === 'public')
-                await PostM.deleteOne({_id : new ObjectId(postId)}, (err:any) => {
-                        if (err) {
-                          console.error(err)
-                        } else {
-                          console.log(`Deleted document with ID ${postId}`)
-                        }})
-            return
+            if(post)
+                await PostM.deleteOne(new ObjectId(postId))
         }
         if(postId && userId && groupId){
             await GroupM.updateOne({_id: new ObjectId(groupId)}, {$pull: {posts: post!._id}, $inc : {psts : -1}})
