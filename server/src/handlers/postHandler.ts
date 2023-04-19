@@ -1,4 +1,5 @@
-import { CreatePostRequest, 
+import {
+         CreatePostRequest, 
          CreatePostResponse, 
          DeletePostRequest, 
          DeletePostResponse, 
@@ -98,7 +99,9 @@ CreatePostResponse
             title,
             description,
             urls: urls as string[],
-            files: files as string[],
+            nurls : urls!.length,
+            files : files as string[],
+            nfiles : files!.length,
             userId,
             postedAt: new Date(),
             privacy

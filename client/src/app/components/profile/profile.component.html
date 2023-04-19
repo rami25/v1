@@ -96,6 +96,7 @@
           <span aria-hidden="true">&times;</span>
           </button>
        </div>
+<button class="btn btn-outline-secondary updatePost" data-toggle="modal" data-target="#updatePost">Update Post</button> 
        <div class="modal-body">
          <div class="container postData">
             <div><span class="font-weight-bold font-italic">Desctiption :</span> {{showPost.description}}</div>
@@ -136,7 +137,50 @@
   </div>
   </div>
 
-
+<!-- Update Post Modal -->
+<div class="modal fade" id="updatePost" tabindex="-1" role="dialog" aria-labelledby="updatePostModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="updatePostModalLabel">Update Post</h5>
+       </div>
+       <div class="modal-body">
+          <form #postForm="ngForm">
+          <div class="form-group">
+             <label for="title">Title<span class="text-danger">*</span></label>
+             <input type="text" ngModel name="title" class="form-control" id="title" placeholder="{{showPost.title}}" required>
+          </div>
+          <div class="form-group">
+             <label for="desc">Description<span class="text-danger">*</span></label>
+             <input type="email" ngModel name="description" class="form-control" id="desc" placeholder="{{showPost.description}}" required>
+          </div>
+          <div class="form-group">
+             <label for="links">Links</label>
+             <input type="text" ngModel name="urls" class="form-control" id="links" placeholder="{{showPost.urls}}">
+          </div>
+          <div class="form-group">
+            <span>Files : </span>
+            <button data-toggle="modal" data-target="#openFiles">Add+</button>
+            <!-- <label for="files">Files</label>
+            <input type="file" multiple ngModel name="files" class="form-control" id="files" placeholder="Files"> -->
+          </div>
+          <div class="form-group">
+             <span>Privacy<span class="text-danger">*</span> : </span>
+             <label class="form-check-label radio-label" for="pbc">Public</label>
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="pbc" value="public" required>
+             <span class="p2">
+             <label class="form-check-label radio-label" for="prv">Private</label>
+             <input class="form-check-input" type="radio" ngModel name="privacy" id="prv" value="private" required>
+             </span>
+          </div>
+          <div class="modal-footer">
+             <button [disabled]="" type="submit" class="btn btn-primary" >Save Changes</button>
+          </div>
+          </form>
+       </div>
+    </div>
+  </div>
+  </div>
 
 
 <!-- delete Post Modal -->

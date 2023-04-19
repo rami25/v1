@@ -38,6 +38,39 @@ a{ cursor:pointer }
 .p2{
   margin-left: 40px;
 }
+/* /////////////////////////// Links */
+#linksInfo {
+  color : gray;
+  font-size : 95%;
+  margin-left : 150px;
+}
+#filesInfo {
+  color : gray;
+  font-size : 95%;
+  margin-left : 155px;
+}
+#Add {
+  padding-left : 150px;
+}
+#Add:hover {
+    text-decoration: underline;
+}
+#linkInput {
+  width : 70%;
+  height : 35px;
+}
+#add {
+  height : 35px;
+  width : 60px;
+  margin-left : 60px;
+  margin-bottom : 5px;
+}
+#add:hover {
+    text-decoration: underline;
+}
+#linkVal {
+  width: 65%;
+}
 
 
 

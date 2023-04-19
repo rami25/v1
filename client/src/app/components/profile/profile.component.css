@@ -83,6 +83,21 @@ a{ cursor:pointer; }
 .deletePost{
    width : 140px;
 }
+.updatePost{
+   margin-left : 17px;
+   width : 111px;
+}
+.radio-label {
+  padding-left: 5px;
+  cursor: pointer;
+}
+
+.form-check-input{
+  margin-left: 10px;
+}
+.p2{
+  margin-left: 40px;
+}
 .postData{
    text-align : left;
    background-color : rgb(240, 240, 240);

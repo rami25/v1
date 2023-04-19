@@ -1,5 +1,20 @@
 import { Schema, model, Types} from 'mongoose';
 
+
+// interface IFile extends Document {
+//   name: string;
+//   data: Buffer;
+//   contenttype : string;
+//   size : number;
+// }
+
+// const fileSchema = new Schema<IFile>({
+//   name: String,
+//   data: Buffer,
+//   contentType: String,
+//   size: Number
+// });
+
 export interface Post {
     _id?: Types.ObjectId;
     title: string;
@@ -28,16 +43,16 @@ const postSchema = new Schema<Post>({
     description : {
         type : String
     },
-    urls : {
-        type : [String]
-    },
+    urls : [{
+        type : String
+    }],
     nurls : {
         type : Number,
         default : 0
     },
-    files : {
-        type : [String]
-    },
+    files : [{
+        type : String
+    }],
     nfiles : {
         type : Number,
         default : 0

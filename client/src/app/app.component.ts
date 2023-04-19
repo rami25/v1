@@ -1,28 +1,36 @@
 // import { User } from '@roomv1/shared'
-import { Component,  OnInit } from '@angular/core';
+import { Component,  ElementRef,  OnInit, ViewChild } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
 import { NavbarService } from './services/navbar/navbar.service';
 import { NgForm } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { PostService } from './services/post/post.service';
 import { GroupService } from './services/group/group.service';
 import { AuthGuard } from './services/authGuard/auth.guard';
+import { environment } from 'src/environments/environment';
 
+interface File {
+  name : string;
+  data : any;
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
+  private apiServerUrl = environment.apiBaseUrl
   id : string = '';
   userName : string = '';
   email : string = '';
   description : string ='';
+
   constructor(public _authService : AuthService,
               public _guard : AuthGuard,
               private _postService : PostService,
               private _groupService : GroupService,
-              private navbarService: NavbarService) {}
+              private navbarService: NavbarService,
+              private http : HttpClient) {}
 
   ngOnInit(): void {
     this.navbarService._userName$.subscribe(name => {
@@ -60,9 +68,90 @@ export class AppComponent implements OnInit{
     )
   }
   ///////////////////////////////////////// Post
+  links: string[] = []
+  showedLinks : any[] = []
+  i: number = 0
+  @ViewChild('link', { static: true }) link!: ElementRef;
+  appendLinksList(){
+    const val = this.link.nativeElement.value
+    if(val !== ''){
+      const exist = this.showedLinks.find(l => { return l.value === val})
+      if(exist) alert('this link is already exist')
+      else {
+        this.showedLinks.push({key : this.i , value : this.link.nativeElement.value })
+        this.i+=1
+        this.link.nativeElement.value = '';
+      }
+    }
+  }
+  removeLink(key:number){
+    // let lb:number = 0 
+    // let rb:number = this.showedLinks.length
+    // while(lb <= rb){
+    //   let mid = (lb+rb)/2
+    //   if(key === this.showedLinks[mid].key){
+    //     this.showedLinks.splice(mid, 1);
+    //     break;
+    //   }
+    //   else if(key < this.showedLinks[mid].key)
+    //     rb-=1;
+    //   else lb+=1
+    // }
+    for (let i = 0; i < this.showedLinks.length; i++) {
+      if (this.showedLinks[i].key === key) {
+        this.showedLinks.splice(i, 1);
+        break;
+      }
+    }
+  }
 
+  resetLinks(){
+    this.links = []
+    this.showedLinks = []
+  }
+  cloneLinks(){
+    for(let Link of this.showedLinks)
+      this.links.push(Link.value)
+  }
+  files: string[] = []
+  showedFiles : any[] = []
+  j: number = 0
+  @ViewChild('file', { static: true }) file!: ElementRef;
+  appendFilesList(){
+    const val = this.file.nativeElement.value
+    if(val !== ''){
+      const exist = this.showedFiles.find(f => { return f.value === val})
+      if(exist) alert('this file is already exist')
+      else {
+        this.showedFiles.push({key : this.j , value : val})
+        this.j+=1
+        this.file.nativeElement.value = '';
+      }
+    }
+  }
+  removeFile(key:number){
+    for (let i = 0; i < this.showedFiles.length; i++) {
+      if (this.showedFiles[i].key === key) {
+        this.showedFiles.splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  resetFiles(){
+    this.files = []
+    this.showedFiles = []
+  }
+  cloneFiles(){
+    for(let File of this.showedFiles)
+      this.files.push(File.value)
+  }
   createPost(postData : NgForm){
     document.getElementById('create-post')?.click();
+    this.cloneLinks()
+    this.cloneFiles()
+    postData.value.urls = this.links
+    postData.value.files = this.files
     this._postService.createPost(postData.value)
     .subscribe(
       res => {
@@ -85,4 +174,42 @@ export class AppComponent implements OnInit{
     )
 
   }
+
+
+
+
+
+
+
+
+
+// 
+  // createPost(postData : NgForm){
+    // document.getElementById('create-post')?.click();
+    // const title = postData.value.title
+    // const description = postData.value.description
+    // const urls = postData.value.urls
+    // const privacy = postData.value.privacy
+    // const formData = new FormData()
+    // for (let i = 0; i < this.selectedFiles.length; i++) {
+    //   formData.append('files', this.selectedFiles[i], this.selectedFiles[i].name);
+    // }
+    // formData.set('title',title)
+    // formData.set('description',description)
+    // formData.set('urls',urls)
+    // formData.set('privacy',privacy)
+    // console.log('postData', postData.value)
+    // console.log('files', postData.value.files)
+    // console.log('formData',formData)
+    // this.http.post<any>(`${this.apiServerUrl}/posts/create`, formData)
+    // .subscribe(
+      // res => console.log(res),
+      // err => alert(err.message)
+    // )
+  // }
+
+
+
+
+
 }
