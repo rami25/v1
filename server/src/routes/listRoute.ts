@@ -17,6 +17,6 @@ router.get('/list-comments', asyncHandler(listComments))
 router.get('/count-comments', asyncHandler(countComments))
 router.get('/list-commentLikes', asyncHandler(listCommentLikes))
 router.get('/count-commentLikes', asyncHandler(countCommentLikes))
-router.get('/list-postLikes', asyncHandler(listPostLikes))
+router.post('/list-postLikes', asyncHandler(listPostLikes))
 router.get('/count-postLikes', asyncHandler(countPostLikes))
 module.exports = router

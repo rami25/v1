@@ -1,7 +1,7 @@
 import CommentM, { Comment } from "../../../../shared/src/types/Comment";
 import GroupM, { Group } from "../../../../shared/src/types/Group";
 import PostM, { Post } from "../../../../shared/src/types/Post";
-import { Like } from "../../../../shared/src/types/Like";
+import LikeM, { Like } from "../../../../shared/src/types/Like";
 import UserM, { User } from "../../../../shared/src/types/User";
 import { DataStore } from "../../dao";
 import { Types } from "mongoose";
@@ -359,17 +359,74 @@ export class MongoDB implements DataStore {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////Likes
-    createLike(like: Like): void {
-        throw new Error("Method not implemented.");
+    async getLike(likeId : Types.ObjectId) : Promise<Like | undefined> {
+        return await LikeM.findOne(likeId) || undefined
     }
-    deleteLike(like: Like): void {
-        throw new Error("Method not implemented.");
+    async createLike(user : User , postId : string): Promise<void> {
+        const like = await LikeM.create({
+            userId : user._id,
+            userName : user.userName,
+            likedAt : new Date()
+        })
+        like.save()
+        // const post = await this.getPost(postId)
+        const post = await PostM.findOne(new ObjectId(postId))
+        if(post){
+            const likes = await this.getLikes(post._id.toString())
+            for(let Like of likes){
+                if(Like.userId!.toString() === user._id!.toString())
+                    return
+            }
+            post.likes?.push(like._id)
+            post.lks = post.likes?.length
+            await post.save()
+        }
     }
-    getLikes(postId: string): number {
-        throw new Error("Method not implemented.");
+    async deleteLike(userId : Types.ObjectId , postId : string): Promise<boolean> {
+        const likes = await this.getLikes(postId)
+        if(likes.length){
+            for(let like of likes){
+                if(like.userId!.toString() === userId.toString()){
+                    await PostM.updateOne({_id : new ObjectId(postId)}, {$pull : {likes : like._id}})
+                    const post = await PostM.findOne(new ObjectId(postId))
+                    if(post){
+                        post.lks = post.likes?.length
+                        await post.save()
+                    }
+                    await LikeM.deleteOne(like._id)
+                    return true
+                }
+                    
+            }
+        }
+        return false
+        
     }
-    exists(like: Like): boolean {
-        throw new Error("Method not implemented.");
+    async getLikes(postId: string): Promise<Like[]> {
+        let likesList : Like[] = []
+        const post = await this.getPost(postId)
+        if(post){
+            if(post.lks === 0)
+                return []
+            for(let likeId of post.likes!){
+                const like = await this.getLike(likeId)
+                if(like) likesList.push(like)
+            }
+            return likesList
+        }
+        return []
+    }
+    
+    async exists(userId : Types.ObjectId , postId : string): Promise<boolean> {
+        const likes = await this.getLikes(postId)
+        if(likes.length){
+            for(let like of likes){
+                if(like.userId!.toString() === userId.toString()){
+                    return true
+                }
+            }
+        }
+        return false
     }
 
 

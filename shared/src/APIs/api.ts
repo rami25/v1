@@ -49,7 +49,9 @@ export interface UpdatePostRequest {
     postId: string;
     privacy?: string;
 }
-export interface UpdatePostResponse {}
+export interface UpdatePostResponse {
+    message? : string;
+}
 ///////////////////////////////////////////////////
 /////////////////////////////////////////Auth
 export interface ListUserRequest {}

@@ -30,8 +30,31 @@ export class PostService {
   }) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/posts/create`, postData)
   }
+  updatePost(postData : {
+    postId : string;
+    title : string;
+    description : string;
+    urls?: string[];
+    files? : string[];
+    privacy : string;
+  }) : Observable<any> {
+    console.log(postData)
+    return this.http.patch<any>(`${this.apiServerUrl}/posts/update`, postData)
+  }
 
   deleteUserPost(postData : { postId : string}) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/posts/delete`, postData)
+  }
+  listStars(postData : {postId : string}) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/list-postLikes`, postData)
+  }
+  addStar(postData : {postId : string}): Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/likes/post/add`, postData)
+  }
+  checkStar(postData : {postId : string}) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/likes/post/check`, postData)
+  }
+  removeStar(postData : {postId : string}): Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/likes/post/remove`, postData)
   }
 }

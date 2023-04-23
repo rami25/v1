@@ -143,15 +143,18 @@ UpdatePostResponse
 > = async (req, res) => {
     const userId = res.locals.userId
     const { title , description, urls, files, postId, privacy} = req.body
-    if(postId){
+    if(userId){
+        if(!postId)
+            return res.status(401).send({error : 'no identifer'})
         const post = await db.getPost(postId, userId)
         if(post){
             if(title) post.title = title
             if(description) post.description = description
-            if(urls) post.urls = urls
-            if(files) post.files = files
+            if(urls) {post.urls = urls; post.nurls = urls.length}
+            if(files) {post.files = files; post.nfiles = files.length}
             if(privacy) post.privacy = privacy
             await db.updatePost(post)
+            return res.status(200).send({message : 'post updated successfully!!!'})
         }
         return res.status(401).send({ error: ERRORS.POST_NOT_FOUND })
     }

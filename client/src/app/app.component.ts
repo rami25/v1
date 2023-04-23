@@ -159,6 +159,10 @@ export class AppComponent implements OnInit{
       },
       err => alert(err.message)
     )
+    const updateForm = document.getElementById('createPostForm') as HTMLFormElement
+    updateForm.reset()
+    this.resetLinks()
+    this.resetFiles()
   }
 
   ///////////////////////////////////////// Group

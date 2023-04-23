@@ -103,6 +103,41 @@ a{ cursor:pointer; }
    background-color : rgb(240, 240, 240);
    border-radius : 10px;
 }
+/* /////////////////////////// update post */
+#linksInfo {
+  color : gray;
+  font-size : 95%;
+  margin-left : 150px;
+}
+#filesInfo {
+  color : gray;
+  font-size : 95%;
+  margin-left : 155px;
+}
+#Add {
+  padding-left : 150px;
+}
+#Add:hover {
+    text-decoration: underline;
+}
+#linkInput {
+  width : 70%;
+  height : 35px;
+}
+#add {
+  height : 35px;
+  width : 60px;
+  margin-left : 60px;
+  margin-bottom : 5px;
+}
+#add:hover {
+    text-decoration: underline;
+}
+#linkVal {
+  width: 65%;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////////////////// */
 .sourceTitle {
    width: 90%;
    margin-right : 100px;
@@ -115,6 +150,9 @@ a{ cursor:pointer; }
 }
 .sourceButtons {
     margin-bottom : 30px;
+}
+.sourceVal {
+    width : 100%;
 }
 .showSources {
     margin-top : 200px;

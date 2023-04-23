@@ -89,7 +89,7 @@
           </button>
        </div>
        <div class="modal-body">
-          <form #postForm="ngForm" (ngSubmit)="createPost(postForm)">
+          <form #postForm="ngForm" (ngSubmit)="createPost(postForm)" id="createPostForm">
           <div class="form-group">
              <label for="title">Title<span class="text-danger">*</span></label>
              <input type="text" ngModel name="title" class="form-control" id="title" placeholder="Title" required>
@@ -109,7 +109,7 @@
           <div class="form-group">
             <span>Files : </span>
             <span id="filesInfo"> {{showedFiles.length}} Files</span>
-            <a data-toggle="modal" data-target="#openFiles" style="padding-left:155px"> Add+</a>
+            <a data-toggle="modal" data-target="#openFiles" id="Add" style="padding-left:155px"> Add+</a>
             <hr>
             <!-- <label for="files">Files</label>
             <input type="file" multiple ngModel name="files" class="form-control" id="files" placeholder="Files"> -->
