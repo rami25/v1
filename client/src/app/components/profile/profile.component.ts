@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute,  Router } from '@angular/router';
-import { Group, Like, Post, User } from '@roomv1/shared';
+import { Group, Like, Post, User , Comment} from '@roomv1/shared';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { GroupService } from 'src/app/services/group/group.service';
 import { NavbarService } from 'src/app/services/navbar/navbar.service';
 import { PostService } from 'src/app/services/post/post.service';
+
 
 @Component({
   selector: 'app-profile',
@@ -16,8 +17,10 @@ export class ProfileComponent implements OnInit {
   user! : User;
   posts! : Post[];
   showPost! :Post;
-  postStars! : Like[]
+  postStars! : Like[];
   nStars! : number;
+  comments! : Comment[];
+  comment! : Comment;
   groups! : Group[];
   meta!: string;
   getUser(){
@@ -97,6 +100,9 @@ export class ProfileComponent implements OnInit {
   clear(){
     const updateForm = document.getElementById('updateForm') as HTMLFormElement
     updateForm.reset()
+    this.showComments = false
+    this.showNewComment = false
+    this.isComment = false
   }
   getPosts() {
     // this._postService.getUserPosts(this.user._id!.toString())
@@ -120,6 +126,16 @@ export class ProfileComponent implements OnInit {
       err => alert(err.message)
     )
   }
+  listComments() {
+    this._postService.listComments({ postId : this.showPost._id!.toString()})
+    .subscribe(
+      res => {
+         this.comments = res.comments
+         this.nComment = this.comments.length
+      },
+      err => alert(err.message)
+    )
+  }
   catchPost(post: Post){
     this.showPost = post;
     if(post.urls.length !== 0)
@@ -132,6 +148,7 @@ export class ProfileComponent implements OnInit {
       res => this.star = res.exists,
       err => alert(err.message)
     )
+    this.listComments()
   }
   getPrivacy(post : Post){
     return post.privacy === 'public'
@@ -152,10 +169,6 @@ export class ProfileComponent implements OnInit {
       this.nStars--
     }
   }
-  showComments = false
-  toggleComments() {
-    this.showComments = !this.showComments
-  }
   deletePost(){
     this._postService.deleteUserPost({postId : this.showPost._id!.toString()})
     .subscribe(
@@ -170,6 +183,54 @@ export class ProfileComponent implements OnInit {
       },
       err => alert(err.message)
     )
+  }
+  //////////////////////// Comment
+  showComments = false
+  toggleComments() {
+    this.showComments = !this.showComments
+  }
+  showNewComment = false
+  toggleNewComment() {
+    this.showNewComment = !this.showNewComment
+    this.isComment = false
+  }
+  isComment = false
+  checkComment(){
+    const input = document.getElementById('commentVal') as HTMLTextAreaElement
+    const commentVal = input.value 
+    if(commentVal !== '') 
+      this.isComment = true
+    else this.isComment = false  
+  }
+  nComment! : number
+  addComment(commentForm : NgForm) {
+    this.showNewComment = false
+    this.isComment = false
+    commentForm.value.postId = this.showPost._id
+    this.nComment++
+    this._postService.addComment(commentForm.value)
+    .subscribe(
+      res => this.listComments()
+    )
+  }
+  checkCommentUser(comment : Comment){
+    return comment.userId === this.user._id
+  }
+  deleteComment(comment : Comment){
+    this.comment = comment
+    this.nComment--
+    this._postService.deleteComment({postId : this.showPost._id!.toString(),
+                                     commentId : this.comment._id!.toString()}).subscribe()
+                                     
+    for(let i = 0; i < this.comments.length; i++){
+      if(this.comments[i]._id === this.comment._id){
+        this.comments.splice(i,1)
+        break
+      }
+    }
+  }
+  updateComment(comment : Comment){
+
   }
 ////////////////////////////////////////////////////////////////////////////////////////// update post
   links: string[] = []

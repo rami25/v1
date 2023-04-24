@@ -57,4 +57,29 @@ export class PostService {
   removeStar(postData : {postId : string}): Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/likes/post/remove`, postData)
   }
+  ////////// Comment
+  countComments(commentData : {
+    postId : string,
+  }): Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/count-comments`, commentData)
+  }
+  listComments(commentData : {
+    postId : string,
+  }): Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/list-comments`, commentData)
+  }
+  addComment(commentData : {
+    postId : string,
+    content : string
+  }): Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/comments/create`, commentData)
+  }
+  deleteComment(commentData : {
+    postId : string,
+    commentId : string
+  }): Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/comments/delete`, commentData)
+  }
+
+
 }

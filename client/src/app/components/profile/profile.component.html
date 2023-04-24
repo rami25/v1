@@ -118,19 +118,44 @@
                        alt="star" width="25px" height="25px">
                </button> 
                <button data-toggle="modal" data-target="#postStars" class="btn btn-outline-ordinary cmntsButton">{{nStars}} Stars </button> 
-               <button class="btn btn-outline-ordinary cmntsButton" (click)="toggleComments()">{{showPost.cmnts}} Comments</button> 
+               <button class="btn btn-outline-ordinary cmntsButton" (click)="toggleComments()">{{nComment}} Comments</button> 
             </div>
             <hr>
-            <div class="container">
-               <div *ngIf="showComments">
-                  <p>fsdfsfsfsfsfs</p>
-                  <p>fsdfsfsfsfsfs</p>
-                  <p>fsdfsfsfsfsfs</p>
-                  <p>fsdfsfsfsfsfs</p>
-                  <p>fsdfsfsfsfsfs</p>
+            <div class="container" *ngIf="showComments">
+               <div class="container" *ngIf="showNewComment">
+                  <form #commentForm="ngForm" (ngSubmit)="addComment(commentForm)">
+                     <button type="submit" [disabled]="!isComment" class="float-right" style="margin-right:20px" >
+                        <img *ngIf="!isComment" src="data:image/png;base64,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"
+                         alt="send" width="25px" height="25px">
+                        <img *ngIf="isComment" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW93O6_BBhlu7OjRXgKo8EraqTeXuETZokpMk19huxy1jPSSfZVvesr3iF5-iZumR5ens&usqp=CAU"
+                         alt="send" width="25px" height="25px">
+                     </button> 
+                       <textarea ngModel name="content" id="commentVal"cols="80" placeholder="comment here..." (keyup)="checkComment()"></textarea>
+                  </form>
+               </div>
+               <button class="btn btn-outline-success float-right addCommentButton" (click)="toggleNewComment()">+</button> 
+               <br>
+               <h4 style="text-align:left"><b>Comments</b></h4>
+               <div *ngFor="let comment of comments">
+                  <div class="commentTitle">
+                     <div>{{comment.userName}} | {{comment.commentedAt | date:'mediumDate'}}</div>
+                  </div>
+                  <div class="comment">
+                     <div *ngFor="let line of comment.content.split('\n')">{{ line }}</div>
+                  </div>
+                  <div class="commentConfig" *ngIf="checkCommentUser(comment)">
+                     <!-- <button class="btn btn-outline-secondary configButton">Edit</button>
+                     <button class="btn btn-outline-danger configButton">Delete</button> -->
+                     <a data-toggle="modal" data-target="#updateComment" (click)="updateComment(comment)" class="btn btn-primary tooltips" data-placement="top" data-original-title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                              <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                              </svg> </a>
+                     <a (click)="deleteComment(comment)" class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                              <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                              </svg></a>
+                  </div>
                </div>
             </div>
-
          </div>
        </div>
     </div>
@@ -298,24 +323,46 @@
 </div>
 
 <!-- show Stars Modal -->
-<div class="modal fade showSources" id="postStars" tabindex="-1" role="dialog" aria-labelledby="showLinksModalLabel" aria-hidden="true">
+<div class="modal fade showStars" id="postStars" tabindex="-1" role="dialog" aria-labelledby="showLinksModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
      <div class="modal-content">
         <div class="modal-header">
            <h5 class="modal-title" id="showLinksModalLabel">Stars</h5>
         </div>
         <div class="modal-body">
-         <h4 *ngFor="let star of postStars">
-            <h4> {{star.userName}}____ stared At {{star.likedAt | date : 'medium'}}</h4>
-            <h4><input type="text" value="{{star.userName}}" disabled class="sourceVal">stared At {{star.likedAt | date : 'medium'}}</h4><hr>
-         </h4>
+         <h5 class="float-left">userName</h5>
+         <h5 class="float-right">stared at</h5><br>
+         <hr>
+         <div *ngFor="let star of postStars">
+            <h6 class="float-left"> {{star.userName}}</h6>
+            <h6 class="float-right">{{star.likedAt | date : 'medium'}}</h6>
+         </div>
         </div>
      </div>
   </div>
 </div>
 
 
-
+<!-- delete Comment Modal -->
+<div class="modal fade" id="deleteComment" tabindex="-1" role="dialog" aria-labelledby="deletePostModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deletePostModelLabel">Delete Comment</h5>
+           <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button> -->
+        </div>
+        <div class="modal-body">
+           <p>Are you sure you want to delete this comment?</p>
+           <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button> -->
+              <button (click)="deleteComment(comment)" class="btn btn-danger">Yes</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
 
 
 <!-- ///////////////////////////////////////////////////////////////////////// Group -->
@@ -365,6 +412,4 @@
     </div>
   </div>
   </div>
-
-
 

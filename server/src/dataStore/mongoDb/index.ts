@@ -328,7 +328,7 @@ export class MongoDB implements DataStore {
     async createComment(postId: string, comment: Comment): Promise<void> {
         const newComment = await CommentM.create(comment)
         newComment.save()
-        await PostM.findByIdAndUpdate(new ObjectId(postId), {$push : {comments: newComment._id}},{new : true})
+        await PostM.findByIdAndUpdate(new ObjectId(postId), {$push : {comments: newComment._id}, $inc : {cmnts : 1}},{new : true})
     }
     async updateComment(comment: Partial<Comment>): Promise<void> {
         await CommentM.findByIdAndUpdate(comment._id, comment , {new : true})
@@ -348,7 +348,7 @@ export class MongoDB implements DataStore {
 
     async deleteComment(postId: string, commentId: string): Promise<void> {
         await CommentM.deleteOne({_id: new ObjectId(commentId)})
-        await PostM.findByIdAndUpdate(new ObjectId(postId), {$pull : {comments: new ObjectId(commentId)}},{new : true})
+        await PostM.findByIdAndUpdate(new ObjectId(postId), {$pull : {comments: new ObjectId(commentId)} , $inc : {cmnts : -1}},{new : true})
     }
 
     async getComment(commentId: string): Promise<Comment | undefined> {

@@ -54,8 +54,10 @@ AddCommentResponse
     const post = await db.getPost(postId)
     if(!post)
         return res.status(400).send({error : ERRORS.POST_NOT_FOUND})
+    const user = await db.getUserById(userId)
     const comment : Comment = {
         userId,
+        userName : user!.userName,
         content,
         commentedAt : new Date()
     }

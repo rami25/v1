@@ -3,6 +3,7 @@ import { Schema, model, Types} from 'mongoose';
 export interface Comment {
     _id?: Types.ObjectId;
     userId?: Types.ObjectId;
+    userName? : string;
     content : string;
     likes? : Types.ObjectId[];
     lks? : number;
@@ -13,6 +14,10 @@ const commentSchema = new Schema<Comment>({
     userId : {
         type : Types.ObjectId,
         ref: 'UserM',
+        required : true
+    },
+    userName : {
+        type : String,
         required : true
     },
     content : {

@@ -155,7 +155,10 @@ a{ cursor:pointer; }
     width : 100%;
 }
 .showSources {
-    margin-top : 200px;
+    margin-top : 245px;
+}
+.showStars {
+    margin-top : 300px;
 }
 .cmnts {
     /* position : sticky; */
@@ -167,6 +170,22 @@ a{ cursor:pointer; }
 .cmntsButton:hover {
     text-decoration: underline;
 }
-
-
+.addCommentButton {
+    font-size : 20px;
+    height : 45px;
+    border-radius : 30px;
+}
+.comment {
+    border : solid gray 2px;
+    border-radius : 5px;
+    background-color : rgb(240, 240, 240);
+    text-align : left;
+}
+.commentTitle {
+    margin-top : 22px;
+    text-align : left;
+}
+.commentConfig {
+    text-align : right;
+}
 

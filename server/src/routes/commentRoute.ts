@@ -10,5 +10,5 @@ const router = Router()
 
 router.post('/create', jwtParseMiddleware, asyncHandler(addComment))
 router.patch('/update', jwtParseMiddleware, asyncHandler(updateComment))
-router.delete('/delete', jwtParseMiddleware, asyncHandler(deleteComment))
+router.post('/delete', jwtParseMiddleware, asyncHandler(deleteComment))
 module.exports = router
