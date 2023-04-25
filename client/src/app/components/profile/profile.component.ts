@@ -229,8 +229,29 @@ export class ProfileComponent implements OnInit {
       }
     }
   }
-  updateComment(comment : Comment){
-
+  showUpdateComment = false
+  toggleUpdateComment(comment : Comment){
+    this.isEmpty = true
+    this.showUpdateComment = !this.showUpdateComment  
+    if(this.showUpdateComment)
+      this.comment = comment
+  }
+  isEmpty = true
+  checkContent(){
+    const input = document.getElementById('updateContent') as HTMLTextAreaElement
+    const commentVal = input.value 
+    if(commentVal !== '') 
+      this.isEmpty = false
+    else this.isEmpty = true  
+  }
+  thisComment(comment : Comment){
+    return this.comment === comment
+  }
+  updateComment(){
+    this.showUpdateComment = false
+    if(this.comment.content !== ''){
+      this._postService.updateComment({commentId : this.comment._id!.toString() , content : this.comment.content}).subscribe()
+    }
   }
 ////////////////////////////////////////////////////////////////////////////////////////// update post
   links: string[] = []

@@ -80,6 +80,12 @@ export class PostService {
   }): Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/comments/delete`, commentData)
   }
+  updateComment(commentData : {
+    commentId : string,
+    content : string
+  }): Observable<any> {
+    return this.http.patch<any>(`${this.apiServerUrl}/comments/update`, commentData)
+  }
 
 
 }
