@@ -11,6 +11,9 @@ export class GroupService {
   private apiServerUrl = environment.apiBaseUrl
   constructor(private http : HttpClient) { }
 
+  listGroups() : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/list-groups`)
+  }
   getUserGroups() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/groups/list-shared-groups`)
   }

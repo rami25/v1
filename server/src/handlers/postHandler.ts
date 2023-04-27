@@ -63,27 +63,6 @@ ListPostsResponse
         return res.status(200).send({posts})
     }
 
-    // if(userId && !groupId && profileId){
-    //     if(userId === new ObjectId(profileId)){//owns posts(public and private) User
-    //         await db.listPosts(userId)
-    //         return res.sendStatus(200)
-    //     }
-    //     await db.listPosts(undefined, undefined, profileId, 'public')
-    //     return res.sendStatus(200)
-    // }
-
-    // if(userId && groupId && !profileId){//as user search group or belong group
-    //     const exists:boolean = await db.existsUserById(groupId,userId) as boolean
-    //     if(exists){
-    //         await db.listPosts(undefined,groupId)
-    //         return res.sendStatus(200)
-    //     }
-    //     else{
-    //         await db.listPosts(undefined, groupId, undefined, 'public')
-    //         return res.sendStatus(200)
-    //     }
-    // }
-
     res.sendStatus(401)
 }
 

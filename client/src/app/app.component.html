@@ -9,9 +9,18 @@
       <li class="nav-item">
             <form class="form-inline">
                <span>
-               <input class="form-control mr-sm-2 formSearch" type="search" placeholder="Search" aria-label="Search">
+               <input class="form-control mr-sm-2 formSearch" type="search" (ngModelChange)="search(key.value)" #key="ngModel" ngModel
+               name="key" placeholder="Search" aria-label="Search">
                </span>
-               <button class="btn btn-outline-outline-primary my-2 my-sm-0 sbtn" type="submit">Search</button>
+
+               <li class="nav-item dropdown filter">
+                  <a class="btn btn-outline-info text-white dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{filter}}</a>        
+                     <div class="dropdown-menu filterMenu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" (click)="changeFilter('Post')">Post</a>
+                        <a class="dropdown-item" (click)="changeFilter('User')">User</a>
+                        <a class="dropdown-item" (click)="changeFilter('Group')">Group</a>
+                     </div>
+               </li>
             </form>
       </li>
     </ul>
@@ -43,7 +52,38 @@
   </div>
 </nav>    
 
-
+<div class="container">
+  <div class="row justify-content-center mt-3 bg-white resultMenu" id="result">
+    <div class="col-md-8">
+      <table border="1" class="table table-bordered">
+            <tbody *ngIf="filter === 'Post' && isResults">
+            <tr *ngFor="let post of results" style="position:relative; right: 20px">
+               <a><td id="postInfo">
+                  {{post.title}}
+                  <span ngNonBindable>{{post.description.replace(/(\r\n|\n|\r)/gm, '') }}</span>
+               </td></a>
+            </tr>
+            </tbody>
+            <tbody *ngIf="filter === 'User' && isResults">
+            <tr *ngFor="let user of results" >
+               <a><td>
+                  {{user.userName}}<br>
+                  {{user.description}}
+               </td></a>
+            </tr>
+            </tbody>
+            <tbody *ngIf="filter === 'Group' && isResults">
+            <tr *ngFor="let group of results" >
+               <a><td>
+                  {{group.groupName}}<br>
+                  {{group.description}}
+               </td></a>
+            </tr>
+            </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <!-- Create Group Modal -->
 <div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel" aria-hidden="true">
@@ -257,10 +297,14 @@
 
 
 
+
+
+
 <body>
    <div class="container">
      <router-outlet></router-outlet>            
    </div>
 </body>
+
 
 

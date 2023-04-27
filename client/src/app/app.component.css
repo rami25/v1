@@ -7,7 +7,34 @@ a{ cursor:pointer }
 .formSearch{
   width:150%;
 }
-.sbtn{margin-left : 110px;}
+.filter{
+  margin-left : 110px;
+  /* width : 100%; */
+}
+.filterMenu{
+  margin-left:-50px;
+  /* background-color: rgb(136, 220, 231); */
+  transition: all 0.3s ease;
+  border-radius: 0.25rem;
+  text-align: center;
+
+}
+.resultMenu{
+  position: absolute; top : 30px; left : 125px;
+  width:16%;
+  padding-right:320px;
+  border-top : solid 10px #343a40;
+  text-align:left;
+  max-height: 300px; overflow-y: auto; overflow-x:hidden;
+}
+.resultBorder{
+  border: solid 1px #343a40;
+  border-top : solid 10px #343a40;
+}
+#postInfo{
+  /* height : 80px; */
+  padding-right : 300px;
+}
 .userMenu{
   margin-left:-100px;
   background-color: rgba(255, 255, 255, 0.1);

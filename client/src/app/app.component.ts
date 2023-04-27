@@ -1,4 +1,3 @@
-// import { User } from '@roomv1/shared'
 import { Component,  ElementRef,  OnInit, ViewChild } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
 import { NavbarService } from './services/navbar/navbar.service';
@@ -8,11 +7,8 @@ import { PostService } from './services/post/post.service';
 import { GroupService } from './services/group/group.service';
 import { AuthGuard } from './services/authGuard/auth.guard';
 import { environment } from 'src/environments/environment';
+import { Group, Post, User } from '@roomv1/shared';
 
-interface File {
-  name : string;
-  data : any;
-}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -24,7 +20,13 @@ export class AppComponent implements OnInit{
   userName : string = '';
   email : string = '';
   description : string ='';
-
+  filter : string = 'Post'
+  isResults = true
+  bufferKey : string = '';
+  posts : Post[] = []
+  users : User[] = []
+  groups : Group[] = []
+  results : any[] = []
   constructor(public _authService : AuthService,
               public _guard : AuthGuard,
               private _postService : PostService,
@@ -46,10 +48,73 @@ export class AppComponent implements OnInit{
       this.description = desc;
     });
 
-    window.addEventListener('beforeunload', () => {
-      // alert("updating")
-    });
+    this._postService.listPublicPosts()
+    .subscribe(
+      res => {
+        this.posts = res.posts
+        console.log('posts',this.posts)
+      }
+    )
+    this._authService.listUsers()
+    .subscribe(
+      res => {
+        this.users = res.users
+        console.log('user',this.users)
+      }
+    )
+    this._groupService.listGroups()
+    .subscribe(
+      res => {
+        this.groups = res.groups
+        console.log('groups',this.groups)
+      }
+    )
   }
+  ////////////////////////////////////////////////////// Search bar
+  changeFilter(filter : string){
+    this.filter = filter
+    console.log('filter : ',this.filter)
+    console.log('bufferKey :', this.bufferKey)
+    this.search(this.bufferKey)
+  }
+  search(key : string){
+    this.bufferKey = key
+    console.log(key)
+    const res = document.getElementById('result')
+    if(key === ''){
+      this.isResults = false
+      this.results = []
+      res!.classList.remove('resultBorder');
+      return
+    }
+    this.isResults = true
+    const results = this.getResults(key, this.filter)
+    if(results.length !== 0){
+      res!.classList.add('resultBorder');
+      this.results = results
+      console.log('results : ',this.results)
+    }
+    
+  }
+  getResults(query: string, filter : string) {
+    let results: any[] = []
+    if(filter === 'Post'){  
+      results = this.posts.filter(item => item.title!.toLowerCase().includes(query.toLowerCase()) ||
+                                          item.description!.toLowerCase().includes(query.toLowerCase()));
+    }
+    if(filter === 'User'){  
+      results = this.users.filter(item => item.userName!.toLowerCase().includes(query.toLowerCase()) ||
+                                          item.description!.toLowerCase().includes(query.toLowerCase()));
+    }
+    if(filter === 'Group'){  
+      results = this.groups.filter(item => item.groupName!.toLowerCase().includes(query.toLowerCase()) ||
+                                           item.description!.toLowerCase().includes(query.toLowerCase()));
+    }
+    return results;
+  }
+
+  
+
   ///////////////////////////////////////// User
   
   updateUser(userData: NgForm){
@@ -183,34 +248,6 @@ export class AppComponent implements OnInit{
 
 
 
-
-
-
-
-// 
-  // createPost(postData : NgForm){
-    // document.getElementById('create-post')?.click();
-    // const title = postData.value.title
-    // const description = postData.value.description
-    // const urls = postData.value.urls
-    // const privacy = postData.value.privacy
-    // const formData = new FormData()
-    // for (let i = 0; i < this.selectedFiles.length; i++) {
-    //   formData.append('files', this.selectedFiles[i], this.selectedFiles[i].name);
-    // }
-    // formData.set('title',title)
-    // formData.set('description',description)
-    // formData.set('urls',urls)
-    // formData.set('privacy',privacy)
-    // console.log('postData', postData.value)
-    // console.log('files', postData.value.files)
-    // console.log('formData',formData)
-    // this.http.post<any>(`${this.apiServerUrl}/posts/create`, formData)
-    // .subscribe(
-      // res => console.log(res),
-      // err => alert(err.message)
-    // )
-  // }
 
 
 

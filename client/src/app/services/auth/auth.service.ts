@@ -12,7 +12,10 @@ export class AuthService {
   private apiServerUrl = environment.apiBaseUrl
   constructor(private http : HttpClient,
               private _router : Router) { }
-
+  
+  listUsers() : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/list-users`)
+  }
   getUserById() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/users/get-by-id`)
   }

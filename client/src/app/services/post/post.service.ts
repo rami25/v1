@@ -12,6 +12,9 @@ export class PostService {
   private apiServerUrl = environment.apiBaseUrl
 
   constructor(private http : HttpClient) { }
+  listPublicPosts() : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/list-posts`);
+  }
 
   getUserPosts(profileId: string) : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/list-posts/${profileId}`);
