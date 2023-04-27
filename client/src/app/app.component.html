@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: trasparant">
   <a class="navbar-brand" href="#" routerLink="/home" routerLinkActive="active">RoomV1</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -53,17 +53,15 @@
 </nav>    
 
 <div class="container">
-  <div class="row justify-content-center mt-3 bg-white resultMenu" id="result">
-    <div class="col-md-8">
-      <table border="1" class="table table-bordered">
-            <tbody *ngIf="filter === 'Post' && isResults">
-            <tr *ngFor="let post of results" style="position:relative; right: 20px">
-               <a><td id="postInfo">
-                  {{post.title}}
-                  <span ngNonBindable>{{post.description.replace(/(\r\n|\n|\r)/gm, '') }}</span>
-               </td></a>
-            </tr>
-            </tbody>
+  <div class="resultMenu" id="result">
+            <div *ngIf="filter === 'Post' && isResults">
+            <div *ngFor="let post of results">
+               <a id="postInfo">
+                  {{post.title}}fdsfsdfsdfdfdafdsafafafafqffafafafqf<br>
+                  {{post.description.replace('\n', ' ')}} 
+               </a>
+            </div>
+         </div>
             <tbody *ngIf="filter === 'User' && isResults">
             <tr *ngFor="let user of results" >
                <a><td>
@@ -80,8 +78,6 @@
                </td></a>
             </tr>
             </tbody>
-      </table>
-    </div>
   </div>
 </div>
 

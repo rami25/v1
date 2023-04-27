@@ -2,7 +2,7 @@ body {
   /* background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5_E4HE79PNgDUmaGsqYi4PVSO9NIg4YGV2A&usqp=CAU'); */
   background-repeat: no-repeat;
   background-size: cover;
-}
+} 
 a{ cursor:pointer }
 .formSearch{
   width:150%;
@@ -20,20 +20,25 @@ a{ cursor:pointer }
 
 }
 .resultMenu{
-  position: absolute; top : 30px; left : 125px;
-  width:16%;
-  padding-right:320px;
-  border-top : solid 10px #343a40;
+  position: absolute; top : 47px; left : 107px;
+  width:323px;
+  border-top : solid 8px #343a40;
   text-align:left;
-  max-height: 300px; overflow-y: auto; overflow-x:hidden;
+  max-height: 400px; overflow: auto; 
+  background-color : white;   
+  background-clip: padding-box;
+  z-index : 1000;
 }
 .resultBorder{
-  border: solid 1px #343a40;
+  border: solid 3px #343a40;
   border-top : solid 10px #343a40;
 }
 #postInfo{
-  /* height : 80px; */
-  padding-right : 300px;
+  padding-bottom : 5px;
+  border-bottom : solid 1px #343a40;
+  /* border: solid 1px gray; */
+  /* position : relative;
+  left : 30px; */
 }
 .userMenu{
   margin-left:-100px;
