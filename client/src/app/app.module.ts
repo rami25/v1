@@ -17,6 +17,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { NavbarService } from './services/navbar/navbar.service';
 import { PostService } from './services/post/post.service';
 import { GroupService } from './services/group/group.service';
+import { OpenPostComponent } from './components/open-post/open-post.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { GroupService } from './services/group/group.service';
     SignUpComponent,
     PostComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    OpenPostComponent
   ],
 
   imports: [

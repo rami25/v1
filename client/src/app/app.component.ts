@@ -15,7 +15,6 @@ import { Group, Post, User } from '@roomv1/shared';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  private apiServerUrl = environment.apiBaseUrl
   id : string = '';
   userName : string = '';
   email : string = '';
@@ -52,34 +51,28 @@ export class AppComponent implements OnInit{
     .subscribe(
       res => {
         this.posts = res.posts
-        console.log('posts',this.posts)
       }
     )
     this._authService.listUsers()
     .subscribe(
       res => {
         this.users = res.users
-        console.log('user',this.users)
       }
     )
     this._groupService.listGroups()
     .subscribe(
       res => {
         this.groups = res.groups
-        console.log('groups',this.groups)
       }
     )
   }
   ////////////////////////////////////////////////////// Search bar
   changeFilter(filter : string){
     this.filter = filter
-    console.log('filter : ',this.filter)
-    console.log('bufferKey :', this.bufferKey)
     this.search(this.bufferKey)
   }
   search(key : string){
     this.bufferKey = key
-    console.log(key)
     const res = document.getElementById('result')
     if(key === ''){
       this.isResults = false
@@ -92,7 +85,6 @@ export class AppComponent implements OnInit{
     if(results.length !== 0){
       res!.classList.add('resultBorder');
       this.results = results
-      console.log('results : ',this.results)
     }
     
   }

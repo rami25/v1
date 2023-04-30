@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Post } from '@roomv1/shared';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -21,6 +20,9 @@ export class PostService {
   }
   getP() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/posts/list-up`);
+  }
+  getOnePost(id : string) : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/post/${id}`);
   }
 
   createPost(postData : {

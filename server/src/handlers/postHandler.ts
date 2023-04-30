@@ -14,11 +14,16 @@ import { Post } from '../../../shared/src/types/Post';
 import { ObjectId } from '../../../shared/src/connection';
 import { ERRORS } from '../../../shared/src/errors';
 import { getUserIdMiddleware } from '../middlewares/authMiddleware';
+import { RequestHandler } from 'express';
 
 export const countPostsHandler : ExpressHandler<{},{posts : number}> = async (req, res) => {
     res.status(200).send({ posts : await db.countPosts()})
 }
 
+export const getPostHandler : RequestHandler = async (req, res) => {
+    const postId = req.params.id
+    return res.status(200).send({post : await db.getPostById(postId)})
+}
 export const listUP : ExpressHandler<{},ListPostsResponse> = async (req, res) => {
     const userId = res.locals.userId
     const posts = await db.listPosts(userId)

@@ -3,7 +3,10 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 } 
-a{ cursor:pointer }
+a{ 
+  cursor:pointer; 
+  text-decoration : none;
+}
 .formSearch{
   width:150%;
 }
@@ -33,12 +36,11 @@ a{ cursor:pointer }
   border: solid 3px #343a40;
   border-top : solid 10px #343a40;
 }
-#postInfo{
-  padding-bottom : 5px;
-  border-bottom : solid 1px #343a40;
-  /* border: solid 1px gray; */
-  /* position : relative;
-  left : 30px; */
+.searchInfo{
+  display: block;
+  padding: 10px;
+  border-bottom : solid 2px #343a40;
+  width: auto;
 }
 .userMenu{
   margin-left:-100px;

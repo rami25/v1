@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { NavbarService } from 'src/app/services/navbar/navbar.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-sign-up',
@@ -13,7 +14,9 @@ export class SignUpComponent {
   
   constructor(private _auth : AuthService,
               private _router : Router,
-              private navbarService: NavbarService){}
+              private route: ActivatedRoute,
+              private navbarService: NavbarService,
+              private location: Location){}
 
               
   signup(userData : NgForm){
@@ -26,7 +29,16 @@ export class SignUpComponent {
         this.navbarService.id = res.user._id
         this.navbarService.email = res.user.email
         this.navbarService.desc = res.user.description
-        this._router.navigate(['/'])
+        const meta = this.route.snapshot.paramMap.get('meta');
+        // this.route.params.subscribe(params => {
+        //   const meta = params['meta'];
+          console.log('meta',meta)
+          if(meta === 'other')
+            this.location.back();
+          else{
+            this._router.navigate(['/'])
+          }
+        // })
       },
       err => console.log(err)
     )

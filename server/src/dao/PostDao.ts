@@ -5,6 +5,7 @@ export interface PostDao {
   countPosts(): Promise<number>;
   createPost(post: Post): Promise<void>;
   getPost(id: string, userId?: Types.ObjectId): Promise<Post | undefined>;
+  getPostById(id: string): Promise<Post | undefined>;
   updatePost(post: Post, userId?: Types.ObjectId, groupId?: string): Promise<void>;
   getPostByUrl(url: string): Post | undefined;
   deletePost(postId: string, userId?:Types.ObjectId, groupId?: string): Promise<void>;

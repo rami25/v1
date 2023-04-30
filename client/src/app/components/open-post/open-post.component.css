@@ -1,0 +1,76 @@
+.container{
+    text-align: center;
+}
+.desc{
+    text-align : left;
+    margin-bottom: 50px;
+}
+hr{
+    background-color : rgb(77, 6, 6);
+}
+span{
+    color : rgb(139, 13, 62);
+}
+/* /////////////////////////////////// Sources */
+.sourceTitle {
+   width: 90%;
+   margin-right : 100px;
+   text-align : center;
+   font-size : 20px;
+   color : rgb(55, 55, 100);
+   font-style : italic;
+   text-decoration: underline;
+
+}
+.sourceButtons {
+    margin-bottom : 70px;
+}
+.sourceVal {
+    width : 100%;
+}
+.showSources {
+    margin-top : 30px;
+}
+.copy {
+  width : 40px;
+  padding : 5px 0px 5px 0px;
+  background-color: #007bff;
+  color: #fff;
+  font-size : 10px;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.copy:hover {
+  background-color: #0069d9;
+}
+
+/* ////////////////////////////////////////////////// */
+.showStars {
+    margin-top : 320px;
+}
+.cmnts {
+    /* position : sticky; */
+    margin-right : 0px;
+    /* float : right; */
+    /* margin-right : 0px; */
+    text-align : right;
+}
+.cmntsButton:hover {
+    text-decoration: underline;
+}
+.comment {
+    border : solid gray 2px;
+    border-radius : 5px;
+    background-color : rgb(240, 240, 240);
+    text-align : left;
+}
+.commentTitle {
+    margin-top : 22px;
+    text-align : left;
+}
+.commentConfig {
+    text-align : right;
+}
+

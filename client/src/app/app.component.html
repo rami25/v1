@@ -26,7 +26,7 @@
     </ul>
     <ul class="navbar-nav">
         <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/log-in" routerLinkActive="active">Log in</a>
-        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up" routerLinkActive="active">Sign up</a>
+        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up/ " routerLinkActive="active">Sign up</a>
         <li class="nav-item dropdown create">
           <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create +</a>        
            <div class="dropdown-menu userMenu" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
@@ -55,29 +55,29 @@
 <div class="container">
   <div class="resultMenu" id="result">
             <div *ngIf="filter === 'Post' && isResults">
-            <div *ngFor="let post of results">
-               <a id="postInfo">
-                  {{post.title}}fdsfsdfsdfdfdafdsafafafafqffafafafqf<br>
+            <div *ngFor="let post of results" class="searchInfo">
+               <a routerLink="/post/{{post._id}}" target="_blank">
+                  <div style="color:rgb(95, 41, 41)"><b>{{post.title}}</b></div>
                   {{post.description.replace('\n', ' ')}} 
                </a>
             </div>
          </div>
-            <tbody *ngIf="filter === 'User' && isResults">
-            <tr *ngFor="let user of results" >
-               <a><td>
+            <div *ngIf="filter === 'User' && isResults">
+            <div *ngFor="let user of results" class="searchInfo">
+               <a>
                   {{user.userName}}<br>
                   {{user.description}}
-               </td></a>
-            </tr>
-            </tbody>
-            <tbody *ngIf="filter === 'Group' && isResults">
-            <tr *ngFor="let group of results" >
-               <a><td>
+               </a>
+            </div>
+            </div>
+            <div *ngIf="filter === 'Group' && isResults">
+            <div *ngFor="let group of results"  class="searchInfo">
+               <a>
                   {{group.groupName}}<br>
                   {{group.description}}
-               </td></a>
-            </tr>
-            </tbody>
+               </a>
+            </div>
+            </div>
   </div>
 </div>
 

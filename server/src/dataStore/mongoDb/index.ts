@@ -127,6 +127,9 @@ export class MongoDB implements DataStore {
             return await PostM.findOne({_id: new ObjectId(id)}) || undefined
         return await PostM.findOne({_id: new ObjectId(id), userId: Iduser}) || undefined
     }
+    async getPostById(postId: string): Promise<Post | undefined> {
+        return await PostM.findOne({_id: new ObjectId(postId)}) || undefined
+    }
 
 
     getPostByUrl(url: string): Post | undefined {

@@ -43,6 +43,7 @@ export class ProfileComponent implements OnInit {
         if(res.message){
           alert(res.message)
           this._auth.logoutUser()
+          this._router.navigate(['/'])
         }
         if(res.error)
           alert(res.error)
@@ -122,6 +123,11 @@ export class ProfileComponent implements OnInit {
       res => {
         this.postStars = res.likes
         this.nStars = this.postStars.length
+        this._postService.checkStar({ postId : this.showPost._id!.toString()})
+        .subscribe(
+          res => this.star = res.exists,
+          err => alert(err.message)
+        )
       },
       err => alert(err.message)
     )
@@ -143,11 +149,6 @@ export class ProfileComponent implements OnInit {
     if(post.files.length !== 0)
       this.reverseCloneFiles(post.files)
     this.getStars()  
-    this._postService.checkStar({ postId : this.showPost._id!.toString()})
-    .subscribe(
-      res => this.star = res.exists,
-      err => alert(err.message)
-    )
     this.listComments()
   }
   getPrivacy(post : Post){
@@ -184,10 +185,12 @@ export class ProfileComponent implements OnInit {
       err => alert(err.message)
     )
   }
-  //////////////////////// Comment
+  ////////////////////////////////////////////////////////////////////////////////////////////////// Comment
   showComments = false
   toggleComments() {
     this.showComments = !this.showComments
+    if(this.showComments)
+      this.listComments()
   }
   showNewComment = false
   toggleNewComment() {
