@@ -1,0 +1,56 @@
+<div class="container">
+
+    <div class="desc">
+        <div><span class="font-weight-bold font-italic" >User Name : </span>{{user.userName}}</div>
+        <hr>
+        <div><span class="font-weight-bold font-italic" >Email : </span>{{user.email}}</div>
+        <hr>
+        <div><span class="font-weight-bold font-italic" >Description : </span>{{user.description}}</div>
+        <hr>
+        <div><span class="font-weight-bold font-italic" >Created At : </span>{{user.createdAt | date:'medium'}}</div>
+        <hr>
+    </div>
+
+
+
+<hr>
+    <button class="btn btn-outline-secondary posts" (click)="togglePosts()" id="posts"><b>{{user.psts}} Posts </b></button>
+
+        <div class="container" *ngIf="showPosts">
+            <a *ngFor="let post of posts" >
+                <div class="card">
+                    <div class="in">
+                    <a *ngIf="showPosts" routerLink="/post/{{post._id}}" target="_blank">
+                        <div id="Ptitle">{{post.title}}</div>
+                        <div id=""><span>Desctiption :</span> {{post.description}}</div>
+                        <div id="">{{post.nurls}} (Urls : Web Sources)</div>
+                        <div id="">{{post.nfiles}} (Files)</div>
+                        <div id="">{{post.cmnts}} (Comments)</div>
+                        <div id="">{{post.lks}} (Stars)</div>
+                        <div>privacy : <span *ngIf="getPrivacy(post)"id="public">{{post.privacy}}</span><span *ngIf="!getPrivacy(post)"id="private">{{post.privacy}}</span></div>
+                        <div id=""><span>Posted At :</span> {{post.postedAt | date:'medium'}}</div>
+                        <div id="author"><span>Author : </span>{{post.userName}}</div>
+                    </a>
+                    </div>
+                </div>
+                <hr>
+            </a>
+        </div>
+    <br>
+    <hr style="height:10px;border-radius:5px">
+    <button class="btn btn-outline-secondary groupBtn" (click)="toggleGroups()" id="groups"><b>{{user.grps}} Groups </b></button>
+
+        <div class="container" *ngIf="showGroups">
+            <div *ngFor="let group of groups">
+                <div class="card">
+                    <a data-toggle="modal" data-target="#showGroup">
+                        <div>{{group._id}}</div>
+                        <div>{{group.groupName}}</div>
+                        <div>{{group.description}}</div>
+                    </a>
+                </div>
+                <hr>
+            </div>
+        </div>
+</div>
+

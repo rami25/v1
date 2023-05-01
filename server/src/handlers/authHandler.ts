@@ -24,6 +24,8 @@ import { signJwt } from '../auth'
 import { hashPassword } from '../env';
 import crypto from 'crypto'
 import nodemailer from 'nodemailer'
+import { RequestHandler } from 'express';
+import { ObjectId } from '../../../shared/src/connection';
 
 export const countUserHandler : ExpressHandler<{},{users: number}> = async(req, res) => {
     res.status(200).send({users : await db.countUsers()})
@@ -33,6 +35,14 @@ ListUserRequest,
 ListUserResponse
 > = async (req, res) => {
    res.status(200).send({ users : await db.listUsers()})
+}
+
+export const openUserHandler : RequestHandler = async (req, res) => {
+    const userId = req.params.id
+    const user = await db.getUserById(new ObjectId(userId))
+    if(user)
+        return res.status(200).send({user})
+    res.sendStatus(404)    
 }
 
 export const getUserHandler : ExpressHandler<{},{

@@ -35,6 +35,7 @@ import { ERRORS } from "../../../shared/src/errors";
 import { Group } from "../../../shared/src/types/Group";
 import { db } from "../dao";
 import { ExpressHandler } from "../types";
+import { RequestHandler } from "express";
 
 export const createGroup : ExpressHandler<// as an admin
 CreateGroupRequest,
@@ -108,6 +109,22 @@ UpdateGroupResponse
 
 export const countGroups : ExpressHandler<{},{groups: number}> = async(req, res) =>{
     res.status(200).send({groups : await db.countGroups()})
+}
+
+export const getGroupHandler : RequestHandler = async (req,res) => {
+    const groupId = req.params.id
+    const group = await db.getGroup(new ObjectId(groupId))
+    if(group)
+        return res.status(200).send({group})
+    res.sendStatus(404)
+}
+
+export const listUserGroups : RequestHandler = async (req,res) => {
+    const userId = req.params.id
+    const groups = await db.listUserGroups(new ObjectId(userId))
+    if(groups)
+        return res.status(200).send({groups})
+    res.sendStatus(404)    
 }
 
 export const listGroups : ExpressHandler<// for all (publics)

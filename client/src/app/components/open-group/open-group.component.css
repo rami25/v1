@@ -1,0 +1,28 @@
+.container{
+    margin-top : 50px;
+    text-align: center;
+}
+.desc{
+    text-align : left;
+    margin-bottom: 50px;
+}
+hr{
+    background-color : rgb(77, 6, 6);
+}
+span{
+    color : rgb(139, 13, 62);
+}
+.admin{
+    padding-top : 10px;
+    color:black;
+    font-size:15px;
+    text-decoration : underline;
+}
+.posts{
+    margin-bottom : 20px;
+    width : 300px;
+}
+a{
+    cursor:pointer;
+    text-decoration : none;
+}

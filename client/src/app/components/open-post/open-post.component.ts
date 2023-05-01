@@ -22,7 +22,7 @@ export class OpenPostComponent implements OnInit{
   nStar! : number
   constructor(private _postService : PostService,
               private route: ActivatedRoute,
-              private _auth : AuthService,
+              public _auth : AuthService,
               private navbarService : NavbarService,
               private router : Router){}
   getUser(){
@@ -199,6 +199,7 @@ export class OpenPostComponent implements OnInit{
         this.navbarService.desc = res.user.description
         this.navbarService.psts = res.user.psts
         this.navbarService.grps = res.user.grps
+        this.ngOnInit()
         // this._router.navigate(['/'])
       },
       (error : HttpErrorResponse) => {

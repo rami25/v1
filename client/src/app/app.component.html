@@ -64,16 +64,16 @@
          </div>
             <div *ngIf="filter === 'User' && isResults">
             <div *ngFor="let user of results" class="searchInfo">
-               <a>
-                  {{user.userName}}<br>
+               <a routerLink="/user/{{user._id}}" target="_blank">
+                  <div style="color:rgb(95, 41, 41)"><b>{{user.userName}}</b></div>
                   {{user.description}}
                </a>
             </div>
             </div>
             <div *ngIf="filter === 'Group' && isResults">
             <div *ngFor="let group of results"  class="searchInfo">
-               <a>
-                  {{group.groupName}}<br>
+               <a routerLink="/group/{{group._id}}" target="_blank">
+                  <div style="color:rgb(95, 41, 41)"><b>{{group.groupName}}</b></div>
                   {{group.description}}
                </a>
             </div>

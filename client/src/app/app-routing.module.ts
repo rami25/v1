@@ -6,6 +6,8 @@ import { HomeComponent } from './components/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './services/authGuard/auth.guard';
 import { OpenPostComponent } from './components/open-post/open-post.component';
+import { OpenUserComponent } from './components/open-user/open-user.component';
+import { OpenGroupComponent } from './components/open-group/open-group.component';
 
 const routes: Routes = [
   {
@@ -22,11 +24,19 @@ const routes: Routes = [
     component : OpenPostComponent
   },
   {
+    path : 'user/:id',
+    component : OpenUserComponent
+  },
+  {
+    path : 'group/:id',
+    component : OpenGroupComponent
+  },
+  {
     path : 'log-in',
     component : LoginComponent 
   },
   {
-    path : 'sign-up/:meta?',
+    path : 'sign-up/:meta',
     component : SignUpComponent 
   },
   {

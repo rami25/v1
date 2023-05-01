@@ -40,7 +40,7 @@
              </button> 
           </form>
        </div>
-       <button class="btn btn-outline-success float-right addCommentButton" (click)="toggleNewComment()">add</button> 
+       <button *ngIf="_auth.loggedIn()" class="btn btn-outline-success float-right addCommentButton" (click)="toggleNewComment()">add</button> 
        <br>
        <h4 style="text-align:left"><b>Comments : </b></h4>
        <div *ngFor="let comment of comments">

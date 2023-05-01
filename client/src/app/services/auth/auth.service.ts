@@ -19,6 +19,9 @@ export class AuthService {
   getUserById() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/users/get-by-id`)
   }
+  openUser(userId : string) : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/user/${userId}`)
+  }
   loginUser(credential: {login : string, password : string}) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/visitors/sign-in` , credential )
   }

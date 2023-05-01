@@ -1,0 +1,86 @@
+.container{
+    margin-top : 50px;
+    text-align: center;
+}
+.desc{
+    text-align : left;
+    margin-bottom: 50px;
+}
+hr{
+    background-color : rgb(77, 6, 6);
+}
+span{
+    color : rgb(139, 13, 62);
+}
+.posts{
+    margin-bottom : 20px;
+    width : 300px;
+}
+a{
+    cursor:pointer;
+    text-decoration : none;
+}
+.groupBtn{
+    margin-bottom : 25px;
+    margin-top : 20px;
+    width : 300px;
+}
+.card{
+    border : 2px solid gray;
+    border-radius : 20px;
+}
+.in{
+    width : 500px;
+    margin : auto;
+    padding : 15px;
+    text-align : left;
+    font-size : 20px;
+    font-weight : bold;
+    color : rgb(68, 59, 59);
+}
+.in:hover{
+    background-color : rgb(175, 235, 207);
+    border-radius : 20px;
+    width : 100%;
+    transition: background-color 0.5s ease-in-out 0.2s;
+    transition: width 0.6s ease-in-out 0.2s;
+}
+.in:not(:hover){
+    background-color : rgb(247, 240, 242);
+    border-radius : 20px;
+    width : 500px;
+    transition: background-color 0.5s ease-in-out 0.2s;
+    transition: width 0.6s ease-in-out 0.2s;
+}
+#Ptitle{
+    text-align : center;
+    font-style : italic;
+    color : rgb(158, 45, 45);
+}
+#author{
+    text-align : right;
+}
+#private{
+    color : orange;
+}
+#public{
+    color : rgb(30, 163, 30);
+}
+.modalDialog {
+   max-width: 800px;
+   width: 90%;
+   text-align : center;
+}
+.postTitle {
+   width: 90%;
+   margin-right : 100px;
+   text-align : center;
+   font-size : 26px;
+   color : gray;
+   font-style : italic;
+}
+.postData{
+   text-align : left;
+   background-color : rgb(240, 240, 240);
+   border-radius : 10px;
+}

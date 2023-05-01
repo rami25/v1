@@ -14,8 +14,14 @@ export class GroupService {
   listGroups() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/list-groups`)
   }
+  openGroup(groupId : string) : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/group/${groupId}`)
+  }
   getUserGroups() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/groups/list-shared-groups`)
+  }
+  openUserGroups(userId : string) : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/list-user-groups/${userId}`)
   }
   createGroup(groupData : {
     groupName : string;
