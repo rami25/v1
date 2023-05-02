@@ -31,8 +31,11 @@ export class OpenUserComponent implements OnInit{
   }
   getUser(userId : string){
     this._auth.openUser(userId)
-    .subscribe((res) => this.user = res.user,
-              err => alert(err.message))
+    .subscribe((res) => {
+      this.user = res.user,
+      this.getPosts()
+    },
+    err => alert(err.message))
   }
 
 

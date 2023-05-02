@@ -14,7 +14,7 @@
 
 
 <hr>
-    <button class="btn btn-outline-secondary posts" (click)="togglePosts()" id="posts"><b>{{user.psts}} Posts </b></button>
+    <button class="btn btn-outline-secondary posts" (click)="togglePosts()" id="posts"><b>{{posts.length}} Posts </b></button>
 
         <div class="container" *ngIf="showPosts">
             <a *ngFor="let post of posts" >

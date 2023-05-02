@@ -56,7 +56,7 @@ ListPostsResponse
         const posts = await db.listPosts(undefined, undefined, profileId, 'public')
         return res.status(200).send({posts})
     }
-    if(groupId && !profileId){//as (visitor or user) search group or own group
+    if(!!groupId && profileId === 'none'){//as (visitor or user) search group or own group
         if(userId){
             const exists:boolean = await db.existsUserById(groupId,userId) as boolean
             if(exists){
@@ -64,7 +64,7 @@ ListPostsResponse
                 return res.status(200).send({posts})
             }
         }
-        const posts = await db.listPosts(undefined, groupId,undefined, 'public')
+        const posts = await db.listPosts(undefined, groupId, undefined, 'public')
         return res.status(200).send({posts})
     }
 

@@ -14,7 +14,9 @@ export class PostService {
   listPublicPosts() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/list-posts`);
   }
-
+  listGroupPosts(groupId : string) : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/list-posts/none/${groupId}`);
+  }
   getUserPosts(profileId: string) : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/list-posts/${profileId}`);
   }

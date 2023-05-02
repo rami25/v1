@@ -44,12 +44,14 @@
 
         <div class="container" *ngIf="showGroups">
             <div *ngFor="let group of groups">
-                <div class="card">
-                    <a data-toggle="modal" data-target="#showGroup">
+                <div class="card in1">
+                  <div class="">
+                    <a data-toggle="modal" data-target="#showGroup" *ngIf="showGroups" (click)="catchGroup(group)">
                         <div>{{group._id}}</div>
                         <div>{{group.groupName}}</div>
                         <div>{{group.description}}</div>
                     </a>
+                  </div>
                 </div>
                 <hr>
             </div>
@@ -366,39 +368,39 @@
           </button>
        </div>
        <div class="modal-body">
-          <form #postForm="ngForm">
-          <div class="form-group">
-             <label for="title">Title<span class="text-danger">*</span></label>
-             <input type="text" ngModel name="title" class="form-control" id="title" placeholder="Title" required>
-          </div>
-          <div class="form-group">
-             <label for="desc">Description<span class="text-danger">*</span></label>
-             <input type="email" ngModel name="description" class="form-control" id="desc" placeholder="Description" required>
-          </div>
-          <div class="form-group">
-             <label for="links">Links</label>
-             <input type="text" ngModel name="urls" class="form-control" id="links" placeholder="Url">
-          </div>
-          <div class="form-group">
-             <label for="files">Files</label>
-             <input type="text" ngModel name="files" class="form-control" id="files" placeholder="Files">
-          </div>
-          <div class="form-group">
-             <span>Privacy<span class="text-danger">*</span> : </span>
-             <label class="form-check-label radio-label" for="public">Public</label>
-             <input class="form-check-input" type="radio" ngModel name="privacy" id="public" value="public" required>
-             <span class="p2">
-             <label class="form-check-label radio-label" for="private">Private</label>
-             <input class="form-check-input" type="radio" ngModel name="privacy" id="private" value="private" required>
-             </span>
-          </div>
+         show group modal
           <div class="modal-footer">
              <button type="button" id="create-post" class="btn btn-secondary" data-dismiss="modal">Close</button>
-             <button [disabled]="postForm.invalid" type="submit" class="btn btn-success" >Create</button>
+             <button [disabled]="" type="submit" class="btn btn-success" >Create</button>
           </div>
-          </form>
        </div>
     </div>
   </div>
   </div>
+
+<!-- Show Group Modal -->
+<div class="modal fade" id="getGroup" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deleteAccountModalLabel">Remove {{user.userName}}'s Account</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+         <form #eteForm ="ngForm">
+            <div class="form-group">
+              <label>Password<span class="text-danger">*</span></label>
+              <input type="password" class="form-control rounded-0" ngModel name="password" placeholder="password" required>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button (click)="deleteAccount(deleteForm)" [disabled]="deleteForm.invalid" type="submit" class="btn btn-danger" data-dismiss="modal">Delete</button>
+            </div>
+         </form>
+        </div>
+     </div>
+  </div>
+</div>
 

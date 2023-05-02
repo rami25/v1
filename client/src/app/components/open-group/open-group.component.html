@@ -11,6 +11,30 @@
         <hr>
 <button class="btn btn-outline-info" data-toggle="modal" data-target="#groupMembers">See group members</button> 
     </div>
+
+<hr>
+    <button class="btn btn-outline-secondary posts" (click)="togglePosts()" id="posts"><b>{{posts.length}} Posts </b></button>
+
+        <div class="container" *ngIf="showPosts">
+            <a *ngFor="let post of posts" >
+                <div class="card">
+                    <div class="in">
+                    <a *ngIf="showPosts" routerLink="/post/{{post._id}}" target="_blank">
+                        <div id="Ptitle">{{post.title}}</div>
+                        <div id=""><span>Desctiption :</span> {{post.description}}</div>
+                        <div id="">{{post.nurls}} (Urls : Web Sources)</div>
+                        <div id="">{{post.nfiles}} (Files)</div>
+                        <div id="">{{post.cmnts}} (Comments)</div>
+                        <div id="">{{post.lks}} (Stars)</div>
+                        <div>privacy : <span *ngIf="getPrivacy(post)"id="public">{{post.privacy}}</span><span *ngIf="!getPrivacy(post)"id="private">{{post.privacy}}</span></div>
+                        <div id=""><span>Posted At :</span> {{post.postedAt | date:'medium'}}</div>
+                        <div id="author"><span>Author : </span>{{post.userName}}</div>
+                    </a>
+                    </div>
+                </div>
+                <hr>
+            </a>
+        </div>
 </div>
 
 <!-- show groupMembers Modal -->

@@ -22,6 +22,7 @@ export class ProfileComponent implements OnInit {
   comments! : Comment[];
   comment! : Comment;
   groups! : Group[];
+  showGroup! : Group;
   meta!: string;
   getUser(){
     this._auth.getUserById()
@@ -392,6 +393,9 @@ export class ProfileComponent implements OnInit {
     .subscribe(
         res=> this.groups = res.groups,
         err => alert(err.message))
+  }
+  catchGroup(group : Group){
+    this.showGroup = group
   }
   showGroups = false;
   toggleGroups() {
