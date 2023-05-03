@@ -65,7 +65,8 @@ CreateGroupResponse
             usersId: group.usersId,
             createdAt: group.createdAt
         },
-        grps : user!.grps
+        grps : user!.grps,
+        message : 'group created successfully'
     })
 }
 export const deleteGroup : ExpressHandler<// as an admin
