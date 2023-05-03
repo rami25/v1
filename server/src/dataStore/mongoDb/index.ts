@@ -138,13 +138,12 @@ export class MongoDB implements DataStore {
 
     async deletePost(postId: string, userId?: Types.ObjectId, groupId?: string): Promise<void> {
         const post = await this.getPost(postId,userId)
-        if(postId && userId && !groupId){//removing from user profile
+        if(post){
             await UserM.updateOne({_id : userId}, {$pull: {posts:new ObjectId(postId)}, $inc : {psts : -1}})
-            if(post)
-                await PostM.deleteOne(new ObjectId(postId))
-        }
-        if(postId && userId && groupId){
-            await GroupM.updateOne({_id: new ObjectId(groupId)}, {$pull: {posts: post!._id}, $inc : {psts : -1}})
+            if(!!post.groupId){
+                await GroupM.updateOne({_id: post.groupId}, {$pull: {posts: post!._id}, $inc : {psts : -1}})
+            }
+            await PostM.deleteOne(new ObjectId(postId))
         }
     }
 
@@ -181,7 +180,7 @@ export class MongoDB implements DataStore {
 
     async deleteGroup(id: string): Promise<void> {
         const groupId = new ObjectId(id)
-        await UserM.updateMany({groups : {$in : groupId}}, {$pull : {groups : groupId}})
+        await UserM.updateMany({groups : {$in : groupId}}, {$pull : {groups : groupId}, $inc:{grps:-1}})
         await GroupM.findByIdAndDelete(groupId)
     }
 
@@ -197,7 +196,7 @@ export class MongoDB implements DataStore {
         return await GroupM.find({},{groupName : 1 , description : 1 , userAdmin : 1 , admin: 1 , usersId : 1 ,users : 1,psts : 1, createdAt : 1}) || undefined
     }
     async listUserGroups(userId: Types.ObjectId) : Promise<Group[] | undefined> {
-        return await GroupM.find({ usersId : { $in:[userId]}},{groupName : 1 , description : 1 , userAdmin : 1 , admin: 1 , users : 1,psts : 1, createdAt : 1}) || undefined
+        return await GroupM.find({ usersId : { $in:[userId]}}) || undefined
     }
 
     async getGroup(id: Types.ObjectId, userId?: Types.ObjectId): Promise<Group | undefined> {

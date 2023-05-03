@@ -29,4 +29,14 @@ export class GroupService {
   }) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/groups/create`, groupData)
   }
+  deleteGroup(groupData : {groupId : string}) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/groups/delete`, groupData)
+  }
+  updateGroup(groupData : {
+    groupId : string;
+    groupName : string;
+    description : string;
+  }) : Observable<any> {
+    return this.http.patch<any>(`${this.apiServerUrl}/groups/update`, groupData)
+  }
 }

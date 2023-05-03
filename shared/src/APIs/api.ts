@@ -139,14 +139,18 @@ export interface CreateGroupResponse {
 export interface DeleteGroupRequest {
     groupId: string;
 }
-export interface DeleteGroupResponse {}     
+export interface DeleteGroupResponse {
+    message : string
+}     
 
 export interface UpdateGroupRequest {
     groupId: string;
     groupName?: string;
     description? : string;
 }
-export interface UpdateGroupResponse {}     
+export interface UpdateGroupResponse {
+    message : string;
+}     
 
 export interface ListGroupsRequest {}// or list group of profile
 export interface ListGroupsResponse {

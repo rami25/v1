@@ -24,7 +24,7 @@
                     <div class="in">
                     <a data-toggle="modal" data-target="#showPost" *ngIf="showPosts" (click)="catchPost(post)" (click)="clear()">
                         <div id="Ptitle">{{post.title}}</div>
-                        <div id=""><span>Desctiption :</span> {{post.description}}</div>
+                        <div id=""><span>Description :</span> {{post.description}}</div>
                         <div id="">{{post.nurls}} (Urls : Web Sources)</div>
                         <div id="">{{post.nfiles}} (Files)</div>
                         <div id="">{{post.cmnts}} (Comments)</div>
@@ -44,12 +44,15 @@
 
         <div class="container" *ngIf="showGroups">
             <div *ngFor="let group of groups">
-                <div class="card in1">
-                  <div class="">
-                    <a data-toggle="modal" data-target="#showGroup" *ngIf="showGroups" (click)="catchGroup(group)">
-                        <div>{{group._id}}</div>
-                        <div>{{group.groupName}}</div>
-                        <div>{{group.description}}</div>
+                <div class="card">
+                  <div class="in1">
+                    <a data-toggle="modal" data-target="#showGroup" *ngIf="showGroups" (click)="catchGroup(group)" (click)="clearGroup()">
+                        <div id="Ptitle">{{group.groupName}}</div>
+                        <div><span>Description :</span>{{group.description}}</div>
+                        <div>{{group.psts}} (Posts)</div>
+                        <div>{{group.users}} (Users)</div>
+                        <div id=""><span>Created At :</span> {{group.createdAt | date:'medium'}}</div>
+                        <div id="author"><span>Admin : </span>{{group.admin}}</div>
                     </a>
                   </div>
                 </div>
@@ -58,9 +61,114 @@
         </div>
 </div>
 
+<!-- Show Group Modal -->
+<div *ngIf="showGroups" class="modal fade" id="showGroup" tabindex="-1" role="dialog" aria-labelledby="showGroupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modalDialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+<button class="btn btn-outline-danger deletePost" data-toggle="modal" data-target="#deleteGroup">Delete Group</button> 
+          <h5 class="modal-title postTitle" id="showGroupModalLabel">{{showGroup.groupName}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeGroupModal">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+<button class="btn btn-outline-secondary updateGroup" data-toggle="modal" data-target="#updateGroup">Update Group</button> 
+       <div class="modal-body" style="padding-bottom:50px">
+         <div class="container postData">
+            <div><span class="font-weight-bold font-italic">Desctiption :</span> {{showGroup.description}}
+<button class="btn btn-outline-info float-right" data-toggle="modal" data-target="#groupMembers" (click)="listGroupUsers()">{{showGroup.users}} Members</button> 
+</div>
+            <hr>
+
+            <div class="container sources">
+               <a typ="button" class="sourceTitle" (click)="toggleGroupPosts()"><b>{{showGroup.psts}} Posts</b></a>
+               <div class="container" *ngIf="showGroupPosts">
+               <button class="btn btn-outline-success float-right addPostButton">add post</button> 
+                  <div *ngFor="let post of groupPosts">
+                     <div>{{post.title}}</div>
+                     <div>{{post.description}}</div>
+                  </div>
+               </div>
+            </div>
 
 
 
+         </div>
+       </div>
+    </div>
+  </div>
+  </div>
+
+<!-- show groupMembers Modal -->
+<div class="modal fade mt-4" id="groupMembers" tabindex="-1" role="dialog" aria-labelledby="deletePostModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deletePostModelLabel">Group Members</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+            <h4 *ngFor="let user of groupUsers">
+               <a routerLink="/user/{{user._id}}" target="_blank">
+                    {{user.userName}}
+                </a><span class="admin float-right" *ngIf="showGroup.userAdmin === user._id">Admin</span>
+            </h4><hr>
+        </div>
+     </div>
+  </div>
+</div>
+
+<!-- Delete Group Modal -->
+<div class="modal fade" id="deleteGroup" tabindex="-1" role="dialog" aria-labelledby="deleteGroupModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deleteGroupModelLabel">Delete Group</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <p>Are you sure you want to delete this group?</p>
+           <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+              <button (click)="deleteGroup()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+<!-- Update Group Modal -->
+<div *ngIf="showGroups" class="modal fade" id="updateGroup" tabindex="-1" role="dialog" aria-labelledby="updateGroupModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="updatGroupModalLabel">Update Group</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form #UGroupForm="ngForm" (ngSubmit)="updateGroup(UGroupForm)" id="updateGroupForm">
+          <div class="form-group">
+             <label for="title">Group Name :</label>
+             <input type="text" ngModel name="groupName" class="form-control" id="title" placeholder="{{showGroup.groupName}}">
+          </div>
+          <div class="form-group">
+             <label for="desc">Description :</label>
+             <input type="email" ngModel name="description" class="form-control" id="desc" placeholder="{{showGroup.description}}">
+          </div>
+          <div class="modal-footer">
+             <button type="button" id="update-group" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             <button  type="submit" class="btn btn-primary" >Save Changes</button>
+          </div>
+          </form>
+       </div>
+    </div>
+  </div>
+</div>
 <!-- Delete Account Modal -->
 <div class="modal fade" id="deleteAccount" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -302,6 +410,8 @@
   </div>
 </div>
 
+
+
 <!-- show files Modal -->
 <div class="modal fade showSources" id="showFiles" tabindex="-1" role="dialog" aria-labelledby="showFilesLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -356,51 +466,4 @@
 
 
 
-<!-- ///////////////////////////////////////////////////////////////////////// Group -->
-<!-- Show Group Modal -->
-<div class="modal fade" id="showGroup" tabindex="-1" role="dialog" aria-labelledby="showGroupModalLabel" aria-hidden="true">
-  <div class="modal-dialog modalDialog" role="document">
-    <div class="modal-content">
-       <div class="modal-header">
-          <h5 class="modal-title" id="showGroupModalLabel">Create Post</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-          </button>
-       </div>
-       <div class="modal-body">
-         show group modal
-          <div class="modal-footer">
-             <button type="button" id="create-post" class="btn btn-secondary" data-dismiss="modal">Close</button>
-             <button [disabled]="" type="submit" class="btn btn-success" >Create</button>
-          </div>
-       </div>
-    </div>
-  </div>
-  </div>
-
-<!-- Show Group Modal -->
-<div class="modal fade" id="getGroup" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-     <div class="modal-content">
-        <div class="modal-header">
-           <h5 class="modal-title" id="deleteAccountModalLabel">Remove {{user.userName}}'s Account</h5>
-           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-           </button>
-        </div>
-        <div class="modal-body">
-         <form #eteForm ="ngForm">
-            <div class="form-group">
-              <label>Password<span class="text-danger">*</span></label>
-              <input type="password" class="form-control rounded-0" ngModel name="password" placeholder="password" required>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button (click)="deleteAccount(deleteForm)" [disabled]="deleteForm.invalid" type="submit" class="btn btn-danger" data-dismiss="modal">Delete</button>
-            </div>
-         </form>
-        </div>
-     </div>
-  </div>
-</div>
 

@@ -90,11 +90,18 @@ CreatePostResponse
             postedAt: new Date(),
             privacy
         } 
-        if(req.body.groupId)
+        let checkGroup = false
+        if(req.body.groupId){
             post.groupId = new ObjectId(req.body.groupId)
+            checkGroup = true
+        }
         await db.createPost(post)
         const user = await db.getUserById(userId)
-        return res.status(200).send({psts : user!.psts})
+        if(checkGroup){
+            const group = await db.getGroup(new ObjectId(req.body.groupId))
+            return res.status(200).send({psts : user!.psts ,gpsts:group!.psts , message:'post created successfully!!!'})
+        }
+        return res.status(200).send({psts : user!.psts , message:'post created successfully!!!'})
     }
     res.status(400).send({error:'all fields are required'})
 }
@@ -104,19 +111,17 @@ DeletePostRequest,
 DeletePostResponse
 > = async (req, res) => {
     const userId = res.locals.userId
-    const { postId , groupId } = req.body
+    const { postId } = req.body
     if(postId){
         const post = await db.getPost(postId, userId)
         if(!post)
-            return res.status(400).send({error:'User not authorized for deleting this post'})
-        if(!groupId){                                      //tab9a fel group
-            await db.deletePost(postId, userId)            //w tetfasa5 fel main posts
-            return res.status(200).send({message :'Post deleted successfully!'})                     // if eli heya public post
-        }
-        else{//tab9a fel user profile w fel main public posts w ken user owner ydelety
-            await db.deletePost(postId, userId , groupId)
-            return res.sendStatus(200)
-        }
+            return res.status(400).send({error:'User not authorized to deleting this post'})
+        // if(!groupId){                                      //tab9a fel group
+        //     await db.deletePost(postId, userId)            //w tetfasa5 fel main posts
+        //     return res.status(200).send({message :'Post deleted successfully!'})                     // if eli heya public post
+        // }
+       await db.deletePost(postId, userId)
+       return res.status(200).send({message :'Post deleted successfully!'})
     }
     res.sendStatus(401)
 }

@@ -23,7 +23,7 @@ const router = Router()
 router.get('/list-shared-groups',jwtParseMiddleware, asyncHandler(listSharedGroups))// as an admin
 router.get('/get',jwtParseMiddleware, asyncHandler(getGroup))// as an admin
 router.post('/create', jwtParseMiddleware, asyncHandler(createGroup))// as an admin
-router.delete('/delete', jwtParseMiddleware, asyncHandler(deleteGroup))
+router.post('/delete', jwtParseMiddleware, asyncHandler(deleteGroup))
 router.patch('/update', jwtParseMiddleware, asyncHandler(updateGroup))//users , groupName , description
 router.post('/send-request', jwtParseMiddleware, asyncHandler(sendRequest))// to the group
 router.delete('/delete-request', jwtParseMiddleware, asyncHandler(deleteSendRequest))// as user

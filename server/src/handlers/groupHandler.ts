@@ -79,7 +79,7 @@ DeleteGroupResponse
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
         await db.deleteGroup(groupId)    
-        return res.sendStatus(200)
+        return res.status(200).send({message : 'Group deleted successfully!'})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
@@ -103,7 +103,7 @@ UpdateGroupResponse
         }
         if(description) group.description = description
         await db.updateGroup(group)
-        return res.sendStatus(200)
+        return res.status(200).send({message : 'group updated successfully!!!'})
     }
 }
 
@@ -137,13 +137,7 @@ ListGroupsResponse
 
 export const listSharedGroups : ExpressHandler<{},
 {
-    groups : Pick<Group,'_id'|
-                    'groupName'|
-                    'description'|'userAdmin'|
-                    'admin'|
-                    'users'|
-                    'psts'|
-                    'createdAt'>[];
+    groups : Group[];
 }
 > = async (req, res) => {
     const userId = res.locals.userId

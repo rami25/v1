@@ -23,6 +23,8 @@ export class ProfileComponent implements OnInit {
   comment! : Comment;
   groups! : Group[];
   showGroup! : Group;
+  groupUsers : User[] = []
+  groupPosts! : Post[]
   meta!: string;
   getUser(){
     this._auth.getUserById()
@@ -388,11 +390,33 @@ export class ProfileComponent implements OnInit {
 
   }
 ///////////////////////////////////////////// Groups
+  clearGroup(){
+    this.groupUsers = []
+    this.groupPosts = []
+    this.showGroupPosts = false;
+  }
   getGroups() {
     this._groupService.getUserGroups()
     .subscribe(
         res=> this.groups = res.groups,
         err => alert(err.message))
+  }
+  getGroupPosts() {
+    this._postService.listGroupPosts(this.showGroup._id!.toString())
+    .subscribe(
+        res=> this.groupPosts = res.posts,
+        err => alert(err.message))
+  }
+  listGroupUsers(){
+    this.groupUsers = []
+    for(let userId of this.showGroup.usersId!){
+      this._auth.openUser(userId.toString()).subscribe(
+        res => {
+          this.groupUsers.push(res.user)
+        },
+        err => alert(err.message)
+      )
+    }
   }
   catchGroup(group : Group){
     this.showGroup = group
@@ -402,8 +426,44 @@ export class ProfileComponent implements OnInit {
     if(this.showGroups === false) this.getGroups();
     this.showGroups = !this.showGroups;
   }
+  showGroupPosts = false;
+  toggleGroupPosts() {
+    if(this.showGroupPosts === false) this.getGroupPosts();
+    this.showGroupPosts = !this.showGroupPosts;
+  }
 
+  deleteGroup(){
+    this._groupService.deleteGroup({groupId : this.showGroup._id!.toString()}).subscribe(
+      res => {
+        if(res.message){
+          alert(res.message)
+          document.getElementById('closeGroupModal')?.click()
+          this._router.navigate([`/user/${this.user._id}/profile`])
+          this.getUser()
+        }
+        if(res.error) alert(res.error)
+      },
+      err => alert(err.message)     
+    )
+  }
 
-
+  updateGroup(groupForm : NgForm) {
+    groupForm.value.groupId = this.showGroup._id 
+    if(!groupForm.value.groupName || groupForm.value.groupName === ' ')
+      groupForm.value.groupName = this.showGroup.groupName
+    if(!groupForm.value.description || groupForm.value.description === ' ')
+      groupForm.value.description = this.showGroup.description
+    this._groupService.updateGroup(groupForm.value).subscribe(
+      res => {
+        if(res.message){
+          alert(res.message)
+          this._router.navigate([`/user/${this.user._id}/profile`])
+          this.getUser()
+        }
+        if(res.error) alert(res.error)
+      },
+      err => alert(err.message)
+    )
+  }
 
 }
