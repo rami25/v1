@@ -55,9 +55,12 @@ export const getUserHandler : ExpressHandler<{},{
                      'psts'|
                    'groups'|
                      'grps'|
-      'groupsIdInvitations'|
+         'groupsIdDemandes'|
          'groupsIdRequests'| 
-         'acceptedRequests'>
+         'acceptedRequests'|
+                    'gIdDs'|
+                    'gIdRs'|
+                    'notif'>
 }> = async(req,res) => {
     const userId = res.locals.userId
     const existing = await db.getUserById(userId) 
@@ -73,9 +76,12 @@ export const getUserHandler : ExpressHandler<{},{
             psts : existing.psts,
             groups: existing.groups,
             grps: existing.grps,
-            groupsIdInvitations: existing.groupsIdInvitations,
+            groupsIdDemandes: existing.groupsIdDemandes,
             groupsIdRequests: existing.groupsIdRequests,
-            acceptedRequests: existing.acceptedRequests
+            acceptedRequests: existing.acceptedRequests,
+            gIdDs: existing.gIdDs,
+            gIdRs: existing.gIdRs,
+            notif: existing.notif,
         }
     })   
     res.sendStatus(404)
@@ -106,9 +112,12 @@ SignInResponse
             psts: existing.psts,
             grps: existing.grps,
             groups: existing.groups,
-            groupsIdInvitations: existing.groupsIdInvitations,
+            groupsIdDemandes: existing.groupsIdDemandes,
             groupsIdRequests: existing.groupsIdRequests,
-            acceptedRequests: existing.acceptedRequests
+            acceptedRequests: existing.acceptedRequests,
+            gIdDs: existing.gIdDs,
+            gIdRs: existing.gIdRs,
+            notif: existing.notif,
         },
         jwt,
     })    

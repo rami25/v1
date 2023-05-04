@@ -44,9 +44,9 @@ CreateGroupResponse
     const userId = res.locals.userId
     const { groupName , description } = req.body
     if(!groupName || !description)
-        return res.status(400).send({error:'all fields are required'})
+        return res.status(400).send({message:'all fields are required'})
     if(await db.getGroupByGroupName(groupName))    
-      return res.status(403).send({ error: ERRORS.DUPLICATE_GROUP_NAME });
+      return res.status(403).send({ message: ERRORS.DUPLICATE_GROUP_NAME });
 
     const newGroup: Group = {
         groupName,
@@ -94,7 +94,7 @@ UpdateGroupResponse
     if(!groupId)
         return res.status(403).send({error: 'unauthorized'})
     if(!groupName && !description)    
-        return res.status(403).send({error: 'minimum one field is required'})
+        return res.status(403).send({message: 'minimum one field is required'})
     const group = await db.getGroup(new ObjectId(groupId),userId)    
     if(group){
         if(groupName) {

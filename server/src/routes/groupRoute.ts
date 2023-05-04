@@ -30,7 +30,7 @@ router.delete('/delete-request', jwtParseMiddleware, asyncHandler(deleteSendRequ
 router.delete('/reject-request', jwtParseMiddleware, asyncHandler(rejectRequest))// of user to the group
 router.post('/accept-request', jwtParseMiddleware, asyncHandler(acceptRequest))
 router.post('/invite', jwtParseMiddleware, asyncHandler(inviteTo))
-router.delete('/remove-invitation', jwtParseMiddleware, asyncHandler(removeInvitation))
+router.post('/remove-invitation', jwtParseMiddleware, asyncHandler(removeInvitation))
 router.post('/join', jwtParseMiddleware, asyncHandler(joinGroup))//accept demande
 router.delete('/reject-invitation', jwtParseMiddleware, asyncHandler(deleteInvitation))//as a user
 router.delete('/leave-group', jwtParseMiddleware, asyncHandler(leaveGroup))
