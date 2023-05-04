@@ -43,11 +43,16 @@
         <div class="container" *ngIf="showGroups">
             <div *ngFor="let group of groups">
                 <div class="card">
-                    <a data-toggle="modal" data-target="#showGroup">
-                        <div>{{group._id}}</div>
-                        <div>{{group.groupName}}</div>
-                        <div>{{group.description}}</div>
+                  <div class="in1">
+                    <a routerLink="/group/{{group._id}}" target="_blank">
+                        <div id="Ptitle">{{group.groupName}}</div>
+                        <div><span>Description :</span> {{group.description}}</div>
+                        <div><span>{{group.psts}}</span> (Posts)</div>
+                        <div><span>{{group.users}}</span> (Users)</div>
+                        <div><span>Created At :</span> {{group.createdAt | date:'medium'}}</div>
+                        <div id="author"><span>Admin : </span>{{group.admin}}</div>
                     </a>
+                  </div>
                 </div>
                 <hr>
             </div>

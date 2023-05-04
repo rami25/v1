@@ -32,11 +32,13 @@ export type CreatePostRequest = {
 }
 export interface CreatePostResponse {
     psts : number;
+    gpsts : number;
+    message : string;
 }
 
 export interface DeletePostRequest {
     postId: string;
-    groupId?: string;
+    // groupId?: string;
 }
 export interface DeletePostResponse {
     message?: string;
@@ -74,9 +76,12 @@ export interface SignInResponse {
                      'psts'|
                    'groups'|
                      'grps'|
-      'groupsIdInvitations'|
+         'groupsIdDemandes'|
          'groupsIdRequests'| 
-         'acceptedRequests'>;
+         'acceptedRequests'|
+                    'gIdDs'|
+                    'gIdRs'|
+                    'notif'>;
     jwt: string;
 }
 
@@ -132,8 +137,9 @@ export interface CreateGroupRequest {
     description: string;
 }
 export interface CreateGroupResponse {
-     group: Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'createdAt'>
-     grps : number;
+    group: Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'createdAt'>
+    grps : number;
+    message : string;
 }
 
 export interface DeleteGroupRequest {
@@ -154,7 +160,8 @@ export interface UpdateGroupResponse {
 
 export interface ListGroupsRequest {}// or list group of profile
 export interface ListGroupsResponse {
-    groups : Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'users'|'psts'|'createdAt'>[];
+    // groups : Pick<Group,'_id'|'groupName'|'description'|'userAdmin'|'usersId'|'users'|'psts'|'createdAt'>[];
+    groups : Group[];
 }     
 
 export interface GetGroupRequest {

@@ -39,4 +39,17 @@ export class GroupService {
   }) : Observable<any> {
     return this.http.patch<any>(`${this.apiServerUrl}/groups/update`, groupData)
   }
+  //interact
+  inviteUserToGroup(groupData : {
+    groupId : string,
+    profileId : string
+  }) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/groups/invite`, groupData)
+  }
+  removeUserInvitation(groupData : {
+    groupId : string,
+    profileId : string
+  }) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/groups/remove-invitation`, groupData)
+  }
 }

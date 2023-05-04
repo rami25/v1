@@ -11,6 +11,10 @@ hr{
 span{
     color : rgb(139, 13, 62);
 }
+a{
+    cursor:pointer;
+    text-decoration : none;
+}
 /* /////////////////////////////////// Sources */
 .sourceTitle {
    width: 90%;

@@ -4,6 +4,10 @@
         <hr>
         <div><span class="font-weight-bold font-italic" >Description : </span>{{post.description}}</div>
         <hr>
+        <div *ngIf="post.groupId">
+            <div><span class="font-weight-bold font-italic" >Group Name : </span><a routerLink="/group/{{post.groupId}}" target="_blank">{{post.groupName}}</a></div>
+            <hr>
+        </div>
         <div><span class="font-weight-bold font-italic" >Posted At : </span>{{post.postedAt | date:'medium'}}</div>
         <hr>
     </div>
@@ -130,7 +134,7 @@
          <hr>
          <div *ngFor="let star of stars">
             <h6 class="float-left"> {{star.userName}}</h6>
-            <h6 class="float-right">{{star.likedAt | date : 'medium'}}</h6>
+            <h6 class="float-right">{{star.likedAt | date : 'medium'}}</h6><br><hr>
          </div>
         </div>
      </div>

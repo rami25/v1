@@ -11,9 +11,12 @@ export interface Group {
     posts? : Types.ObjectId[];
     psts? : number;
     createdAt : Date;
-    usersIdInvitations?: Types.ObjectId[];
-    usersIdRequests?: Types.ObjectId[];
+    usersIdDemandes?: Types.ObjectId[];// as an admin
+    uIdDs? : number;
+    usersIdRequests?: Types.ObjectId[];// as a user
+    uIdRs? : number;
     acceptedRequests? : string[];
+    notif? : number;
 }
 
 const groupeSchema = new Schema<Group>({
@@ -52,17 +55,29 @@ const groupeSchema = new Schema<Group>({
         type : Date,
         default : Date.now()
     },
-    usersIdInvitations : [{
+    usersIdDemandes : [{
         type : Types.ObjectId,
         ref: 'UserM'
     }],
+    uIdDs : {
+        type : Number,
+        defautl : 0
+    },
     usersIdRequests : [{
         type : Types.ObjectId,
         ref: 'UserM'
     }],
+    uIdRs : {
+        type : Number,
+        defautl : 0
+    },
     acceptedRequests : [{
         type : String
-    }]
+    }],
+    notif : {
+        type : Number,
+        defautl : 0
+    },
 })
 
 const GroupM = model<Group>('GroupM', groupeSchema)

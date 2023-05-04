@@ -7,7 +7,6 @@ import { GroupService } from 'src/app/services/group/group.service';
 import { NavbarService } from 'src/app/services/navbar/navbar.service';
 import { PostService } from 'src/app/services/post/post.service';
 
-
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -15,6 +14,9 @@ import { PostService } from 'src/app/services/post/post.service';
 })
 export class ProfileComponent implements OnInit {
   user! : User;
+  showUser! : User;
+  users : User[] = [];
+  searchResult : User[] = [];
   posts! : Post[];
   showPost! :Post;
   postStars! : Like[];
@@ -104,9 +106,12 @@ export class ProfileComponent implements OnInit {
   clear(){
     const updateForm = document.getElementById('updateForm') as HTMLFormElement
     updateForm.reset()
+    // this.resetLinks()
+    // this.resetFiles()
     this.showComments = false
     this.showNewComment = false
     this.isComment = false
+    this.openGPost = false
   }
   getPosts() {
     // this._postService.getUserPosts(this.user._id!.toString())
@@ -146,6 +151,8 @@ export class ProfileComponent implements OnInit {
     )
   }
   catchPost(post: Post){
+    this.resetLinks()
+    this.resetFiles()
     this.showPost = post;
     if(post.urls.length !== 0)
       this.reverseCloneLinks(post.urls)
@@ -182,6 +189,8 @@ export class ProfileComponent implements OnInit {
           this._router.navigate([`/user/${this.user._id}/profile`])
           // this.navbarService.psts = res.psts
           this.getUser()
+          this.getGroups()
+          document.getElementById('closeGroupModal')?.click()
         }
         if(res.error) alert(res.error)
       },
@@ -263,16 +272,17 @@ export class ProfileComponent implements OnInit {
   links: string[] = []
   showedLinks : any[] = []
   i: number = 0
-  @ViewChild('link') link!: ElementRef;
+  @ViewChild('ulink') ulink!: ElementRef;
   appendLinksList(){
-    const val = this.link.nativeElement.value
+    const val = this.ulink.nativeElement.value
+    console.log('link : ',val)
     if(val !== ''){
       const exist = this.showedLinks.find(l => { return l.value === val})
       if(exist) alert('this link is already exist')
       else {
-        this.showedLinks.push({key : this.i , value : this.link.nativeElement.value })
+        this.showedLinks.push({key : this.i , value : this.ulink.nativeElement.value })
         this.i+=1
-        this.link.nativeElement.value = '';
+        this.ulink.nativeElement.value = '';
       }
     }
   }
@@ -300,6 +310,7 @@ export class ProfileComponent implements OnInit {
   resetLinks(){
     this.links = []
     this.showedLinks = []
+    this.i = 0;
   }
   cloneLinks(){
     for(let Link of this.showedLinks)
@@ -319,16 +330,16 @@ export class ProfileComponent implements OnInit {
   files: string[] = []
   showedFiles : any[] = []
   j: number = 0
-  @ViewChild('file') file!: ElementRef;
+  @ViewChild('ufile') ufile!: ElementRef;
   appendFilesList(){
-    const val = this.file.nativeElement.value
+    const val = this.ufile.nativeElement.value
     if(val !== ''){
       const exist = this.showedFiles.find(f => { return f.value === val})
       if(exist) alert('this file is already exist')
       else {
         this.showedFiles.push({key : this.j , value : val})
         this.j+=1
-        this.file.nativeElement.value = '';
+        this.ufile.nativeElement.value = '';
       }
     }
   }
@@ -344,6 +355,7 @@ export class ProfileComponent implements OnInit {
   resetFiles(){
     this.files = []
     this.showedFiles = []
+    this.j = 0;
   }
   cloneFiles(){
     for(let File of this.showedFiles)
@@ -369,7 +381,7 @@ export class ProfileComponent implements OnInit {
     postData.value.urls = this.links
     postData.value.files = this.files
     postData.value.postId = this.showPost._id
-    // console.log(postData.value)
+    console.log('update-post :' ,postData.value)
     this._postService.updatePost(postData.value)
     .subscribe(
       res => {
@@ -377,6 +389,7 @@ export class ProfileComponent implements OnInit {
           alert(res.message)
           this._router.navigate([`/user/${this.user._id}/profile`])
           this.getUser()
+          document.getElementById('closeGroupModal')?.click()
         }
         if(res.error) alert(res.error)
       },
@@ -391,6 +404,8 @@ export class ProfileComponent implements OnInit {
   }
 ///////////////////////////////////////////// Groups
   clearGroup(){
+    const updateGroup = document.getElementById('updateGroupForm') as HTMLFormElement
+    updateGroup.reset()
     this.groupUsers = []
     this.groupPosts = []
     this.showGroupPosts = false;
@@ -401,10 +416,14 @@ export class ProfileComponent implements OnInit {
         res=> this.groups = res.groups,
         err => alert(err.message))
   }
+  nGroupPost : number = 0
   getGroupPosts() {
     this._postService.listGroupPosts(this.showGroup._id!.toString())
     .subscribe(
-        res=> this.groupPosts = res.posts,
+        res=> {
+          this.groupPosts = res.posts
+          this.nGroupPost = this.groupPosts.length
+        },
         err => alert(err.message))
   }
   listGroupUsers(){
@@ -420,6 +439,8 @@ export class ProfileComponent implements OnInit {
   }
   catchGroup(group : Group){
     this.showGroup = group
+    this.nGroupPost = this.showGroup.psts!
+    // this.listGroupUsers()
   }
   showGroups = false;
   toggleGroups() {
@@ -456,7 +477,9 @@ export class ProfileComponent implements OnInit {
     this._groupService.updateGroup(groupForm.value).subscribe(
       res => {
         if(res.message){
+          document.getElementById('update-group')?.click()
           alert(res.message)
+          document.getElementById('closeGroupModal')?.click()
           this._router.navigate([`/user/${this.user._id}/profile`])
           this.getUser()
         }
@@ -465,5 +488,131 @@ export class ProfileComponent implements OnInit {
       err => alert(err.message)
     )
   }
+
+  createGroupPost(postData : NgForm){
+    document.getElementById('create-group-post')?.click()
+    this.cloneLinks()
+    this.cloneFiles()
+    postData.value.urls = this.links
+    postData.value.files = this.files
+    postData.value.groupId = this.showGroup._id
+    console.log(postData.value)
+    this._postService.createPost(postData.value)
+    .subscribe(
+      res => {
+        if(res.message) alert(res.message)
+        if(res.gpsts) this.nGroupPost = res.gpsts
+        this.navbarService.psts = res.psts
+        this.getGroupPosts()
+        // this._router.navigate([`/user/${this.user._id}/profile`])
+        this.getUser()
+        const createPostForm = document.getElementById('createPostForm') as HTMLFormElement
+        createPostForm.reset()
+        this.resetLinks()
+        this.resetFiles()
+      },
+      err => alert(err.message)
+    )
+  }
+  checkUserPost(post : Post) : boolean {
+    return post.userId === this.user._id
+  }
+  openGPost = false
+  openGroupPost(post : Post){
+    this.clear()
+    this.openGPost = true
+    this.catchPost(post)
+    console.log('post :', post)
+    document.getElementById('openPost')?.click()
+  }
+
+  listUsers(){
+    this._auth.listUsers()
+    .subscribe(
+      res => {
+        this.users = res.users
+      }
+    )
+  }
+  ///////////////////// interact
+  isResult = false
+  searchUser(key : string){
+    if(key === ''){
+      this.isResult = false
+      this.searchResult = []
+      return
+    }
+    const results = this.getResult(key)
+    if(results.length !== 0){
+      this.searchResult = results
+      this.isResult = true
+    }
+  }
+
+  getResult(query : string){
+    let results: User[] = []
+    results = this.users.filter(item => item.userName!.toLowerCase().includes(query.toLowerCase()))
+    return results
+  }
+
+  notBelongToGroup(user : User) : boolean {
+    for(let uId of this.showGroup.usersId!){
+      if(uId === user._id)
+        return false
+    }
+    return true
+  }
+
+  catchUser(user : User){
+    this.showUser = user
+  }
+
+  checkUserInvitation(user : User) : boolean {
+    // console.log('user :', user.userName)
+    // console.log('group req : ', this.showGroup.usersIdRequests)
+    for(let uId of this.showGroup.usersIdRequests!){
+      // console.log('userId : ' , uId)
+      // console.log('compare : ', uId === user._id)
+      if(uId === user._id)
+        return false
+    }
+    return true
+  }
+
+  inviteUserToGroup(user : User){
+    this._groupService.inviteUserToGroup({groupId : this.showGroup._id!.toString(), profileId : user._id!.toString()}).subscribe(
+      res => {
+      }
+    )
+  }
+
+
+
+
+  removeUserFromGroup(user : User){
+    this._groupService.removeUserInvitation({groupId : this.showGroup._id!.toString(), profileId : user._id!.toString()}).subscribe(
+      res => {
+      }
+    )
+  }
+
+  rejectUserFromGroup(user : User){
+
+  }
+
+  
+
+
+  // removeUserId(user : User){
+  //   for (let i = 0; i < this.usersRequestsCache.length; i++) {
+  //     if (this.usersRequestsCache[i] === user._id) {
+  //       this.usersRequestsCache.splice(i, 1);
+  //       break;
+  //     }
+  //   }
+  // }
+
+
+
 
 }

@@ -212,14 +212,15 @@ export class AppComponent implements OnInit{
     this._postService.createPost(postData.value)
     .subscribe(
       res => {
+        if(res.message) alert(res.message)
         this.navbarService.psts = res.psts
+        const updateForm = document.getElementById('createPostForm') as HTMLFormElement
+        updateForm.reset()
+        this.resetLinks()
+        this.resetFiles()
       },
       err => alert(err.message)
     )
-    const updateForm = document.getElementById('createPostForm') as HTMLFormElement
-    updateForm.reset()
-    this.resetLinks()
-    this.resetFiles()
   }
 
   ///////////////////////////////////////// Group
@@ -229,6 +230,7 @@ export class AppComponent implements OnInit{
     this._groupService.createGroup(groupData.value)
     .subscribe(
       res => {
+        if(res.message) alert(res.message)
         this.navbarService.grps = res.grps
       },
       err => alert(err.message)

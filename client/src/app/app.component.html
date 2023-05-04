@@ -26,7 +26,32 @@
     </ul>
     <ul class="navbar-nav">
         <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/log-in" routerLinkActive="active">Log in</a>
-        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up/ " routerLinkActive="active">Sign up</a>
+        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up/ " routerLinkActive="active" style="margin-right:-120px">Sign up</a>
+
+        <li class="nav-item dropdown create">
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Invitations</a>        
+           <div class="dropdown-menu interact" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
+               <a class="dropdown-item" data-toggle="modal" data-target="#createPost">Post</a>
+               <a class="dropdown-item" data-toggle="modal" data-target="#createGroup">Group</a>
+           </div>
+        </li>
+
+        <li class="nav-item dropdown create">
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Requests</a>        
+           <div class="dropdown-menu interact" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
+               <a class="dropdown-item" data-toggle="modal" data-target="#createPost">Post</a>
+               <a class="dropdown-item" data-toggle="modal" data-target="#createGroup">Group</a>
+           </div>
+        </li>
+
+        <li class="nav-item dropdown create">
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications</a>        
+           <div class="dropdown-menu interact" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
+               <a class="dropdown-item" data-toggle="modal" data-target="#createPost">Post</a>
+               <a class="dropdown-item" data-toggle="modal" data-target="#createGroup">Group</a>
+           </div>
+        </li>
+
         <li class="nav-item dropdown create">
           <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create +</a>        
            <div class="dropdown-menu userMenu" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
@@ -37,7 +62,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{userName}}</a>        
   
-           <div class="dropdown-menu userMenu" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
+           <div class="dropdown-menu userMenu" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()" style="margin-left:-100px">
                <a class="dropdown-item">{{userName}}</a>
                <a class="dropdown-item">{{email}}</a>
                <hr>

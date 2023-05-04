@@ -11,9 +11,14 @@ export interface User {
     psts? : number;
     groups?: Types.ObjectId[];
     grps? : number;
-    groupsIdInvitations? : Types.ObjectId[];
-    groupsIdRequests? : Types.ObjectId[];
+    //interact
+    groupsIdDemandes? : Types.ObjectId[];// as a User
+    gIdDs? : number;
+    groupsIdRequests? : Types.ObjectId[];//as an admin
+    gIdRs? : number;
     acceptedRequests? : string[];
+    notif? : number;
+    //reset password
     resetPasswordToken? : string;
     resetPasswordExpires?: number;
 }
@@ -54,17 +59,29 @@ const userSchema = new Schema<User>({
         type : Number,
         default : 0
     },
-    groupsIdInvitations : [{
+    groupsIdDemandes : [{
         type : Types.ObjectId,
         ref : 'GroupM'
     }],
+    gIdDs : {
+        type : Number,
+        default : 0
+    },
     groupsIdRequests : [{
         type : Types.ObjectId,
         ref : 'GroupM'
     }],
+    gIdRs : {
+        type : Number,
+        default : 0
+    },
     acceptedRequests : [{
         type : String
     }],
+    notif : {
+        type : Number,
+        default : 0
+    },
     //reset password
     resetPasswordToken : {
         type : String
