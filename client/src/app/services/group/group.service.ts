@@ -40,6 +40,7 @@ export class GroupService {
     return this.http.patch<any>(`${this.apiServerUrl}/groups/update`, groupData)
   }
   //interact
+    // admin
   inviteUserToGroup(groupData : {
     groupId : string,
     profileId : string
@@ -51,5 +52,15 @@ export class GroupService {
     profileId : string
   }) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/groups/remove-invitation`, groupData)
+  }
+    // user
+  sendGroupRequest(groupData : {groupId : string}) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/groups/send-request`, groupData)
+  }
+  cancelGroupRequest(groupData : {groupId : string}) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/groups/delete-request`, groupData)
+  }
+  leaveGroup(groupData : {groupId : string}) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/groups/leave-group`, groupData)
   }
 }

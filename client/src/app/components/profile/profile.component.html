@@ -165,7 +165,7 @@
                <div class="container mt-1" *ngIf="isResult">
                   <div *ngFor="let user of searchResult">
                      <a *ngIf="notBelongToGroup(user)" (click)="catchUser(user)" data-toggle="modal" data-target="#showUser">
-                        <div class="userResult">{{user.userName}}<span *ngIf="!checkUserInvitation(user)" class="text-green float-right" style="padding-right:5px">invited</span><span *ngIf="checkUserInvitation(user)" class="text-red float-right" style="padding-right:5px">invite</span></div>
+                        <div class="userResult">{{user.userName}}<span *ngIf="!checkUserInvitation(user)" class="float-right" style="padding-right:5px; color : green">invited</span><span *ngIf="checkUserInvitation(user)" class="text-red float-right" style="padding-right:5px">invite</span></div>
                      </a>
                   </div>
                </div>
@@ -185,7 +185,8 @@
            </button>
         </div>
         <div class="modal-body" style="text-align:center">
-            <button class="btn btn-outline-success inviteButton">invite</button>
+            <button *ngIf="invite" class="btn btn-outline-success inviteButton" (click)="inviteUserToGroup()">invite</button>
+            <button *ngIf="!invite" class="btn btn-outline-danger inviteButton" (click)="removeGroupRequest()">remove request</button>
         </div>
      </div>
   </div>

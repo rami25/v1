@@ -171,7 +171,7 @@ SendGroupResponse
         const group = await db.getGroup(new ObjectId(groupId))
         if(group){
             await db.sendGroupRequest(new ObjectId(groupId), userId)
-            return res.sendStatus(200)
+            return res.status(200).send({message : 'request sent seccessfully'})
         }
         return res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
     }
@@ -189,7 +189,7 @@ DeleteSendResponse
     const group = await db.getGroup(new ObjectId(groupId))
     if(group){
         await db.deleteSendGroupRequest(new ObjectId(groupId), userId)
-        res.sendStatus(200)
+        res.status(200).send({message : 'request canceled seccessfully'})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
@@ -238,7 +238,7 @@ InviteToResponse
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
         await db.inviteUserToGroup(new ObjectId(groupId) , new ObjectId(profileId))
-        return res.sendStatus(200)
+        return res.status(200).send({message : 'user invited successfully'})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
@@ -254,7 +254,7 @@ RemoveInvitationResponse
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
         await db.deleteInvitationUserToGroup(new ObjectId(groupId), new ObjectId(profileId))
-        return res.sendStatus(200)
+        return res.status(200).send({message : 'request removed successfully'})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
@@ -303,7 +303,7 @@ LeaveGroupResponse
     const group = await db.getGroup(new ObjectId(groupId))
     if(group){
         await db.leaveGroup(new ObjectId(groupId), userId)
-        return res.sendStatus(200)
+        return res.status(200).send({message : `you leaved ${group.groupName} group`})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }

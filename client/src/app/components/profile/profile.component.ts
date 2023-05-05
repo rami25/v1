@@ -565,6 +565,7 @@ export class ProfileComponent implements OnInit {
 
   catchUser(user : User){
     this.showUser = user
+    this.invite = this.checkUserInvitation(user)? true : false
   }
 
   checkUserInvitation(user : User) : boolean {
@@ -573,15 +574,20 @@ export class ProfileComponent implements OnInit {
     for(let uId of this.showGroup.usersIdRequests!){
       // console.log('userId : ' , uId)
       // console.log('compare : ', uId === user._id)
-      if(uId === user._id)
+      if(uId === user._id){
         return false
+      }
     }
     return true
   }
-
-  inviteUserToGroup(user : User){
-    this._groupService.inviteUserToGroup({groupId : this.showGroup._id!.toString(), profileId : user._id!.toString()}).subscribe(
+  invite = true
+  inviteUserToGroup(){
+    this._groupService.inviteUserToGroup({groupId : this.showGroup._id!.toString(), profileId : this.showUser._id!.toString()}).subscribe(
       res => {
+        if(res.message) alert(res.message)
+        if(res.error) alert(res.error)
+        this.showGroup.usersIdRequests!.push(this.showUser._id!)
+        this.invite = !this.invite
       }
     )
   }
@@ -589,9 +595,14 @@ export class ProfileComponent implements OnInit {
 
 
 
-  removeUserFromGroup(user : User){
-    this._groupService.removeUserInvitation({groupId : this.showGroup._id!.toString(), profileId : user._id!.toString()}).subscribe(
+  removeGroupRequest(){
+    this._groupService.removeUserInvitation({groupId : this.showGroup._id!.toString(), profileId : this.showUser._id!.toString()}).subscribe(
       res => {
+        if(res.message) alert(res.message)
+        if(res.error) alert(res.error)
+        if(this.showGroup.usersIdRequests!.length !== 0)
+          this.removeUserId(this.showUser)
+        this.invite = !this.invite
       }
     )
   }
@@ -603,14 +614,14 @@ export class ProfileComponent implements OnInit {
   
 
 
-  // removeUserId(user : User){
-  //   for (let i = 0; i < this.usersRequestsCache.length; i++) {
-  //     if (this.usersRequestsCache[i] === user._id) {
-  //       this.usersRequestsCache.splice(i, 1);
-  //       break;
-  //     }
-  //   }
-  // }
+  removeUserId(user : User){
+    for (let i = 0; i < this.showGroup.usersIdRequests!.length; i++) {
+      if (this.showGroup.usersIdRequests![i] === user._id) {
+        this.showGroup.usersIdRequests!.splice(i, 1);
+        break;
+      }
+    }
+  }
 
 
 

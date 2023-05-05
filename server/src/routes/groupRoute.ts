@@ -26,13 +26,13 @@ router.post('/create', jwtParseMiddleware, asyncHandler(createGroup))// as an ad
 router.post('/delete', jwtParseMiddleware, asyncHandler(deleteGroup))
 router.patch('/update', jwtParseMiddleware, asyncHandler(updateGroup))//users , groupName , description
 router.post('/send-request', jwtParseMiddleware, asyncHandler(sendRequest))// to the group
-router.delete('/delete-request', jwtParseMiddleware, asyncHandler(deleteSendRequest))// as user
-router.delete('/reject-request', jwtParseMiddleware, asyncHandler(rejectRequest))// of user to the group
+router.post('/delete-request', jwtParseMiddleware, asyncHandler(deleteSendRequest))// as user
+router.post('/reject-request', jwtParseMiddleware, asyncHandler(rejectRequest))// of user to the group
 router.post('/accept-request', jwtParseMiddleware, asyncHandler(acceptRequest))
 router.post('/invite', jwtParseMiddleware, asyncHandler(inviteTo))
 router.post('/remove-invitation', jwtParseMiddleware, asyncHandler(removeInvitation))
 router.post('/join', jwtParseMiddleware, asyncHandler(joinGroup))//accept demande
 router.delete('/reject-invitation', jwtParseMiddleware, asyncHandler(deleteInvitation))//as a user
-router.delete('/leave-group', jwtParseMiddleware, asyncHandler(leaveGroup))
+router.post('/leave-group', jwtParseMiddleware, asyncHandler(leaveGroup))
 router.delete('/reject-user', jwtParseMiddleware, asyncHandler(rejectUser))
 module.exports = router

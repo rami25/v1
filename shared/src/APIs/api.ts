@@ -174,12 +174,16 @@ export interface GetGroupResponse {
 export interface SendGroupRequest {
     groupId : string;
 }
-export interface SendGroupResponse {}     
+export interface SendGroupResponse {
+    message : string;
+}     
 
 export interface DeleteSendRequest {
     groupId: string;
 }     
-export interface DeleteSendResponse {}     
+export interface DeleteSendResponse {    
+    message : string;
+}
 
 export interface RejectRequest {
     groupId: string;
@@ -197,13 +201,17 @@ export interface InviteToRequest {
     groupId: string;
     profileId: string;
 }
-export interface InviteToResponse {}     
+export interface InviteToResponse {
+    message : string;
+}     
 
 export interface RemoveInvitationRequest {
     groupId: string;
     profileId: string;
 }     
-export interface RemoveInvitationResponse {}
+export interface RemoveInvitationResponse {
+    message : string;
+}
 
 export interface DeleteInvitationRequest {
     groupId: string;
@@ -218,7 +226,9 @@ export interface JoinGroupResponse {}
 export interface LeaveGroupRequest {
     groupId: string;
 }
-export interface LeaveGroupResponse {}     
+export interface LeaveGroupResponse {
+    message : string;
+}     
 
 export interface RejectUserRequest {
     groupId: string;
