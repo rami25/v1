@@ -129,21 +129,23 @@
   </div>
 
 <!-- show groupMembers Modal -->
-<div class="modal fade mt-4" id="groupMembers" tabindex="-1" role="dialog" aria-labelledby="deletePostModelLabel" aria-hidden="true">
+<div class="modal fade mt-4" id="groupMembers" tabindex="-1" role="dialog" aria-labelledby="groupMembersPostModelLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
      <div class="modal-content">
         <div class="modal-header">
-           <h5 class="modal-title" id="deletePostModelLabel">Group Members</h5>
+           <h5 class="modal-title" id="groupMembersModelLabel">Group Members</h5>
            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
            <span aria-hidden="true">&times;</span>
            </button>
         </div>
         <div class="modal-body">
+          <div>
             <h4 *ngFor="let user of groupUsers">
                <a routerLink="/user/{{user._id}}" target="_blank">
                     {{user.userName}}
-                </a><span class="admin float-right" *ngIf="showGroup.userAdmin === user._id">Admin</span>
-            </h4><hr>
+               </a><span class="admin float-right" *ngIf="showGroup.userAdmin === user._id">Admin</span><hr>
+            </h4>
+          </div>
         </div>
      </div>
   </div>

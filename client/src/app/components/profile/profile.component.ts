@@ -25,8 +25,8 @@ export class ProfileComponent implements OnInit {
   comment! : Comment;
   groups! : Group[];
   showGroup! : Group;
-  groupUsers : User[] = []
-  groupPosts! : Post[]
+  groupUsers! : User[];
+  groupPosts! : Post[];
   meta!: string;
   getUser(){
     this._auth.getUserById()
@@ -413,7 +413,9 @@ export class ProfileComponent implements OnInit {
   getGroups() {
     this._groupService.getUserGroups()
     .subscribe(
-        res=> this.groups = res.groups,
+        res=> {
+          this.groups = res.groups
+        },
         err => alert(err.message))
   }
   nGroupPost : number = 0
@@ -428,14 +430,20 @@ export class ProfileComponent implements OnInit {
   }
   listGroupUsers(){
     this.groupUsers = []
-    for(let userId of this.showGroup.usersId!){
-      this._auth.openUser(userId.toString()).subscribe(
-        res => {
-          this.groupUsers.push(res.user)
-        },
-        err => alert(err.message)
-      )
-    }
+    this._auth.listGroupUsers(this.showGroup._id!.toString()).subscribe(
+      res => {
+        this.groupUsers = res.users
+        console.log('group users : ', this.groupUsers)
+      },err => alert(err.message)
+    )
+    // for(let userId of this.showGroup.usersId!){
+    //   this._auth.openUser(userId.toString()).subscribe(
+    //     res => {
+    //       this.groupUsers.push(res.user)
+    //     },
+    //     err => alert(err.message)
+    //   )
+    // }
   }
   catchGroup(group : Group){
     this.showGroup = group

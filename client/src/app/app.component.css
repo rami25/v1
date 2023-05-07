@@ -56,6 +56,44 @@ a{
   border-radius: 0.25rem;
   text-align: center;
 }
+#nRequests {
+ height : 6px;
+ padding-right : 4px;
+ padding-left : 4px;
+ border : solid 1px red;
+ border-radius : 16px;
+ color:red;
+ font-weight : bold;
+ background-color:white 
+}
+.requests{
+  width : 200px;
+  margin-left:-55px;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  border-radius: 0.25rem;
+  text-align: left;
+  max-height : 400px;
+  overflow-y : auto;
+}
+.request{
+  border-bottom : solid 2px #343a40;
+  padding-left : 7px;
+  padding-top : 5px;
+}
+.request:hover {
+  background-color: rgb(198, 226, 235);
+}
+
+/* .reqButton {
+  height : 10px;
+  padding-bottom : 20px;
+  margin-right : 5px;
+} */
+#reqButton:hover {
+  text-decoration : underline;
+}
+
 .dropdown-menu{
   background-color : #fff;
 }
@@ -63,8 +101,6 @@ a{
   background-color: gray;
 }
 .create{
-  /* display : float;
-  right : 30px; */
   margin-right:30px;
 }
 

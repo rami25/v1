@@ -15,7 +15,7 @@ export class MongoDB implements DataStore {
     }
 
     async listUsers(): Promise<Partial<User>[] | undefined> {
-        return await UserM.find({},{userName: 1 , email: 1, description : 1, createdAt: 1, psts: 1}) || undefined
+        return await UserM.find({},{userName: 1 , email: 1, description : 1, createdAt: 1, psts: 1, grps : 1}) || undefined
     }
 
     async createUser(user: User): Promise<User> {
@@ -199,6 +199,13 @@ export class MongoDB implements DataStore {
     async listUserGroups(userId: Types.ObjectId) : Promise<Group[] | undefined> {
         return await GroupM.find({ usersId : { $in:[userId]}}) || undefined
     }
+    async listGroupUsers(groupId: Types.ObjectId) : Promise<User[] | undefined> {
+        return await UserM.find({ groups : { $in:[groupId]}}) || undefined
+    }
+
+    async listAdminGroups(userId: Types.ObjectId) : Promise<Group[] | undefined> {
+        return await GroupM.find({ userAdmin : userId}) || undefined
+    }
 
     async getGroup(id: Types.ObjectId, userId?: Types.ObjectId): Promise<Group | undefined> {
         if(!userId)
@@ -260,15 +267,23 @@ export class MongoDB implements DataStore {
     async notification(id : Types.ObjectId, profileId : Types.ObjectId, target:boolean) : Promise<void> {
         const group = await this.getGroup(id)
         const user = await this.getUserById(profileId)
-        if(target){
-            const message = `hi ${user!.userName}, you have accepted in ${group!.groupName} group`
-            user!.acceptedRequests?.push(message)
-            await UserM.findByIdAndUpdate(profileId , user , {new : true})
-            return
+        if(user && group){
+            if(target){//admin accept user
+                const message1 = `You have accepted in "${group.groupName}" group`
+                const message2 = `"${user!.userName}" has been a member in "${group.groupName}" group`
+                // user!.acceptedRequests?.push(message)
+                await UserM.findByIdAndUpdate(profileId , {$push : {acceptedRequests : message1}, $inc : {notif : 1}})
+                for(let uId of group.usersId!){
+                    console.log(uId === group.userAdmin) 
+                    if((uId === group.userAdmin) || (uId === profileId)) continue
+                    await UserM.findByIdAndUpdate(uId , {$push : {acceptedRequests : message2}, $inc : {notif : 1}})
+                }
+                return
+            }
+            const message = `"${user!.userName}" accepted your invitation to "${group.groupName}" group`
+            // group!.acceptedRequests?.push(message)
+            await GroupM.findByIdAndUpdate(id , {$push : {acceptedRequests : message}, $inc : {notif : 1}})
         }
-        const message = `hi ${group!.groupName}, ${user!.userName} have been a member of ${group!.groupName} group`
-        group!.acceptedRequests?.push(message)
-        await GroupM.findByIdAndUpdate(id , group , {new : true})
     }
 
 

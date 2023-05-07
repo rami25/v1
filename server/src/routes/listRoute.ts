@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler';
 import { Router } from "express"
 import { countPostsHandler, getPostHandler, listPostsHandler } from '../handlers/postHandler';
 import { countUserHandler, listUserHandler, openUserHandler } from '../handlers/authHandler';
-import { countGroups, getGroupHandler, listGroups, listUserGroups } from '../handlers/groupHandler';
+import { countGroups, getGroupHandler, listGroupUsers, listGroups, listUserGroups } from '../handlers/groupHandler';
 import { countComments, listComments } from '../handlers/commentHandler';
 import { countCommentLikes, countPostLikes, listCommentLikes, listPostLikes } from '../handlers/likeHandler';
 
@@ -15,6 +15,7 @@ router.get('/count-posts', asyncHandler(countPostsHandler))
 router.get('/list-users', asyncHandler(listUserHandler))
 router.get('/count-users', asyncHandler(countUserHandler))
 router.get('/list-user-groups/:id', asyncHandler(listUserGroups))
+router.get('/list-group-users/:groupId', asyncHandler(listGroupUsers))
 router.get('/list-groups', asyncHandler(listGroups))
 router.get('/count-groups', asyncHandler(countGroups))
 router.post('/list-comments', asyncHandler(listComments))

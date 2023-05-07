@@ -37,18 +37,30 @@
         </li>
 
         <li class="nav-item dropdown create">
-          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Requests</a>        
-           <div class="dropdown-menu interact" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
-               <a class="dropdown-item" data-toggle="modal" data-target="#createPost">Post</a>
-               <a class="dropdown-item" data-toggle="modal" data-target="#createGroup">Group</a>
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span *ngIf="nRequests !== 0" id="nRequests">{{nRequests}}</span> Requests</a>        
+           <div class="dropdown-menu requests" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
+            <div *ngIf="nRequests !== 0">
+              <div *ngFor="let request of usersRequests" class="request">
+                  "<a routerLink="/user/{{request.userId}}" target="_blank" style="color:rgb(95, 41, 41)"><b>{{request.userName}}</b></a>" sent request to join "<a routerLink="/group/{{request.groupId}}" target="_blank" style="color:rgb(98, 98, 179)"><b>{{request.groupName}}</b></a>" group
+                  <br>
+                  <div style="margin-top : 5px; margin-bottom : 30px">
+                     <a (click)="acceptUserRequest(request)" class="float-left" id="reqButton" style="color:green;margin-left:20px">accept </a> <a (click)="deleteUserRequest(request)" class="float-right" id="reqButton" style="color:red;margin-right:20px">delete</a>
+                  </div>
+              </div>
+            </div>
+            <div *ngIf="nRequests === 0" style="text-align: center">No Requests...</div>
            </div>
         </li>
 
         <li class="nav-item dropdown create">
-          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Notifications</a>        
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span *ngIf="notif !== 0" id="nRequests">{{nRequests}}</span> Notifications</a>        
            <div class="dropdown-menu interact" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
-               <a class="dropdown-item" data-toggle="modal" data-target="#createPost">Post</a>
-               <a class="dropdown-item" data-toggle="modal" data-target="#createGroup">Group</a>
+             <div *ngIf="notifications.length !== 0">
+               <div *ngFor="let not of notifications" class="request">
+                  <p>{{not}}</p>
+               </div>
+              </div>
+              <div *ngIf="notifications.length === 0">No Notifications</div>
            </div>
         </li>
 
@@ -82,7 +94,7 @@
             <div *ngIf="filter === 'Post' && isResults">
             <div *ngFor="let post of results" class="searchInfo">
                <a routerLink="/post/{{post._id}}" target="_blank">
-                  <div style="color:rgb(95, 41, 41)"><b>{{post.title}}</b></div>
+                  <div style="color:rgb(95, 41, 41)"><b>{{post.title}}</b> | {{post.lks}} stars , {{post.cmnts}} comments</div>
                   {{post.description.replace('\n', ' ')}} 
                </a>
             </div>
@@ -90,7 +102,7 @@
             <div *ngIf="filter === 'User' && isResults">
             <div *ngFor="let user of results" class="searchInfo">
                <a routerLink="/user/{{user._id}}" target="_blank">
-                  <div style="color:rgb(95, 41, 41)"><b>{{user.userName}}</b></div>
+                  <div style="color:rgb(95, 41, 41)"><b>{{user.userName}}</b> | {{user.psts}}  posts , {{user.grps}} groups</div>
                   {{user.description}}
                </a>
             </div>
@@ -98,7 +110,7 @@
             <div *ngIf="filter === 'Group' && isResults">
             <div *ngFor="let group of results"  class="searchInfo">
                <a routerLink="/group/{{group._id}}" target="_blank">
-                  <div style="color:rgb(95, 41, 41)"><b>{{group.groupName}}</b></div>
+                  <div style="color:rgb(95, 41, 41)"><b>{{group.groupName}}</b> | {{group.users}} members , {{group.psts}} posts</div>
                   {{group.description}}
                </a>
             </div>

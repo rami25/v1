@@ -20,6 +20,9 @@ export class GroupService {
   getUserGroups() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/groups/list-shared-groups`)
   }
+  listAdminGroups() : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/groups/get-group/all`)
+  }
   openUserGroups(userId : string) : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/list-user-groups/${userId}`)
   }
@@ -52,6 +55,18 @@ export class GroupService {
     profileId : string
   }) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/groups/remove-invitation`, groupData)
+  }
+  acceptUserRequest(groupData : {
+    groupId : string,
+    profileId : string
+  }) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/groups/accept-request`, groupData)
+  }
+  deleteUserRequest(groupData : {
+    groupId : string,
+    profileId : string
+  }) : Observable<any> {
+    return this.http.post<any>(`${this.apiServerUrl}/groups/reject-request`, groupData)
   }
     // user
   sendGroupRequest(groupData : {groupId : string}) : Observable<any> {

@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+interface userRequest {
+  userId : any;
+  userName : string;
+  groupId : any;
+  groupName : string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +18,11 @@ export class NavbarService {
   private _description = new BehaviorSubject<string>('');
   private _psts = new BehaviorSubject<number>(0);
   private _grps = new BehaviorSubject<number>(0);
+  private _notif = new BehaviorSubject<number>(0);
+  private _notifications = new BehaviorSubject<string[]>([]);
+  //userRequests
+  private _usersRequests = new BehaviorSubject<userRequest[]>([]);
+  private _nRequests = new BehaviorSubject<number>(0);
 
   _id$ = this._id.asObservable();
   _userName$ = this._userName.asObservable();
@@ -18,6 +30,11 @@ export class NavbarService {
   _description$ = this._description.asObservable();
   _psts$ = this._psts.asObservable();
   _grps$ = this._grps.asObservable();
+  _notif$ = this._notif.asObservable();
+  _notifications$ = this._notifications.asObservable();
+  ///userRequests
+  _usersRequests$ = this._usersRequests.asObservable();
+  _nRequests$ = this._nRequests.asObservable();
   
   ////////////////////////// userId
   set id(id: string) {
@@ -67,5 +84,37 @@ export class NavbarService {
 
   get grps(): number {
     return this._grps.value;
+  }
+  ///////////////////////////////////////// Notifications
+  set notif(notif: number) {
+    this._notif.next(notif);
+  }
+
+  get notif(): number {
+    return this._notif.value;
+  }
+  set notifications(notifications: string[]) {
+    this._notifications.next(notifications);
+  }
+
+  get notifictions(): string[] {
+    return this._notifications.value;
+  }
+
+
+  ///////////////////////////////////////////////////// User Requests
+  set nRequests(n: number) {
+    this._nRequests.next(n);
+  }
+
+  get nRequests(): number {
+    return this._nRequests.value;
+  }
+  set usersRequests(usersRequests: userRequest[]) {
+    this._usersRequests.next(usersRequests);
+  }
+
+  get usersRequests(): userRequest[] {
+    return this._usersRequests.value;
   }
 }

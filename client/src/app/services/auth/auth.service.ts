@@ -16,6 +16,9 @@ export class AuthService {
   listUsers() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/list-users`)
   }
+  listGroupUsers(groupId : string) : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/list-group-users/${groupId}`)
+  }
   getUserById() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/users/get-by-id`)
   }

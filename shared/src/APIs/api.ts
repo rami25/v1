@@ -169,6 +169,7 @@ export interface GetGroupRequest {
 }
 export interface GetGroupResponse {
     adminGroup : Group;
+    groups : Group[];
 }     
 
 export interface SendGroupRequest {
@@ -189,13 +190,17 @@ export interface RejectRequest {
     groupId: string;
     profileId: string;
 }     
-export interface RejectResponse {}     
+export interface RejectResponse {
+    message : string;
+}     
 
 export interface AcceptRequest {
     groupId : string;
     profileId : string;
 }     
-export interface AcceptResponse {}     
+export interface AcceptResponse {
+    message : string;
+}     
 
 export interface InviteToRequest {
     groupId: string;
@@ -221,7 +226,9 @@ export interface DeleteInvitationResponse {}
 export interface JoinGroupRequest {
     groupId : string;
 }
-export interface JoinGroupResponse {}     
+export interface JoinGroupResponse {
+    message : string;
+}     
 
 export interface LeaveGroupRequest {
     groupId: string;

@@ -9,6 +9,13 @@ import { AuthGuard } from './services/authGuard/auth.guard';
 import { environment } from 'src/environments/environment';
 import { Group, Post, User } from '@roomv1/shared';
 
+interface userRequest {
+  userId : any;
+  userName : string;
+  groupId : any;
+  groupName : string;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -26,6 +33,10 @@ export class AppComponent implements OnInit{
   users : User[] = []
   groups : Group[] = []
   results : any[] = []
+  usersRequests : userRequest[] = []
+  nRequests : number = 0
+  notifications! : string[]
+  notif : number = 0
   constructor(public _authService : AuthService,
               public _guard : AuthGuard,
               private _postService : PostService,
@@ -47,6 +58,21 @@ export class AppComponent implements OnInit{
       this.description = desc;
     });
 
+    ////////// users Requests
+    this.navbarService._usersRequests$.subscribe(array => {
+      this.usersRequests = array;
+    });
+    this.navbarService._nRequests$.subscribe(n => {
+      this.nRequests = n;
+    });
+    /////////////////////////// notifications
+    this.navbarService._notifications$.subscribe(array => {
+      this.notifications = array;
+    });
+    this.navbarService._notif$.subscribe(n => {
+      this.notif = n;
+    });
+    //////////////////////////////////
     this._postService.listPublicPosts()
     .subscribe(
       res => {
@@ -65,6 +91,8 @@ export class AppComponent implements OnInit{
         this.groups = res.groups
       }
     )
+
+
   }
   ////////////////////////////////////////////////////// Search bar
   changeFilter(filter : string){
@@ -235,15 +263,41 @@ export class AppComponent implements OnInit{
       },
       err => alert(err.message)
     )
-
   }
 
 
 
 
+    /////////////////////////////////////////////////////////// Interact
+    acceptUserRequest(req : userRequest){
+      this._groupService.acceptUserRequest({groupId : req.groupId , profileId : req.userId}).subscribe(
+        res => {
+          if(res.message) alert(res.message)
+          this.spliceRequest(req)
+        },err => alert(err.message)
+      )
+    }
+    deleteUserRequest(req : userRequest){
+      this._groupService.deleteUserRequest({groupId : req.groupId , profileId : req.userId}).subscribe(
+        res => {
+          if(res.message) alert(res.message)
+          this.spliceRequest(req)
+        },err => alert(err.message)
+      )
+    }
 
 
 
+    spliceRequest(req : userRequest){
+      for(let i = 0; i < this.usersRequests.length; i++){
+        if(this.usersRequests[i].userId === req.userId &&
+           this.usersRequests[i].groupId === req.groupId){
+            this.usersRequests.splice(i,1)
+            this.nRequests -=1
+            break
+           }
+      }
+    }
 
 
 

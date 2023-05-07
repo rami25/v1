@@ -34,8 +34,9 @@ import {
 import { ERRORS } from "../../../shared/src/errors";
 import { Group } from "../../../shared/src/types/Group";
 import { db } from "../dao";
-import { ExpressHandler } from "../types";
+import { ExpressHandler, ExpressHandlerWithParams } from "../types";
 import { RequestHandler } from "express";
+import { getUserIdMiddleware } from "../middlewares/authMiddleware";
 
 export const createGroup : ExpressHandler<// as an admin
 CreateGroupRequest,
@@ -127,6 +128,13 @@ export const listUserGroups : RequestHandler = async (req,res) => {
         return res.status(200).send({groups})
     res.sendStatus(404)    
 }
+export const listGroupUsers : RequestHandler = async (req,res) => {
+    const { groupId } = req.params
+    const users = await db.listGroupUsers(new ObjectId(groupId))
+    if(users)
+        return res.status(200).send({users})
+    res.sendStatus(404)    
+}
 
 export const listGroups : ExpressHandler<// for all (publics)
 ListGroupsRequest,
@@ -146,19 +154,36 @@ export const listSharedGroups : ExpressHandler<{},
     res.status(200).send({groups})
 }
 
-export const getGroup : ExpressHandler<// only admin
+export const getGroup : ExpressHandlerWithParams<{all : string},// only admin
 GetGroupRequest,
 GetGroupResponse
 > = async (req, res) => {
-    const userId = res.locals.userId
+    // const userId = res.locals.userId
+    const { all } = req.params
     const { groupId } = req.body
-    if(!groupId)
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    let userId = undefined
+    if(token)
+        userId = await getUserIdMiddleware(token)
+    if(userId) userId = new ObjectId(userId) 
+    if(!userId)
         return res.status(403).send({error: 'unauthorized'})
-    const adminGroup = await db.getGroup(new ObjectId(groupId), userId)    
-    if(adminGroup){
-        return res.status(200).send({adminGroup})
+
+    if(!groupId && (all === 'all')){
+        const groups = await db.listAdminGroups(userId)
+        if(groups){
+            return res.status(200).send({groups})
+        }
+        return res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
     }
-    res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
+    if(groupId && !all){
+        const adminGroup = await db.getGroup(new ObjectId(groupId), userId)    
+        if(adminGroup){
+            return res.status(200).send({adminGroup})
+        }
+        res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
+    }
 }
 
 export const sendRequest : ExpressHandler<// as a user to a group
@@ -205,7 +230,7 @@ RejectResponse
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
         await db.deleteUserRequest(new ObjectId(groupId), new ObjectId(profileId))
-        return res.sendStatus(200)
+        return res.status(200).send({message : 'request deleted successfully'})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
@@ -221,8 +246,9 @@ AcceptResponse
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
         await db.acceptUserRequest(new ObjectId(groupId) , new ObjectId(profileId))
-        await db.notification(new ObjectId(groupId), new ObjectId(profileId), false)
-        return res.sendStatus(200)
+        await db.notification(new ObjectId(groupId), new ObjectId(profileId), true)
+        const user = await db.getUserById(new ObjectId(profileId))
+        return res.status(200).send({ message : `${user!.userName} has been a member of ${group.groupName} group`})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
@@ -286,8 +312,8 @@ JoinGroupResponse
     const group = await db.getGroup(new ObjectId(groupId))
     if(group){
         await db.joinGroup(new ObjectId(groupId), userId)
-        await db.notification(new ObjectId(groupId), userId, true)
-        return res.sendStatus(200)
+        await db.notification(new ObjectId(groupId), userId, false)
+        return res.status(200).send({message : `you have joined ${group.groupName} group`})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }

@@ -22,13 +22,14 @@
                     <div class="in">
                     <a *ngIf="showPosts" routerLink="/post/{{post._id}}" target="_blank">
                         <div id="Ptitle">{{post.title}}</div>
-                        <div id=""><span>Desctiption :</span> {{post.description}}</div>
-                        <div id="">{{post.nurls}} (Urls : Web Sources)</div>
-                        <div id="">{{post.nfiles}} (Files)</div>
-                        <div id="">{{post.cmnts}} (Comments)</div>
-                        <div id="">{{post.lks}} (Stars)</div>
-                        <div>privacy : <span *ngIf="getPrivacy(post)"id="public">{{post.privacy}}</span><span *ngIf="!getPrivacy(post)"id="private">{{post.privacy}}</span></div>
-                        <div id=""><span>Posted At :</span> {{post.postedAt | date:'medium'}}</div>
+                        <div><span>Desctiption :</span> {{post.description}}</div>
+                        <div><span>{{post.nurls}}</span> (Urls : Web Sources)</div>
+                        <div><span>{{post.nfiles}}</span> (Files)</div>
+                        <div><span>{{post.cmnts}}</span> (Comments)</div>
+                        <div><span>{{post.lks}}</span> (Stars)</div>
+                        <div *ngIf="post.groupId"><span>Group Name : </span>{{post.groupName}}</div>
+                        <div><span>privacy : </span> <span *ngIf="getPrivacy(post)"id="public">{{post.privacy}}</span><span *ngIf="!getPrivacy(post)"id="private">{{post.privacy}}</span></div>
+                        <div><span>Posted At :</span> {{post.postedAt | date:'medium'}}</div>
                         <div id="author"><span>Author : </span>{{post.userName}}</div>
                     </a>
                     </div>
