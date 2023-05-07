@@ -462,6 +462,10 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteGroup(){
+    if(this.showGroup.userAdmin !== this.user._id){
+      alert('only the group admin can delete this group')
+      return
+    }
     this._groupService.deleteGroup({groupId : this.showGroup._id!.toString()}).subscribe(
       res => {
         if(res.message){
@@ -477,6 +481,10 @@ export class ProfileComponent implements OnInit {
   }
 
   updateGroup(groupForm : NgForm) {
+    if(this.showGroup.userAdmin !== this.user._id){
+      alert('only the group admin can update this group')
+      return
+    }
     groupForm.value.groupId = this.showGroup._id 
     if(!groupForm.value.groupName || groupForm.value.groupName === ' ')
       groupForm.value.groupName = this.showGroup.groupName

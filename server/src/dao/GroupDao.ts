@@ -9,7 +9,8 @@ export interface GroupDao {
     listUserGroups(id : Types.ObjectId) : Promise<Group[] | undefined>;
     listAdminGroups(id : Types.ObjectId) : Promise<Group[] | undefined>;
     countGroups() : Promise<number>;
-    getGroup(id : Types.ObjectId , userId?:Types.ObjectId) : Promise<Group | undefined>;
+    getGroup(id : Types.ObjectId , userId?:Types.ObjectId) : Promise<Group | undefined>;//as an admin
+    getGroupByUser(id : Types.ObjectId , userId?:Types.ObjectId) : Promise<Group | undefined>;// as a group user
     sendGroupRequest(id : Types.ObjectId, userId : Types.ObjectId): Promise<void>;
     deleteSendGroupRequest(id : Types.ObjectId, userId : Types.ObjectId): Promise<void>;
     deleteUserRequest(id : Types.ObjectId , profileId : Types.ObjectId): Promise<void>;

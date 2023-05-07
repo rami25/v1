@@ -53,7 +53,7 @@
         </li>
 
         <li class="nav-item dropdown create">
-          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span *ngIf="notif !== 0" id="nRequests">{{nRequests}}</span> Notifications</a>        
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span *ngIf="notif !== 0" id="nRequests">{{notif}}</span> Notifications</a>        
            <div class="dropdown-menu interact" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
              <div *ngIf="notifications.length !== 0">
                <div *ngFor="let not of notifications" class="request">

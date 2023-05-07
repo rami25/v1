@@ -89,8 +89,8 @@ export class LoginComponent {
       if(group.acceptedRequests!.length !== 0){
         for(let not of group.acceptedRequests!){
           this.notifications.push(not)
-          if(group.notif !== 0) this.notif += group.notif!
         }
+        if(group.notif !== 0) this.notif += group.notif!
       }
     }
     this.navbarService.usersRequests = this.usersRequests
@@ -105,8 +105,8 @@ export class LoginComponent {
     if(user.acceptedRequests!.length !== 0){
       for(let not of user.acceptedRequests!){
           this.notifications.push(not)
-          if(user.notif !== 0) this.notif += user.notif!
       }
+      if(user.notif !== 0) this.notif += user.notif!
     }
   }
 

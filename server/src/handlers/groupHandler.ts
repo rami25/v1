@@ -261,7 +261,7 @@ InviteToResponse
     const { groupId , profileId} = req.body
     if(!groupId || !profileId)
         return res.status(403).send({error: 'unauthorized'})
-    const group = await db.getGroup(new ObjectId(groupId), userId)
+    const group = await db.getGroupByUser(new ObjectId(groupId), userId)
     if(group){
         await db.inviteUserToGroup(new ObjectId(groupId) , new ObjectId(profileId))
         return res.status(200).send({message : 'user invited successfully'})

@@ -213,6 +213,10 @@ export class MongoDB implements DataStore {
         return await GroupM.findOne({_id:id , userAdmin : userId}) || undefined
 
     }
+    async getGroupByUser(id: Types.ObjectId, userId: Types.ObjectId): Promise<Group | undefined> {
+        return await GroupM.findOne({_id:id , usersId : {$in:[userId]} }) || undefined
+
+    }
 //interact with other
     async sendGroupRequest(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
         await GroupM.findByIdAndUpdate(id , {$push : {usersIdDemandes : userId},$inc :{uIdDs:1}}, {new : true})
