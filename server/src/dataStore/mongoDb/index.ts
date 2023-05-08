@@ -238,14 +238,16 @@ export class MongoDB implements DataStore {
         await UserM.findByIdAndUpdate(profileId, {$push : {groups : id}, $inc:{grps:1}})
     }
 
-    async inviteUserToGroup(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
-        await GroupM.findByIdAndUpdate(id , {$push : {usersIdRequests : userId},$inc:{uIdRs:1}}, {new : true})
+    async inviteUserToGroup(id: Types.ObjectId, userId: Types.ObjectId): Promise<Group | undefined> {
         await UserM.findByIdAndUpdate(userId , {$push : {groupsIdDemandes:id},$inc:{gIdDs:1}},{new : true}).exec()
+        const group = await GroupM.findByIdAndUpdate(id , {$push : {usersIdRequests : userId},$inc:{uIdRs:1}}, {new : true})
+        return group || undefined
     }
 
-    async deleteInvitationUserToGroup(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {
-        await GroupM.findByIdAndUpdate(id , {$pull : {usersIdRequests : userId},$inc:{uIdRs:-1}}, {new : true})
+    async deleteInvitationUserToGroup(id: Types.ObjectId, userId: Types.ObjectId): Promise<Group | undefined> {
         await UserM.findByIdAndUpdate(userId , {$pull : {groupsIdDemandes:id},$inc:{gIdDs:-1}},{new : true}).exec()
+        const group = await GroupM.findByIdAndUpdate(id , {$pull : {usersIdRequests : userId},$inc:{uIdRs:-1}}, {new : true})
+        return group || undefined
     }
 
     async deleteGroupInvitation(id: Types.ObjectId, userId: Types.ObjectId): Promise<void> {//as a user

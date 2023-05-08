@@ -29,10 +29,18 @@
         <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up/ " routerLinkActive="active" style="margin-right:-120px">Sign up</a>
 
         <li class="nav-item dropdown create">
-          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Invitations</a>        
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span *ngIf="invi !== 0" id="nRequests">{{invi}}</span> Invitations</a>        
            <div class="dropdown-menu interact" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
-               <a class="dropdown-item" data-toggle="modal" data-target="#createPost">Post</a>
-               <a class="dropdown-item" data-toggle="modal" data-target="#createGroup">Group</a>
+             <div *ngIf="invitations.length !== 0">
+               <div *ngFor="let invitation of invitations" class="request">
+                  inviting "<a routerLink="/user/{{invitation.userId}}" target="_blank" style="color:rgb(95, 41, 41)"><b>{{invitation.userName}}</b></a>" to join "<a routerLink="/group/{{invitation.groupId}}" target="_blank" style="color:rgb(98, 98, 179)"><b>{{invitation.groupName}}</b></a>" group
+                  <br>
+                  <div style="margin-top : 5px; margin-bottom : 10px;text-align:center">
+                     <a (click)="deleteUserInvitation(invitation)"  id="reqButton" style="color:red">delete</a>
+                  </div>
+               </div>
+              </div>
+              <div *ngIf="invitations.length === 0">No Invitations</div>
            </div>
         </li>
 

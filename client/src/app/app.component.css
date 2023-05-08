@@ -55,6 +55,8 @@ a{
   transition: all 0.3s ease;
   border-radius: 0.25rem;
   text-align: center;
+  max-height : 400px;
+  overflow-y : auto;
 }
 #nRequests {
  height : 6px;

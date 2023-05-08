@@ -448,7 +448,9 @@ export class ProfileComponent implements OnInit {
   catchGroup(group : Group){
     this.showGroup = group
     this.nGroupPost = this.showGroup.psts!
-    // this.listGroupUsers()
+    this._groupService.openGroup(this.showGroup._id!.toString()).subscribe(
+      res => this.showGroup.usersIdRequests = res.group.usersIdRequests
+    )
   }
   showGroups = false;
   toggleGroups() {
@@ -585,11 +587,7 @@ export class ProfileComponent implements OnInit {
   }
 
   checkUserInvitation(user : User) : boolean {
-    // console.log('user :', user.userName)
-    // console.log('group req : ', this.showGroup.usersIdRequests)
     for(let uId of this.showGroup.usersIdRequests!){
-      // console.log('userId : ' , uId)
-      // console.log('compare : ', uId === user._id)
       if(uId === user._id){
         return false
       }
@@ -598,11 +596,20 @@ export class ProfileComponent implements OnInit {
   }
   invite = true
   inviteUserToGroup(){
+    if(this.showGroup.userAdmin !== this.user._id){
+      alert('only the group admin can send a request')
+      return
+    }
     this._groupService.inviteUserToGroup({groupId : this.showGroup._id!.toString(), profileId : this.showUser._id!.toString()}).subscribe(
       res => {
         if(res.message) alert(res.message)
         if(res.error) alert(res.error)
-        this.showGroup.usersIdRequests!.push(this.showUser._id!)
+        this.showGroup.usersIdRequests = res.editedGroup.usersIdRequests
+        this.navbarService.setInvitations([{ userId : this.showUser._id ,
+                                           userName : this.showUser.userName , 
+                                           groupId : this.showGroup._id,
+                                           groupName : this.showGroup.groupName!}] , true)
+        this.navbarService.invi += 1    
         this.invite = !this.invite
       }
     )
@@ -612,12 +619,21 @@ export class ProfileComponent implements OnInit {
 
 
   removeGroupRequest(){
+    if(this.showGroup.userAdmin !== this.user._id){
+      alert('only the group admin can cancel a request')
+      return
+    }
     this._groupService.removeUserInvitation({groupId : this.showGroup._id!.toString(), profileId : this.showUser._id!.toString()}).subscribe(
       res => {
         if(res.message) alert(res.message)
         if(res.error) alert(res.error)
-        if(this.showGroup.usersIdRequests!.length !== 0)
-          this.removeUserId(this.showUser)
+        this.showGroup.usersIdRequests = res.editedGroup.usersIdRequests
+        this.navbarService.setInvitations([{ userId : this.showUser._id ,
+                                             userName : this.showUser.userName , 
+                                             groupId : this.showGroup._id,
+                                             groupName : this.showGroup.groupName!}] , false)
+
+        this.navbarService.invi -= 1    
         this.invite = !this.invite
       }
     )
@@ -630,14 +646,6 @@ export class ProfileComponent implements OnInit {
   
 
 
-  removeUserId(user : User){
-    for (let i = 0; i < this.showGroup.usersIdRequests!.length; i++) {
-      if (this.showGroup.usersIdRequests![i] === user._id) {
-        this.showGroup.usersIdRequests!.splice(i, 1);
-        break;
-      }
-    }
-  }
 
 
 

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { NavbarService } from '../navbar/navbar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class AuthService {
 
   private apiServerUrl = environment.apiBaseUrl
   constructor(private http : HttpClient,
-              private _router : Router) { }
+              private _router : Router,
+              private navbarService : NavbarService) { }
   
   listUsers() : Observable<any> {
     return this.http.get<any>(`${this.apiServerUrl}/list-users`)
@@ -39,6 +41,8 @@ export class AuthService {
   }
 
   logoutUser() {
+    this.navbarService.invitations = []
+    this.navbarService.invi = 0
     localStorage.removeItem('token')
     // this._router.navigate(['/home'])
   }

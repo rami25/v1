@@ -154,7 +154,7 @@ export const listSharedGroups : ExpressHandler<{},
     res.status(200).send({groups})
 }
 
-export const getGroup : ExpressHandlerWithParams<{all : string},// only admin
+export const getGroups : ExpressHandlerWithParams<{all : string},// only admin
 GetGroupRequest,
 GetGroupResponse
 > = async (req, res) => {
@@ -261,10 +261,10 @@ InviteToResponse
     const { groupId , profileId} = req.body
     if(!groupId || !profileId)
         return res.status(403).send({error: 'unauthorized'})
-    const group = await db.getGroupByUser(new ObjectId(groupId), userId)
+    const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
-        await db.inviteUserToGroup(new ObjectId(groupId) , new ObjectId(profileId))
-        return res.status(200).send({message : 'user invited successfully'})
+        const editedGroup = await db.inviteUserToGroup(new ObjectId(groupId) , new ObjectId(profileId))
+        return res.status(200).send({message : 'user invited successfully' , editedGroup})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }
@@ -279,8 +279,8 @@ RemoveInvitationResponse
         return res.status(403).send({error: 'All fields are required'})
     const group = await db.getGroup(new ObjectId(groupId), userId)
     if(group){
-        await db.deleteInvitationUserToGroup(new ObjectId(groupId), new ObjectId(profileId))
-        return res.status(200).send({message : 'request removed successfully'})
+        const editedGroup = await db.deleteInvitationUserToGroup(new ObjectId(groupId), new ObjectId(profileId))
+        return res.status(200).send({message : 'request removed successfully' , editedGroup})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }

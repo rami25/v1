@@ -15,13 +15,13 @@ import {
         sendRequest,
         updateGroup, 
         rejectUser,
-        getGroup,
+        getGroups,
         listSharedGroups
 } from '../handlers/groupHandler';
 const router = Router()
 
 router.get('/list-shared-groups',jwtParseMiddleware, asyncHandler(listSharedGroups))// as an admin
-router.get('/get-group/:all', asyncHandler(getGroup))// as an admin
+router.get('/get-group/:all', asyncHandler(getGroups))// as an admin
 router.post('/create', jwtParseMiddleware, asyncHandler(createGroup))// as an admin
 router.post('/delete', jwtParseMiddleware, asyncHandler(deleteGroup))
 router.patch('/update', jwtParseMiddleware, asyncHandler(updateGroup))//users , groupName , description

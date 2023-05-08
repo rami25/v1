@@ -15,8 +15,8 @@ export interface GroupDao {
     deleteSendGroupRequest(id : Types.ObjectId, userId : Types.ObjectId): Promise<void>;
     deleteUserRequest(id : Types.ObjectId , profileId : Types.ObjectId): Promise<void>;
     acceptUserRequest(id : Types.ObjectId , profileId : Types.ObjectId): Promise<void>;
-    inviteUserToGroup(id : Types.ObjectId , userId : Types.ObjectId): Promise<void>;
-    deleteInvitationUserToGroup(id : Types.ObjectId , userId : Types.ObjectId): Promise<void>;
+    inviteUserToGroup(id : Types.ObjectId , userId : Types.ObjectId): Promise<Group | undefined>;
+    deleteInvitationUserToGroup(id : Types.ObjectId , userId : Types.ObjectId): Promise<Group | undefined>;
     deleteGroupInvitation(id : Types.ObjectId , userId : Types.ObjectId): Promise<void>;
     joinGroup(id : Types.ObjectId , userId : Types.ObjectId): Promise<void>;
     leaveGroup(id : Types.ObjectId , userId : Types.ObjectId): Promise<void>;

@@ -18,11 +18,15 @@ export class NavbarService {
   private _description = new BehaviorSubject<string>('');
   private _psts = new BehaviorSubject<number>(0);
   private _grps = new BehaviorSubject<number>(0);
+  //notifications
   private _notif = new BehaviorSubject<number>(0);
   private _notifications = new BehaviorSubject<string[]>([]);
   //userRequests
   private _usersRequests = new BehaviorSubject<userRequest[]>([]);
   private _nRequests = new BehaviorSubject<number>(0);
+  //invitations
+  private _invitations = new BehaviorSubject<userRequest[]>([]);
+  private _invi = new BehaviorSubject<number>(0);
 
   _id$ = this._id.asObservable();
   _userName$ = this._userName.asObservable();
@@ -30,11 +34,15 @@ export class NavbarService {
   _description$ = this._description.asObservable();
   _psts$ = this._psts.asObservable();
   _grps$ = this._grps.asObservable();
+  //notifications
   _notif$ = this._notif.asObservable();
   _notifications$ = this._notifications.asObservable();
   ///userRequests
   _usersRequests$ = this._usersRequests.asObservable();
   _nRequests$ = this._nRequests.asObservable();
+  ///invitations
+  _invitations$ = this._invitations.asObservable();
+  _invi$ = this._invi.asObservable();
   
   ////////////////////////// userId
   set id(id: string) {
@@ -117,4 +125,37 @@ export class NavbarService {
   get usersRequests(): userRequest[] {
     return this._usersRequests.value;
   }
+  ///////////////////////////////////////////////////// group invitations
+  set invi(n: number) {
+    this._invi.next(n);
+  }
+
+  get invi(): number {
+    return this._invi.value;
+  }
+  setInvitations(array: userRequest[], add : boolean) {
+    const currentArray = this._invitations.getValue()
+    if(add){
+      for(let element of array){
+        currentArray.push(element)
+      }
+      this._invitations.next(currentArray)
+      return
+    }
+    const element = array[0]
+    for(let i = 0; i < currentArray.length; i++){
+      if(currentArray[i].userId === element.userId &&
+         currentArray[i].groupId === element.groupId)
+         currentArray.splice(i,1)
+    }
+    this._invitations.next(currentArray);
+  }
+  set invitations( array : userRequest[])  {
+    this._invitations.next(array);
+  }
+
+  get inviations(): userRequest[] {
+    return this._invitations.value;
+  }
+
 }

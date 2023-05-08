@@ -208,6 +208,7 @@ export interface InviteToRequest {
 }
 export interface InviteToResponse {
     message : string;
+    editedGroup : Group;
 }     
 
 export interface RemoveInvitationRequest {
@@ -216,6 +217,7 @@ export interface RemoveInvitationRequest {
 }     
 export interface RemoveInvitationResponse {
     message : string;
+    editedGroup : Group;
 }
 
 export interface DeleteInvitationRequest {

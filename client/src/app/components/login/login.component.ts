@@ -25,6 +25,8 @@ export class LoginComponent {
   requests : number = 0
   notifications : string[] = []
   notif : number = 0
+  invitations : userRequest[] = []
+  invi : number = 0
   constructor(public _auth : AuthService,
               private _router : Router,
               private navbarService: NavbarService,
@@ -43,7 +45,10 @@ export class LoginComponent {
         this.navbarService.desc = res.user.description
         this.navbarService.psts = res.user.psts
         this.navbarService.grps = res.user.grps
+        this.addUserNotif(res.user)
         this.getAdminGroups(res.user)
+        this.navbarService.notifications = this.notifications
+        this.navbarService.notif = this.notif
         this._router.navigate(['/'])
       },
       (error : HttpErrorResponse) => {
@@ -52,25 +57,19 @@ export class LoginComponent {
     ) 
   }             
 
-  getAdminGroups(user : User){  
+  getAdminGroups(user : User) {  
     this.groupService.listAdminGroups().subscribe(
       res => {
-        this.addUserNotif(user)
         this.adminGroups = res.groups
         if(this.adminGroups.length !== 0){
           this.retrieveGroupsRequests(this.adminGroups)
-          return
+          this.retrieveGroupsInvitations(this.adminGroups)
         }
-        this.navbarService.notifications = this.notifications
-        this.navbarService.notif = this.notif
       }, err => alert(err.message)
     )
-
   }
 
   retrieveGroupsRequests(groups : Group[]){
-    this.usersRequests = []
-    this.requests = 0
     for(let group of groups){
       if(group.usersIdDemandes!.length !== 0){
         for(let uId of group.usersIdDemandes!){
@@ -95,13 +94,32 @@ export class LoginComponent {
     }
     this.navbarService.usersRequests = this.usersRequests
     this.navbarService.nRequests = this.requests
-    this.navbarService.notifications = this.notifications
-    this.navbarService.notif = this.notif
+  }
+  retrieveGroupsInvitations(groups : Group[]){
+    this.navbarService.invitations = []
+    for(let group of groups){
+      if(group.usersIdRequests!.length !== 0){
+        for(let uId of group.usersIdRequests!){
+          this._auth.openUser(uId.toString()).subscribe(
+            res=>{
+              this.invitations.push({
+                userId : res.user._id,
+                userName : res.user.userName,
+                groupId : group._id,
+                groupName : group.groupName!
+              })
+            })
+        }
+        this.invi += group.uIdRs!
+      }
+    }
+    this.navbarService.invitations = this.invitations
+    this.navbarService.invi = this.invi
   }
 
+
+
   addUserNotif(user : User){
-    this.notifications = []
-    this.notif = 0
     if(user.acceptedRequests!.length !== 0){
       for(let not of user.acceptedRequests!){
           this.notifications.push(not)

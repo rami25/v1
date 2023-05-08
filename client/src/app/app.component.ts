@@ -37,6 +37,8 @@ export class AppComponent implements OnInit{
   nRequests : number = 0
   notifications! : string[]
   notif : number = 0
+  invitations : userRequest[] = []
+  invi : number = 0
   constructor(public _authService : AuthService,
               public _guard : AuthGuard,
               private _postService : PostService,
@@ -71,6 +73,13 @@ export class AppComponent implements OnInit{
     });
     this.navbarService._notif$.subscribe(n => {
       this.notif = n;
+    });
+    /////////////////////////// invitations
+    this.navbarService._invitations$.subscribe(array => {
+      this.invitations = array;
+    });
+    this.navbarService._invi$.subscribe(n => {
+      this.invi = n;
     });
     //////////////////////////////////
     this._postService.listPublicPosts()
@@ -285,9 +294,6 @@ export class AppComponent implements OnInit{
         },err => alert(err.message)
       )
     }
-
-
-
     spliceRequest(req : userRequest){
       for(let i = 0; i < this.usersRequests.length; i++){
         if(this.usersRequests[i].userId === req.userId &&
@@ -299,6 +305,25 @@ export class AppComponent implements OnInit{
       }
     }
 
+    deleteUserInvitation(invi : userRequest){
+    this._groupService.removeUserInvitation({groupId : invi.groupId.toString(), profileId : invi.userId.toString()}).subscribe(
+      res => {
+        if(res.message) alert(res.message)
+        if(res.error) alert(res.error)
+        this.spliceInvitation(invi)
+      }
+    )
+    }
 
+    spliceInvitation(invi : userRequest){
+      for(let i = 0; i < this.invitations.length; i++){
+        if(this.invitations[i].userId === invi.userId &&
+           this.invitations[i].groupId === invi.groupId){
+            this.invitations.splice(i,1)
+            this.navbarService.invi -= 1
+            break
+           }
+      }
+    }
 
 }
