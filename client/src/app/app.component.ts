@@ -8,10 +8,11 @@ import { GroupService } from './services/group/group.service';
 import { AuthGuard } from './services/authGuard/auth.guard';
 import { environment } from 'src/environments/environment';
 import { Group, Post, User } from '@roomv1/shared';
+import { UserDataCache } from './userDataCache';
 
 interface userRequest {
-  userId : any;
-  userName : string;
+  userId? : any;
+  userName? : string;
   groupId : any;
   groupName : string;
 }
@@ -34,19 +35,27 @@ export class AppComponent implements OnInit{
   groups : Group[] = []
   results : any[] = []
   usersRequests : userRequest[] = []
+  groupRequests : userRequest[] = []
   nRequests : number = 0
   notifications! : string[]
   notif : number = 0
   invitations : userRequest[] = []
+  groupInvitations : userRequest[] = []
   invi : number = 0
   constructor(public _authService : AuthService,
               public _guard : AuthGuard,
               private _postService : PostService,
               private _groupService : GroupService,
               private navbarService: NavbarService,
-              private http : HttpClient) {}
+              private http : HttpClient,
+              private cache : UserDataCache) {}
 
   ngOnInit(): void {
+    if(this._authService.loggedIn()){
+      this._authService.getUserById().subscribe(
+        res => this.cache.userCache(res.user)
+      )
+    }
     this.navbarService._userName$.subscribe(name => {
       this.userName = name;
     });
@@ -60,6 +69,10 @@ export class AppComponent implements OnInit{
       this.description = desc;
     });
 
+    ////////// group Requests
+    this.navbarService._groupRequests$.subscribe(array => {
+      this.groupRequests = array;
+    });
     ////////// users Requests
     this.navbarService._usersRequests$.subscribe(array => {
       this.usersRequests = array;
@@ -73,6 +86,10 @@ export class AppComponent implements OnInit{
     });
     this.navbarService._notif$.subscribe(n => {
       this.notif = n;
+    });
+    /////////////////////////// group invitations
+    this.navbarService._groupInvitations$.subscribe(array => {
+      this.groupInvitations = array;
     });
     /////////////////////////// invitations
     this.navbarService._invitations$.subscribe(array => {
@@ -305,6 +322,36 @@ export class AppComponent implements OnInit{
       }
     }
 
+    acceptGroupRequest(req : userRequest){
+      this._groupService.acceptGroupRequest({groupId : req.groupId}).subscribe(
+        res => {
+          if(res.message) alert(res.message)
+          if(res.error) alert(res.error)
+          this.spliceGroupRequest(req)
+        },err => alert(err.message)
+      )
+    }
+
+    deleteGroupRequest(req : userRequest){
+      this._groupService.deleteGroupRequest({groupId : req.groupId}).subscribe(
+        res => {
+          if(res.message) alert(res.message)
+          if(res.error) alert(res.error)
+          this.spliceGroupRequest(req)
+        },err => alert(err.message)
+      )
+    }
+    spliceGroupRequest(req : userRequest){
+       for(let i = 0; i < this.groupRequests.length; i++){
+        if(this.groupRequests[i].userId === req.userId &&
+           this.groupRequests[i].groupId === req.groupId){
+            this.groupRequests.splice(i,1)
+            this.nRequests -=1
+            break
+           }
+      }     
+    }
+    ///////////////////////////////////// Invitations
     deleteUserInvitation(invi : userRequest){
     this._groupService.removeUserInvitation({groupId : invi.groupId.toString(), profileId : invi.userId.toString()}).subscribe(
       res => {
@@ -326,4 +373,14 @@ export class AppComponent implements OnInit{
       }
     }
 
+    cancelRequest(invi : userRequest){
+      this._groupService.cancelGroupRequest({groupId : invi.groupId.toString()}).subscribe(
+        res => {
+          if(res.message) alert(res.message)
+          if(res.error) alert(res.error)
+          this.navbarService.setGroupInvitations([{groupId : invi.groupId , groupName : invi.groupName}],false)
+          this.navbarService.invi -=1
+        }
+      )
+    }
 }

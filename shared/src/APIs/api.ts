@@ -223,7 +223,9 @@ export interface RemoveInvitationResponse {
 export interface DeleteInvitationRequest {
     groupId: string;
 }
-export interface DeleteInvitationResponse {}
+export interface DeleteInvitationResponse {
+    message : string;
+}
 
 export interface JoinGroupRequest {
     groupId : string;

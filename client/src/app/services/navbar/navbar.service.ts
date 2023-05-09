@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 interface userRequest {
-  userId : any;
-  userName : string;
+  userId? : any;
+  userName? : string;
   groupId : any;
   groupName : string;
 }
@@ -24,9 +24,13 @@ export class NavbarService {
   //userRequests
   private _usersRequests = new BehaviorSubject<userRequest[]>([]);
   private _nRequests = new BehaviorSubject<number>(0);
+  //groupRequests
+  private _groupRequests = new BehaviorSubject<userRequest[]>([]);
   //invitations
   private _invitations = new BehaviorSubject<userRequest[]>([]);
   private _invi = new BehaviorSubject<number>(0);
+  //groupInvitations
+  private _groupInvitations = new BehaviorSubject<userRequest[]>([]);
 
   _id$ = this._id.asObservable();
   _userName$ = this._userName.asObservable();
@@ -40,6 +44,10 @@ export class NavbarService {
   ///userRequests
   _usersRequests$ = this._usersRequests.asObservable();
   _nRequests$ = this._nRequests.asObservable();
+  ///groupRequests
+  _groupRequests$ = this._groupRequests.asObservable();
+  ///groupInvitations
+  _groupInvitations$ = this._groupInvitations.asObservable();
   ///invitations
   _invitations$ = this._invitations.asObservable();
   _invi$ = this._invi.asObservable();
@@ -125,6 +133,14 @@ export class NavbarService {
   get usersRequests(): userRequest[] {
     return this._usersRequests.value;
   }
+  ///////////////////////////////////////////////////// Group Requests
+  set groupRequests(groupRequests: userRequest[]) {
+    this._groupRequests.next(groupRequests);
+  }
+
+  get groupRequests(): userRequest[] {
+    return this._groupRequests.value;
+  }
   ///////////////////////////////////////////////////// group invitations
   set invi(n: number) {
     this._invi.next(n);
@@ -156,6 +172,29 @@ export class NavbarService {
 
   get inviations(): userRequest[] {
     return this._invitations.value;
+  }
+  setGroupInvitations(array: userRequest[], add : boolean) {
+    const currentArray = this._groupInvitations.getValue()
+    if(add){
+      for(let element of array){
+        currentArray.push(element)
+      }
+      this._groupInvitations.next(currentArray)
+      return
+    }
+    const element = array[0]
+    for(let i = 0; i < currentArray.length; i++){
+      if(currentArray[i].groupId === element.groupId)
+         currentArray.splice(i,1)
+    }
+    this._groupInvitations.next(currentArray);
+  }
+  set groupInvitations( array : userRequest[])  {
+    this._groupInvitations.next(array);
+  }
+
+  get groupInviations(): userRequest[] {
+    return this._groupInvitations.value;
   }
 
 }

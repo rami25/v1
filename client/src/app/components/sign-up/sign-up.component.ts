@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { NavbarService } from 'src/app/services/navbar/navbar.service';
 import { Location } from '@angular/common';
+import { UserDataCache } from 'src/app/userDataCache';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,7 +17,8 @@ export class SignUpComponent {
               private _router : Router,
               private route: ActivatedRoute,
               private navbarService: NavbarService,
-              private location: Location){}
+              private location: Location,
+              private cache : UserDataCache){}
 
               
   signup(userData : NgForm){
@@ -25,10 +27,7 @@ export class SignUpComponent {
       res => {
         console.log(res.user)
         localStorage.setItem('token', res.jwt)
-        this.navbarService.userName = res.user.userName
-        this.navbarService.id = res.user._id
-        this.navbarService.email = res.user.email
-        this.navbarService.desc = res.user.description
+        this.cache.userCache(res.user)
         const meta = this.route.snapshot.paramMap.get('meta');
         // this.route.params.subscribe(params => {
         //   const meta = params['meta'];

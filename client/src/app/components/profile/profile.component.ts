@@ -273,16 +273,22 @@ export class ProfileComponent implements OnInit {
   showedLinks : any[] = []
   i: number = 0
   @ViewChild('ulink') ulink!: ElementRef;
-  appendLinksList(){
-    const val = this.ulink.nativeElement.value
+  @ViewChild('link') link!: ElementRef;
+  appendLinksList(add? : boolean){
+    let val = ''
+    if(add)
+       val = this.link.nativeElement.value
+    else val = this.ulink.nativeElement.value
     console.log('link : ',val)
     if(val !== ''){
       const exist = this.showedLinks.find(l => { return l.value === val})
       if(exist) alert('this link is already exist')
       else {
-        this.showedLinks.push({key : this.i , value : this.ulink.nativeElement.value })
+        this.showedLinks.push({key : this.i , value : val})
         this.i+=1
-        this.ulink.nativeElement.value = '';
+        if(add)
+          this.link.nativeElement.value = '';
+        else this.ulink.nativeElement.value = '';
       }
     }
   }
@@ -331,15 +337,21 @@ export class ProfileComponent implements OnInit {
   showedFiles : any[] = []
   j: number = 0
   @ViewChild('ufile') ufile!: ElementRef;
-  appendFilesList(){
-    const val = this.ufile.nativeElement.value
+  @ViewChild('file') file!: ElementRef;
+  appendFilesList(add? : boolean){
+    let val = ''
+    if(add)
+      val = this.file.nativeElement.value
+    else val = this.ufile.nativeElement.value
     if(val !== ''){
       const exist = this.showedFiles.find(f => { return f.value === val})
       if(exist) alert('this file is already exist')
       else {
         this.showedFiles.push({key : this.j , value : val})
         this.j+=1
-        this.ufile.nativeElement.value = '';
+        if(add)
+          this.file.nativeElement.value = '';
+        else this.ufile.nativeElement.value = '';
       }
     }
   }
@@ -449,7 +461,10 @@ export class ProfileComponent implements OnInit {
     this.showGroup = group
     this.nGroupPost = this.showGroup.psts!
     this._groupService.openGroup(this.showGroup._id!.toString()).subscribe(
-      res => this.showGroup.usersIdRequests = res.group.usersIdRequests
+      res => {
+        this.showGroup.usersIdRequests = res.group.usersIdRequests
+        this.showGroup.usersIdDemandes = res.group.usersIdDemandes
+      }
     )
   }
   showGroups = false;
@@ -594,10 +609,23 @@ export class ProfileComponent implements OnInit {
     }
     return true
   }
+
+  checkUserRequest() : boolean {
+    for(let uId of this.showGroup.usersIdDemandes!){
+      if(uId === this.showUser._id)
+        return true
+    }
+    return false
+  }
+
   invite = true
   inviteUserToGroup(){
     if(this.showGroup.userAdmin !== this.user._id){
       alert('only the group admin can send a request')
+      return
+    }
+    if(this.checkUserRequest()){
+      alert(`${this.showUser.userName} has sent to you a group request`)
       return
     }
     this._groupService.inviteUserToGroup({groupId : this.showGroup._id!.toString(), profileId : this.showUser._id!.toString()}).subscribe(

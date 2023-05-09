@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { GroupService } from 'src/app/services/group/group.service';
 import { NavbarService } from 'src/app/services/navbar/navbar.service';
 import { PostService } from 'src/app/services/post/post.service';
+import { UserDataCache } from 'src/app/userDataCache';
 
 @Component({
   selector: 'app-open-group',
@@ -25,7 +26,8 @@ export class OpenGroupComponent implements OnInit{
               private _postService : PostService,
               public _auth : AuthService,
               private navbarService : NavbarService,
-              private router : Router){}
+              private router : Router,
+              private cache : UserDataCache){}
   ngOnInit(){
     this.route.params.subscribe(params => {
       const groupId = params['id'];
@@ -58,13 +60,20 @@ export class OpenGroupComponent implements OnInit{
     this.joined = false
     return false
   }
-  checkUserRequest(){
+  checkUserRequest() {
     for(let uId of this.group.usersIdDemandes!){
       if(uId === this.user._id)
         this.join = false
-        return
+        return 
     }
    this.join = true
+  }
+  checkGroupRequest() : boolean{
+    for(let uId of this.group.usersIdRequests!){
+      if(uId === this.user._id)
+        return true
+    }
+    return false
   }
   join = true
   joinGroup(){
@@ -72,11 +81,17 @@ export class OpenGroupComponent implements OnInit{
       document.getElementById('isUserConnected')?.click()
       return 
     }
+    if(this.checkGroupRequest()){
+      alert('you have received a group request!!!')
+      return
+    }
     this._groupService.sendGroupRequest({groupId : this.group._id!.toString()}).subscribe(
       res => {
         if(res.message) alert(res.message)
         if(res.error) alert(res.error)
         this.group.usersIdDemandes!.push(this.user._id!)
+        this.navbarService.setGroupInvitations([{groupId : this.group._id , groupName : this.group.groupName!}],true)
+        this.navbarService.invi +=1
         this.join = !this.join
       }
     )
@@ -91,6 +106,8 @@ export class OpenGroupComponent implements OnInit{
       res => {
         if(res.message) alert(res.message)
         if(res.error) alert(res.error)
+        this.navbarService.setGroupInvitations([{groupId : this.group._id , groupName : this.group.groupName!}],false)
+        this.navbarService.invi -=1
         this.join = !this.join
       }
     )
@@ -148,12 +165,7 @@ export class OpenGroupComponent implements OnInit{
         console.log(res.user)
         console.log(res.jwt)
         localStorage.setItem('token', res.jwt)
-        this.navbarService.userName = res.user.userName
-        this.navbarService.id = res.user._id
-        this.navbarService.email = res.user.email
-        this.navbarService.desc = res.user.description
-        this.navbarService.psts = res.user.psts
-        this.navbarService.grps = res.user.grps
+        this.cache.userCache(res.user)
         this.ngOnInit()
         // this._router.navigate(['/'])
       },

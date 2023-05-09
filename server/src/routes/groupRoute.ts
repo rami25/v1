@@ -32,7 +32,7 @@ router.post('/accept-request', jwtParseMiddleware, asyncHandler(acceptRequest))/
 router.post('/invite', jwtParseMiddleware, asyncHandler(inviteTo))
 router.post('/remove-invitation', jwtParseMiddleware, asyncHandler(removeInvitation))
 router.post('/join', jwtParseMiddleware, asyncHandler(joinGroup))//accept demande as a user
-router.delete('/reject-invitation', jwtParseMiddleware, asyncHandler(deleteInvitation))//as a user
+router.post('/reject-invitation', jwtParseMiddleware, asyncHandler(deleteInvitation))//as a user
 router.post('/leave-group', jwtParseMiddleware, asyncHandler(leaveGroup))
-router.delete('/reject-user', jwtParseMiddleware, asyncHandler(rejectUser))
+router.post('/reject-user', jwtParseMiddleware, asyncHandler(rejectUser))
 module.exports = router

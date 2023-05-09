@@ -41,6 +41,11 @@ export class AuthService {
   }
 
   logoutUser() {
+    this.navbarService.notifications = []
+    this.navbarService.notif = 0
+    this.navbarService.usersRequests = []
+    this.navbarService.nRequests = 0
+    this.navbarService.groupRequests = []
     this.navbarService.invitations = []
     this.navbarService.invi = 0
     localStorage.removeItem('token')

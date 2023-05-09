@@ -75,6 +75,12 @@ export class GroupService {
   cancelGroupRequest(groupData : {groupId : string}) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/groups/delete-request`, groupData)
   }
+  acceptGroupRequest(groupData : {groupId : string}) : Observable<any>{
+    return this.http.post<any>(`${this.apiServerUrl}/groups/join`, groupData)
+  }
+  deleteGroupRequest(groupData : {groupId : string}) : Observable<any>{
+    return this.http.post<any>(`${this.apiServerUrl}/groups/reject-invitation`, groupData)
+  }
   leaveGroup(groupData : {groupId : string}) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/groups/leave-group`, groupData)
   }

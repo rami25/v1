@@ -296,7 +296,7 @@ DeleteInvitationResponse
     const group = await db.getGroup(new ObjectId(groupId))
     if(group){
         await db.deleteGroupInvitation(new ObjectId(groupId),userId)
-        res.sendStatus(200)
+        res.status(200).send({message : 'request deleted successfully'})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }

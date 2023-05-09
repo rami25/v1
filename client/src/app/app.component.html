@@ -31,7 +31,7 @@
         <li class="nav-item dropdown create">
           <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span *ngIf="invi !== 0" id="nRequests">{{invi}}</span> Invitations</a>        
            <div class="dropdown-menu interact" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
-             <div *ngIf="invitations.length !== 0">
+             <div *ngIf="invi !== 0">
                <div *ngFor="let invitation of invitations" class="request">
                   inviting "<a routerLink="/user/{{invitation.userId}}" target="_blank" style="color:rgb(95, 41, 41)"><b>{{invitation.userName}}</b></a>" to join "<a routerLink="/group/{{invitation.groupId}}" target="_blank" style="color:rgb(98, 98, 179)"><b>{{invitation.groupName}}</b></a>" group
                   <br>
@@ -39,8 +39,15 @@
                      <a (click)="deleteUserInvitation(invitation)"  id="reqButton" style="color:red">delete</a>
                   </div>
                </div>
+               <div *ngFor="let invitation of groupInvitations" class="request">
+                  sending request to join "<a routerLink="/group/{{invitation.groupId}}" target="_blank" style="color:rgb(98, 98, 179)"><b>{{invitation.groupName}}</b></a>" group
+                  <br>
+                  <div style="margin-top : 5px; margin-bottom : 10px;text-align:center">
+                     <a (click)="cancelRequest(invitation)"  id="reqButton" style="color:red">delete</a>
+                  </div>
+               </div>
               </div>
-              <div *ngIf="invitations.length === 0">No Invitations</div>
+              <div *ngIf="invi === 0">No Invitations</div>
            </div>
         </li>
 
@@ -48,11 +55,18 @@
           <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span *ngIf="nRequests !== 0" id="nRequests">{{nRequests}}</span> Requests</a>        
            <div class="dropdown-menu requests" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
             <div *ngIf="nRequests !== 0">
-              <div *ngFor="let request of usersRequests" class="request">
-                  "<a routerLink="/user/{{request.userId}}" target="_blank" style="color:rgb(95, 41, 41)"><b>{{request.userName}}</b></a>" sent request to join "<a routerLink="/group/{{request.groupId}}" target="_blank" style="color:rgb(98, 98, 179)"><b>{{request.groupName}}</b></a>" group
+              <div *ngFor="let req of usersRequests" class="request">
+                  "<a routerLink="/user/{{req.userId}}" target="_blank" style="color:rgb(95, 41, 41)"><b>{{req.userName}}</b></a>" sent request to join "<a routerLink="/group/{{req.groupId}}" target="_blank" style="color:rgb(98, 98, 179)"><b>{{req.groupName}}</b></a>" group
                   <br>
                   <div style="margin-top : 5px; margin-bottom : 30px">
-                     <a (click)="acceptUserRequest(request)" class="float-left" id="reqButton" style="color:green;margin-left:20px">accept </a> <a (click)="deleteUserRequest(request)" class="float-right" id="reqButton" style="color:red;margin-right:20px">delete</a>
+                     <a (click)="acceptUserRequest(req)" class="float-left" id="reqButton" style="color:green;margin-left:20px">accept </a> <a (click)="deleteUserRequest(req)" class="float-right" id="reqButton" style="color:red;margin-right:20px">delete</a>
+                  </div>
+              </div>
+              <div *ngFor="let request of groupRequests" class="request">
+                  "<a routerLink="/user/{{request.userId}}" target="_blank" style="color:rgb(95, 41, 41)"><b>{{request.userName}}</b></a>" invite you to join "<a routerLink="/group/{{request.groupId}}" target="_blank" style="color:rgb(98, 98, 179)"><b>{{request.groupName}}</b></a>" group
+                  <br>
+                  <div style="margin-top : 5px; margin-bottom : 30px">
+                     <a (click)="acceptGroupRequest(request)" class="float-left" id="reqButton" style="color:green;margin-left:20px">accept </a> <a (click)="deleteGroupRequest(request)" class="float-right" id="reqButton" style="color:red;margin-right:20px">delete</a>
                   </div>
               </div>
             </div>

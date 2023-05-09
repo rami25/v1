@@ -6,6 +6,7 @@ import { Like, Post, User , Comment} from '@roomv1/shared';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { NavbarService } from 'src/app/services/navbar/navbar.service';
 import { PostService } from 'src/app/services/post/post.service';
+import { UserDataCache } from 'src/app/userDataCache';
 
 @Component({
   selector: 'app-open-post',
@@ -24,7 +25,8 @@ export class OpenPostComponent implements OnInit{
               private route: ActivatedRoute,
               public _auth : AuthService,
               private navbarService : NavbarService,
-              private router : Router){}
+              private router : Router,
+              private cache : UserDataCache){}
   getUser(){
     this._auth.getUserById()
     .subscribe((res) => this.user = res.user,
@@ -193,12 +195,7 @@ export class OpenPostComponent implements OnInit{
         console.log(res.user)
         console.log(res.jwt)
         localStorage.setItem('token', res.jwt)
-        this.navbarService.userName = res.user.userName
-        this.navbarService.id = res.user._id
-        this.navbarService.email = res.user.email
-        this.navbarService.desc = res.user.description
-        this.navbarService.psts = res.user.psts
-        this.navbarService.grps = res.user.grps
+        this.cache.userCache(res.user)
         this.ngOnInit()
         // this._router.navigate(['/'])
       },

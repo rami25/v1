@@ -12,11 +12,11 @@
 <button class="btn btn-outline-info" data-toggle="modal" data-target="#groupMembers">See group members</button> 
 <button id="isUserConnected" data-toggle="modal" data-target="#login" style="display:none"></button>
 <div *ngIf="!joined || !this._auth.loggedIn()">
-<button *ngIf="join" (click)="joinGroup()" class="btn btn-outline-success float-right">Join Group</button> 
-<button *ngIf="!join" (click)="cancelRequest()" class="btn btn-outline-primary float-right">Cancel Request</button> 
+   <button *ngIf="join" (click)="joinGroup()" class="btn btn-outline-success float-right">Join Group</button> 
+   <button *ngIf="!join" (click)="cancelRequest()" class="btn btn-outline-primary float-right">Cancel Request</button> 
 </div>
 <button *ngIf="joined && this._auth.loggedIn()" class="btn btn-outline-info float-right" data-toggle="modal" data-target="#leaveGroup">Joined</button> 
-    </div>
+   </div>
 
 <hr>
     <button class="btn btn-outline-secondary posts" (click)="togglePosts()" id="posts"><b>{{posts.length}} Posts </b></button>

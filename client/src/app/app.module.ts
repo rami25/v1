@@ -20,6 +20,7 @@ import { GroupService } from './services/group/group.service';
 import { OpenPostComponent } from './components/open-post/open-post.component';
 import { OpenUserComponent } from './components/open-user/open-user.component';
 import { OpenGroupComponent } from './components/open-group/open-group.component';
+import { UserDataCache } from './userDataCache';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { OpenGroupComponent } from './components/open-group/open-group.component
     NavbarService,
     PostService,
     GroupService,
+    UserDataCache,
     {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptorService,
