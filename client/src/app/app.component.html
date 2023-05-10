@@ -26,7 +26,7 @@
     </ul>
     <ul class="navbar-nav">
         <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/log-in" routerLinkActive="active">Log in</a>
-        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up/ " routerLinkActive="active" style="margin-right:-120px">Sign up</a>
+        <a class="nav-link" *ngIf="!_authService.loggedIn()" routerLink="/sign-up/s" routerLinkActive="active" style="margin-right:-120px">Sign up</a>
 
         <li class="nav-item dropdown create">
           <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span *ngIf="invi !== 0" id="nRequests">{{invi}}</span> Invitations</a>        
@@ -75,11 +75,12 @@
         </li>
 
         <li class="nav-item dropdown create">
-          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span *ngIf="notif !== 0" id="nRequests">{{notif}}</span> Notifications</a>        
+          <a class="nav-link dropdown-toggle" *ngIf="_authService.loggedIn()" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="resetNotif()"><span *ngIf="notif !== 0" id="nRequests">{{notif}}</span> Notifications</a>        
            <div class="dropdown-menu interact" aria-labelledby="navbarDropdown" *ngIf="_authService.loggedIn()">
              <div *ngIf="notifications.length !== 0">
                <div *ngFor="let not of notifications" class="request">
-                  <p>{{not}}</p>
+                  {{not.message}}<br>
+                  <span style="margin-left:50px;color:rgb(99, 99, 219)">{{not.notedAt | date : 'MMM d, y'}}</span>
                </div>
               </div>
               <div *ngIf="notifications.length === 0">No Notifications</div>

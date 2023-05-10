@@ -15,8 +15,8 @@ export interface Group {
     uIdDs? : number;
     usersIdRequests?: Types.ObjectId[];// as a user
     uIdRs? : number;
-    acceptedRequests? : string[];
-    notif? : number;
+    // acceptedRequests? : string[];
+    // notif? : number;
 }
 
 const groupeSchema = new Schema<Group>({
@@ -70,14 +70,14 @@ const groupeSchema = new Schema<Group>({
     uIdRs : {
         type : Number,
         defautl : 0
-    },
-    acceptedRequests : [{
-        type : String
-    }],
-    notif : {
-        type : Number,
-        defautl : 0
-    },
+    }
+    // acceptedRequests : [{
+    //     type : String
+    // }],
+    // notif : {
+    //     type : Number,
+    //     defautl : 0
+    // },
 })
 
 const GroupM = model<Group>('GroupM', groupeSchema)

@@ -329,7 +329,7 @@ LeaveGroupResponse
     const group = await db.getGroup(new ObjectId(groupId))
     if(group){
         await db.leaveGroup(new ObjectId(groupId), userId)
-        return res.status(200).send({message : `you leaved ${group.groupName} group`})
+        return res.status(200).send({message : `you have leaved ${group.groupName} group`})
     }
     res.status(403).send({error: ERRORS.GROUP_NOT_FOUND})
 }

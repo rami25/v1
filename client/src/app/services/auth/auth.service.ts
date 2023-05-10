@@ -30,7 +30,9 @@ export class AuthService {
   loginUser(credential: {login : string, password : string}) : Observable<any> {
     return this.http.post<any>(`${this.apiServerUrl}/visitors/sign-in` , credential )
   }
-
+  resetUserNotif() : Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/users/reset-notif`)
+  }
   signupUser(userData : {
     userName : string,
     email : string,

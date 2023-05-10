@@ -276,20 +276,43 @@ export class MongoDB implements DataStore {
         if(user && group){
             if(target){//admin accept user
                 const message1 = `You have accepted in "${group.groupName}" group`
-                const message2 = `"${user!.userName}" has been a member in "${group.groupName}" group`
-                // user!.acceptedRequests?.push(message)
-                await UserM.findByIdAndUpdate(profileId , {$push : {acceptedRequests : message1}, $inc : {notif : 1}})
+                const message2 = `"${user!.userName}" has been a member of "${group.groupName}" group`
+                const invitation1 = {message : message1 , notedAt : new Date()}
+                const invitation2 = {message : message2 , notedAt : new Date()}
+                const newUser = await UserM.findOne(profileId)
+                if(newUser){
+                    newUser!.acceptedRequests?.push(invitation1)
+                    newUser!.notif! += 1
+                    await newUser!.save()
+                }
+                // console.log('profile : ', profile)
+                // await UserM.findByIdAndUpdate(profileId , {$push : {acceptedRequests : invitation1}, $inc : {notif : 1}})
                 for(let uId of group.usersId!){
-                    console.log(uId === group.userAdmin) 
-                    if((uId === group.userAdmin) || (uId === profileId)) continue
-                    await UserM.findByIdAndUpdate(uId , {$push : {acceptedRequests : message2}, $inc : {notif : 1}})
+                    if((uId.toString() === group.userAdmin!.toString()) || (uId.toString() === profileId.toString())) continue
+                    const oldUser = await UserM.findOne(uId)
+                    if(oldUser){
+                        oldUser!.acceptedRequests?.push(invitation2)
+                        oldUser!.notif! += 1
+                        await oldUser!.save()
+                    }
+                    // await UserM.findByIdAndUpdate(uId , {$push : { 'acceptedRequests.message' : message2}, $inc : {notif : 1}})
                 }
                 return
             }
-            const message = `"${user!.userName}" accepted your invitation to "${group.groupName}" group`
-            // group!.acceptedRequests?.push(message)
-            await GroupM.findByIdAndUpdate(id , {$push : {acceptedRequests : message}, $inc : {notif : 1}})
+            const message = `"${user!.userName}" accepted your invitation to join "${group.groupName}" group`
+            const invitation = { message : message , notedAt : new Date()}
+            const profile = await UserM.findOne(group.userAdmin)
+            if(profile){
+                profile!.acceptedRequests?.push(invitation)
+                profile!.notif! += 1
+                await profile!.save()
+            }
+            // await UserM.findByIdAndUpdate({_id : group.userAdmin} , {$push : { 'acceptedRequests.message' : message}, $inc : {notif : 1}})
         }
+    }
+
+    async resetUserNotif(id : Types.ObjectId) : Promise<void> {
+        await UserM.findByIdAndUpdate(id , {$set : {notif : 0}} , { new : true })
     }
 
 

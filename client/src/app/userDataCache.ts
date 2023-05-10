@@ -11,13 +11,18 @@ interface userRequest {
   groupName : string;
 }
 
+interface notification {
+  message : string;
+  notedAt : Date;
+}
+
 @Injectable()
 export class UserDataCache {
   adminGroups! : Group[]
   usersRequests : userRequest[] = []
   groupRequests : userRequest[] = []
   requests : number = 0
-  notifications : string[] = []
+  notifications : notification[] = []
   notif : number = 0
   invitations : userRequest[] = []
   groupInvitations : userRequest[] = []
@@ -36,8 +41,6 @@ export class UserDataCache {
       this.addGroupRequests(user)
       this.addGroupInvitations(user)
       this.getAdminGroups(user)
-      this.navbarService.notifications = this.notifications
-      this.navbarService.notif = this.notif
     }
 
 
@@ -68,12 +71,6 @@ export class UserDataCache {
             })
         }
         this.requests += group.uIdDs!
-      }
-      if(group.acceptedRequests!.length !== 0){
-        for(let not of group.acceptedRequests!){
-          this.notifications.push(not)
-        }
-        if(group.notif !== 0) this.notif += group.notif!
       }
     }
     this.navbarService.usersRequests = this.usersRequests
@@ -107,8 +104,10 @@ export class UserDataCache {
       for(let not of user.acceptedRequests!){
           this.notifications.push(not)
       }
-      if(user.notif !== 0) this.notif += user.notif!
+      if(user.notif !== 0) this.notif = user.notif!
     }
+    this.navbarService.notifications = this.notifications
+    this.navbarService.notif = this.notif
   }
 
   addGroupRequests(user : User) {

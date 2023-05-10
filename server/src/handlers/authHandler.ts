@@ -86,6 +86,14 @@ export const getUserHandler : ExpressHandler<{},{
     })   
     res.sendStatus(404)
 }
+
+
+export const resetUserNotif : ExpressHandler<{},{}> = async (req, res) => {
+    const userId = res.locals.userId
+    await db.resetUserNotif(userId)
+    res.sendStatus(200)
+}
+
 export const signInHandler : ExpressHandler<
 SignInRequest,
 SignInResponse

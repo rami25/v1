@@ -16,6 +16,7 @@ export interface UserDao {
   searchUser(userName : string) : Promise<User | undefined>;
   sendRequestToUser(userName : string) : Promise<void>;
   sendRequestToGroup(group : Group) : Promise<void>;
+  resetUserNotif(id : Types.ObjectId) : Promise<void>;
   addGroup(group : Group) : Promise<void>;
   addFriend(user : User) : Promise<void>;
   //addUserPost(post : Post, userId?:string) : Promise<void>;

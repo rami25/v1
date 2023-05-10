@@ -17,6 +17,11 @@ interface userRequest {
   groupName : string;
 }
 
+interface notification {
+  message : string;
+  notedAt : Date;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -37,7 +42,7 @@ export class AppComponent implements OnInit{
   usersRequests : userRequest[] = []
   groupRequests : userRequest[] = []
   nRequests : number = 0
-  notifications! : string[]
+  notifications! : notification[]
   notif : number = 0
   invitations : userRequest[] = []
   groupInvitations : userRequest[] = []
@@ -83,6 +88,7 @@ export class AppComponent implements OnInit{
     /////////////////////////// notifications
     this.navbarService._notifications$.subscribe(array => {
       this.notifications = array;
+      this.sortNotif()
     });
     this.navbarService._notif$.subscribe(n => {
       this.notif = n;
@@ -382,5 +388,14 @@ export class AppComponent implements OnInit{
           this.navbarService.invi -=1
         }
       )
+    }
+    resetNotif(){
+      this.notif = 0
+      this._authService.resetUserNotif().subscribe(
+        // res => this.notif = 0
+      )
+    }
+    sortNotif(){
+      this.notifications.sort((a, b) => b.notedAt.getTime() - a.notedAt.getTime())
     }
 }

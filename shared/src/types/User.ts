@@ -1,5 +1,19 @@
 import { Schema, model, Types } from 'mongoose';
 
+interface Inotification {
+    message : string;
+    notedAt : Date;
+}
+const notification = new Schema<Inotification>({
+    message : {
+        type : String,
+        required : true
+    },
+    notedAt : {
+        type : Date,
+        default : Date.now()
+    }
+})
 export interface User {
     _id?: Types.ObjectId;
     userName: string;
@@ -16,7 +30,7 @@ export interface User {
     gIdDs? : number;
     groupsIdRequests? : Types.ObjectId[];//as an admin
     gIdRs? : number;
-    acceptedRequests? : string[];
+    acceptedRequests? : Inotification[];
     notif? : number;
     //reset password
     resetPasswordToken? : string;
@@ -76,7 +90,7 @@ const userSchema = new Schema<User>({
         default : 0
     },
     acceptedRequests : [{
-        type : String
+        type : notification
     }],
     notif : {
         type : Number,

@@ -8,6 +8,11 @@ interface userRequest {
   groupName : string;
 }
 
+interface notification {
+  message : string;
+  notedAt : Date;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,7 +25,7 @@ export class NavbarService {
   private _grps = new BehaviorSubject<number>(0);
   //notifications
   private _notif = new BehaviorSubject<number>(0);
-  private _notifications = new BehaviorSubject<string[]>([]);
+  private _notifications = new BehaviorSubject<notification[]>([]);
   //userRequests
   private _usersRequests = new BehaviorSubject<userRequest[]>([]);
   private _nRequests = new BehaviorSubject<number>(0);
@@ -109,14 +114,18 @@ export class NavbarService {
   get notif(): number {
     return this._notif.value;
   }
-  set notifications(notifications: string[]) {
+  set notifications(notifications: notification[]) {
     this._notifications.next(notifications);
   }
-
-  get notifictions(): string[] {
+  get notifictions(): notification[] {
     return this._notifications.value;
   }
 
+  // addNotifications(notif : string){
+  //   const currentArray = this._notifications.getValue()
+  //   currentArray.push(notif)
+  //   this._notifications.next(currentArray)
+  // }
 
   ///////////////////////////////////////////////////// User Requests
   set nRequests(n: number) {

@@ -32,11 +32,12 @@ export class SignUpComponent {
         // this.route.params.subscribe(params => {
         //   const meta = params['meta'];
           console.log('meta',meta)
-          if(meta === 'other')
+          if(meta === 'other'){
             this.location.back();
-          else{
-            this._router.navigate(['/'])
+            return
           }
+          if(meta === 's')
+            this._router.navigate(['/home'])
         // })
       },
       err => console.log(err)
